@@ -10,6 +10,24 @@
 @ini_set('display_errors', '1');
 error_reporting(E_ALL);
 
+/*
+ * Diese Seite muss auch auf einem zu alten PHP noch etwas anzeigen – sie ist ja
+ * genau dann gefragt. Die beiden Funktionen unten gibt es erst ab PHP 8.0;
+ * ohne Ersatz endete der Systemcheck auf älteren Servern mit einer weißen Seite.
+ */
+if (!function_exists('str_starts_with')) {
+    function str_starts_with(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strpos($haystack, $needle) === 0;
+    }
+}
+if (!function_exists('str_contains')) {
+    function str_contains(string $haystack, string $needle): bool
+    {
+        return $needle === '' || strpos($haystack, $needle) !== false;
+    }
+}
+
 header('Content-Type: text/html; charset=utf-8');
 header('X-Robots-Tag: noindex, nofollow');
 
@@ -82,6 +100,8 @@ $grenzen = [
     'Speicherbegrenzung'      => ini_get('memory_limit') ?: '?',
     'Maximale Laufzeit'       => (ini_get('max_execution_time') ?: '?') . ' s',
     'Zeitzone'                => date_default_timezone_get(),
+    'Webserver'               => (string) ($_SERVER['SERVER_SOFTWARE'] ?? 'unbekannt'),
+    'PHP-Anbindung'           => PHP_SAPI,
 ];
 
 /* --------------------------------------------------- Zustand der Anwendung */
@@ -165,8 +185,27 @@ $sicherheit[] = pruefung('Verbindung verschlüsselt (HTTPS)',
         'Ohne HTTPS wandern Kundenadressen und Anmeldedaten im Klartext durchs Netz. '
         . 'Bei fast allen Hostern lässt sich ein kostenloses Zertifikat aktivieren.');
 
-$sicherheit[] = pruefung('.htaccess vorhanden', is_file($wurzel . '/.htaccess'),
-    'Schützt config.php und den Datenordner vor direktem Zugriff – nur auf Apache-Servern wirksam.', true);
+/*
+ * Die Schutzregeln bestehen aus mehreren Dateien: eine im Shop-Ordner und je
+ * eine in data/, lib/, uploads/ und admin/partials/. FTP-Programme blenden
+ * Dateien, die mit einem Punkt beginnen, oft aus – dann landen sie beim
+ * Hochladen nicht auf dem Server. Deshalb prüfen wir jede einzeln.
+ */
+$schutzdateien = ['.htaccess', 'data/.htaccess', 'lib/.htaccess', 'uploads/.htaccess', 'admin/partials/.htaccess'];
+$fehlendeSchutzdateien = [];
+foreach ($schutzdateien as $datei) {
+    if (!is_file($wurzel . '/' . $datei)) {
+        $fehlendeSchutzdateien[] = $datei;
+    }
+}
+$istApache = stripos((string) ($_SERVER['SERVER_SOFTWARE'] ?? ''), 'apache') !== false;
+
+$sicherheit[] = pruefung('Schutzregeln (.htaccess) vollständig', $fehlendeSchutzdateien === [],
+    $fehlendeSchutzdateien === []
+        ? 'Gefunden: alle ' . count($schutzdateien) . ' Dateien.'
+        : 'Es fehlen: ' . implode(', ', $fehlendeSchutzdateien) . '. Im FTP-Programm die Anzeige '
+          . 'versteckter Dateien einschalten und erneut hochladen.',
+    !$istApache);
 
 /** Zählt, was wirklich fehlt (Optionales zählt nicht als Fehler). */
 $fehlend = 0;

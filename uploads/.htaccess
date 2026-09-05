@@ -1,0 +1,16 @@
+# Hochgeladene Dateien dürfen niemals als Programmcode ausgeführt werden.
+#
+# Der übliche Weg dafür wäre "php_flag engine off". Den kennt aber nur mod_php;
+# unter PHP-FPM/FastCGI – heute der Normalfall – bricht Apache damit jede
+# Anfrage mit Fehler 500 ab. Deshalb hier zwei verträglichere Wege.
+
+# 1) Solche Adressen gar nicht erst ausliefern (läuft vor jedem Handler).
+<IfModule mod_alias.c>
+  RedirectMatch 404 (?i)/uploads/.*\.(php|php3|php4|php5|php7|php8|phps|phtml|phar|pl|py|cgi|sh|shtml)$
+</IfModule>
+
+# 2) Falls der Server sie doch zustellt: den PHP-Handler entfernen.
+<IfModule mod_mime.c>
+  RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phps .phtml .phar
+  RemoveType .php .php3 .php4 .php5 .php7 .php8 .phps .phtml .phar
+</IfModule>

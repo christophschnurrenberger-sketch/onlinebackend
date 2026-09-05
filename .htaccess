@@ -1,16 +1,40 @@
-# Zugriff auf Daten, Konfiguration und Programmbibliothek unterbinden.
-# Apache-Server (die meisten Webhoster) lesen diese Datei automatisch.
+# Schutzregeln für Apache-Server (die meisten Webhoster).
+#
+# Diese Datei ist bewusst zurückhaltend geschrieben und benutzt nur
+# Anweisungen aus der Gruppe "FileInfo" – die erlaubt praktisch jeder Hoster,
+# weil ohne sie auch WordPress & Co. nicht liefen. Jede Anweisung steht
+# zusätzlich in einem <IfModule>-Block: Fehlt dem Server das Modul, wird sie
+# übersprungen, statt jede Anfrage mit "Internal Server Error" abzubrechen.
+#
+# Was hier NIE stehen darf (Apache antwortet sonst auf JEDE Anfrage mit
+# Fehler 500, auch auf die zur Startseite):
+#   <Directory> / <VirtualHost>  – nur in der Serverkonfiguration erlaubt
+#   php_flag / php_value         – gibt es nur mit mod_php, nicht unter PHP-FPM
+#
+# Falls trotzdem "Internal Server Error" erscheint:
+#   1. Diese Datei per FTP in htaccess.txt umbenennen und neu laden.
+#   2. Fehler weg  -> dein Hoster erlaubt keine eigenen Regeln. Datei
+#      umbenannt lassen und data/ aus dem Web-Verzeichnis holen,
+#      siehe docs/BETRIEB.md, Abschnitt 5.
+#   3. Fehler bleibt -> es liegt an PHP, nicht an Apache: systemcheck.php.
 
-<FilesMatch "^(config\.php|pruefsummen\.txt)$">
-  Require all denied
-</FilesMatch>
+<IfModule mod_alias.c>
+  # Konfiguration und Prüfsummen.
+  RedirectMatch 404 (?i)/config\.php$
+  RedirectMatch 404 (?i)/config\.example\.php$
+  RedirectMatch 404 (?i)/pruefsummen\.txt$
 
-RedirectMatch 404 ^/(data|lib)/
-RedirectMatch 404 /\.git
+  # Datenbank, Sicherungen, Protokolle – egal, wo sie liegen.
+  RedirectMatch 404 (?i)\.(sqlite|sqlite3|db|bak|sql|log|ini)$
 
-# Hochgeladene Dateien nie als Programmcode ausführen.
-<Directory "uploads">
-  php_flag engine off
-</Directory>
+  # Interne Ordner. Der Shop liest sie per include, davon ist das nicht betroffen.
+  RedirectMatch 404 (?i)/(data|lib)/
+  RedirectMatch 404 (?i)/admin/partials/
 
-Options -Indexes
+  # Versteckte Ordner und Dateien: .git, .env, .htpasswd …
+  RedirectMatch 404 /\.(git|env|ht|svn|idea|vscode)
+</IfModule>
+
+# Zusätzlich liegt in data/, lib/, uploads/ und admin/partials/ je eine eigene
+# .htaccess. Zwei Schichten mit unterschiedlichen Apache-Modulen: Verbietet ein
+# Server die eine, greift die andere.

@@ -115,8 +115,8 @@ die Rückleitungen der Zahlungsanbieter auf.
 
 ## 5. Wenn dein Hoster nginx statt Apache einsetzt
 
-Die mitgelieferte `.htaccess` schützt `config.php`, den Datenordner und die
-Programmbibliothek — aber **nur auf Apache-Servern**. nginx ignoriert sie.
+Die mitgelieferten `.htaccess`-Dateien schützen `config.php`, den Datenordner und
+die Programmbibliothek — aber **nur auf Apache-Servern**. nginx ignoriert sie.
 Ohne Gegenmaßnahme wäre die Datenbank dort schlicht herunterladbar, und damit
 lägen alle Kunden- und Bestelldaten offen.
 
@@ -126,8 +126,10 @@ ist. Zwei Wege, es zu beheben:
 **Regel in der nginx-Konfiguration** (der Hoster muss sie eintragen):
 
 ```nginx
-location ~ ^/(data|lib)/ { deny all; }
-location = /config.php    { deny all; }
+location ~ ^/(data|lib)/          { deny all; }
+location ~ ^/admin/partials/      { deny all; }
+location = /config.php            { deny all; }
+location ~ \.(sqlite|sqlite3|db|bak|sql|log)$ { deny all; }
 location ^~ /uploads/ {
     # Hochgeladene Dateien nie als Programmcode ausführen
     location ~ \.php$ { deny all; }
@@ -194,6 +196,7 @@ beim nächsten Aufruf von selbst. Vorher eine Sicherung ziehen.
 
 | Symptom | Ursache |
 |---|---|
+| **Internal Server Error** auf *allen* Seiten | Fast immer die `.htaccess`. Siehe unten. |
 | Weiße Seite | PHP-Version zu alt oder ein Fehler. `systemcheck.php` aufrufen; die Fehlermeldung steht im Fehlerprotokoll des Hosters. |
 | „Der Shop ist noch nicht eingerichtet“ | `config.php` fehlt — `install.php` aufrufen. |
 | „Noch nichts veröffentlicht“ | Im Backend auf **Veröffentlichen** klicken. |
@@ -205,3 +208,38 @@ beim nächsten Aufruf von selbst. Vorher eine Sicherung ziehen.
 | Upload schlägt fehl | Ordner `uploads` nicht beschreibbar (Rechte 755), oder Datei über 8 MB. Der Systemcheck zeigt die Grenze des Servers. |
 | Nach dem Login wieder auf der Anmeldeseite | Cookies blockiert, oder `base_url` in `config.php` passt nicht zur aufgerufenen Adresse. |
 | Bestand stimmt nicht | Unter **Bestand → ≡** steht der vollständige Verlauf jeder Variante mit Grund und Bestellung. |
+
+### „Internal Server Error“ — so grenzt du es ein
+
+Diese Meldung kommt nicht aus dem Shop, sondern von Apache selbst. Der Shop-Code
+war da noch gar nicht dran. Es gibt genau zwei Ursachen, und du unterscheidest
+sie in einer Minute:
+
+1. **`.htaccess` in `htaccess.txt` umbenennen** (per FTP, im Shop-Ordner) und die
+   Seite neu laden.
+2. **Fehler verschwunden** → dein Hoster erlaubt keine eigenen Apache-Regeln
+   (`AllowOverride None`) oder verbietet einzelne Anweisungen. Lass die Datei
+   umbenannt und hol stattdessen die Datenbank aus dem Web-Verzeichnis
+   (Abschnitt 5) — der Schutz ist dann sogar besser als mit `.htaccess`.
+3. **Fehler bleibt** → es liegt an PHP, nicht an Apache. Dann `systemcheck.php`
+   aufrufen: meist ist die PHP-Version zu alt (nötig ist 8.1) oder eine Datei
+   wurde unvollständig hochgeladen. Die genaue Zeile steht im Fehlerprotokoll
+   des Hosters (bei IONOS „Logs“, bei All-Inkl „error_log“ im Shop-Ordner).
+
+Was in einer `.htaccess` **nie** stehen darf — Apache bricht sonst *jede*
+Anfrage mit Fehler 500 ab, auch die zur Startseite:
+
+- `<Directory>` und `<VirtualHost>` — nur in der Serverkonfiguration erlaubt.
+- `php_flag` und `php_value` — funktionieren nur mit `mod_php`. Unter PHP-FPM
+  oder FastCGI (heute der Normalfall) meldet Apache „Invalid command“.
+- Anweisungen aus Modulen, die der Server nicht geladen hat. Deshalb steht in
+  den mitgelieferten Dateien alles in `<IfModule>`-Blöcken.
+
+Die Schutzregeln liegen absichtlich in **fünf** Dateien: `.htaccess` im
+Shop-Ordner sowie je eine in `data/`, `lib/`, `uploads/` und `admin/partials/`.
+Der Vorteil: Beanstandet ein Server eine Regel, fällt nur der jeweilige Ordner
+aus — und der ist ohnehin gesperrt. Der Shop bleibt erreichbar.
+
+> FTP-Programme blenden Dateien, die mit einem Punkt beginnen, oft aus. In
+> FileZilla: *Server → Versteckte Dateien anzeigen*. Der Systemcheck listet
+> unter „Schutzregeln“ auf, welche der fünf Dateien fehlen.

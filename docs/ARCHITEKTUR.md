@@ -166,7 +166,7 @@ Onlinezahlung möglich.
 | XSS über den Rich-Text | `Util::sauberesHtml()` beim Speichern: Whitelist für Tags und Attribute, `javascript:`- und `data:`-Adressen raus |
 | XSS über Templates | Jede Ausgabe durch `Util::e()` |
 | SQL-Injection | Ausschließlich vorbereitete Anweisungen mit typisierten Parametern |
-| Direkter Zugriff auf `config.php`, `lib/`, `data/` | `.htaccess` (Apache) sperrt sie |
+| Direkter Zugriff auf `config.php`, `lib/`, `data/` | `.htaccess` in Wurzel *und* in den Ordnern selbst (Apache); der Systemcheck prüft, ob es wirkt |
 | Bösartige Uploads | Typprüfung am Dateiinhalt, Größenlimit, serverseitig vergebener Dateiname, PHP im Upload-Ordner abgeschaltet |
 | Gefälschte Zahlungsbestätigung | HMAC-Signaturprüfung (Stripe), Rückfrage beim Anbieter (PayPal) |
 | Timing-Angriff auf den Login | Auch ohne Treffer wird ein Hash geprüft; Vergleiche laufen zeitkonstant |

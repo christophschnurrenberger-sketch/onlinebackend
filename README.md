@@ -26,7 +26,10 @@ Gebaut für ganz normales Webhosting — kein Composer, kein Node, keine
 Kommandozeile.
 
 1. **Hochladen.** Alle Dateien per FTP in den gewünschten Ordner, zum Beispiel
-   `/shop` oder direkt ins Hauptverzeichnis.
+   `/shop` oder direkt ins Hauptverzeichnis. Dabei die **versteckten Dateien**
+   nicht vergessen: Die `.htaccess`-Dateien beginnen mit einem Punkt und werden
+   von FTP-Programmen oft ausgeblendet (FileZilla: *Server → Versteckte Dateien
+   anzeigen*).
 2. **Rechte setzen.** Die Ordner `data` und `uploads` sowie der Shop-Ordner selbst
    müssen beschreibbar sein — im FTP-Programm auf **755** (bei manchen Hostern 775).
 3. **`systemcheck.php` aufrufen.** Zeigt, ob dein Server alles mitbringt, und
@@ -34,6 +37,13 @@ Kommandozeile.
 4. **`install.php` aufrufen.** Ein Formular, zwei Minuten: Shopname, dein Zugang,
    Datenbank. Der Rest wird angelegt.
 5. **`install.php` löschen.** Das Backend erinnert dich daran.
+
+> **„Internal Server Error“ nach dem Hochladen?** Das kommt von Apache, nicht
+> vom Shop. Benenne die `.htaccess` im Shop-Ordner testweise in `htaccess.txt`
+> um und lade neu. Ist der Fehler weg, erlaubt dein Hoster keine eigenen
+> Apache-Regeln — lass sie umbenannt und folge Abschnitt 5 in
+> [docs/BETRIEB.md](docs/BETRIEB.md). Bleibt der Fehler, liegt es an PHP;
+> dann hilft `systemcheck.php`.
 
 **Voraussetzungen:** PHP 8.1 oder neuer, dazu PDO mit SQLite *oder* MySQL.
 Beides bringt praktisch jeder Hoster mit. Fehlt etwas, sagt der Systemcheck,

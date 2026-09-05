@@ -18,6 +18,35 @@ if (!defined('SHOP_ROOT')) {
  */
 define('SHOP_VERSION', '1.0.0');
 
+/*
+ * PHP-Version prüfen, bevor die Klassen geladen werden.
+ *
+ * Die Programmdateien nutzen Sprachmittel aus PHP 8.1. Auf einem älteren
+ * Server ließen sie sich nicht einmal einlesen – der Besucher sähe nur eine
+ * weiße Seite oder "Internal Server Error", ohne jeden Hinweis auf die
+ * Ursache. Diese Datei selbst kommt bewusst ohne neue Sprachmittel aus und
+ * kann die Lage deshalb erklären.
+ */
+if (PHP_VERSION_ID < 80100) {
+    if (PHP_SAPI === 'cli') {
+        fwrite(STDERR, 'Dieses Shop-System benötigt PHP 8.1 oder neuer. Gefunden: PHP ' . PHP_VERSION . PHP_EOL);
+        exit(1);
+    }
+    http_response_code(500);
+    header('Content-Type: text/html; charset=utf-8');
+    echo '<!DOCTYPE html><html lang="de"><head><meta charset="utf-8">'
+       . '<meta name="viewport" content="width=device-width,initial-scale=1">'
+       . '<title>PHP zu alt</title></head>'
+       . '<body style="font-family:Arial,Helvetica,sans-serif;max-width:640px;margin:60px auto;padding:0 20px;color:#16181d;">'
+       . '<h1 style="font-size:22px;">Dieser Server nutzt eine zu alte PHP-Version</h1>'
+       . '<p style="color:#6b7280;line-height:1.6;">Gefunden: <strong>PHP ' . PHP_VERSION . '</strong>, '
+       . 'benötigt wird mindestens <strong>PHP 8.1</strong>. Die Version stellst du im Hosting-Menü um; '
+       . 'danach diese Seite neu laden.</p>'
+       . '<p><a href="systemcheck.php" style="color:#2f6f4f;">Zum Systemcheck</a></p>'
+       . '</body></html>';
+    exit;
+}
+
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Berlin');
 
