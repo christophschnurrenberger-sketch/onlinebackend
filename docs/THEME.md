@@ -38,12 +38,16 @@ Es gibt zwei Sorten:
 | **Golf** | `assets/stile/golf.css` | Sportfachhandel: tiefes Grün, viel Weiß, Versalien, geordnetes Raster |
 | **Fahrrad** | `assets/stile/rad.css` | Technik: Schwarz, Signalrot, schmale Versalien, kantig, große Preise |
 | **Pferdesport** | `assets/stile/pferd.css` | Katalogsortiment: Marineblau auf Sand, Serifenüberschriften, ruhige Karten |
-| **Kräuter** | `assets/stile/kraeuter.css` | Naturprodukte: Creme, Salbeigrün, Serifen, runde Formen, drei Artikel pro Reihe |
+| **Kräuter** | `assets/stile/kraeuter.css` | Naturprodukte: Creme, weiße Karten, Rot als einzige Signalfarbe, Salbeigrün für den Versandhinweis, Marke mittig |
 | Basis, Kontrast, Warm, Dunkel | — | Reine Farbschemata ohne eigene Datei |
 
-Die vier Branchenstile sind nach dem gebaut, was in der jeweiligen Branche
-üblich ist. Sie kopieren keinen bestimmten Shop und enthalten keine fremden
-Logos, Schriften oder Bilder — nur Systemschriften und CSS.
+Golf, Fahrrad und Pferdesport sind nach dem gebaut, was in der jeweiligen
+Branche üblich ist. Der Kräuterstil folgt Bildschirmfotos eines
+österreichischen Kräuterherstellers, die der Betreiber beigesteuert hat: Farben
+wurden aus den Bildern ausgelesen, dazu Bauart und Formensprache übernommen.
+
+Kein Stil enthält fremde Logos, Wortmarken, Schriften oder Bilder — nur
+Systemschriften und CSS. Übernommen ist die Bauart, nicht das Eigentum.
 
 Die Stildatei wird **nach** `assets/shop.css` und **vor** den CSS-Variablen aus
 den Design-Einstellungen geladen. Daraus folgt die Arbeitsteilung:

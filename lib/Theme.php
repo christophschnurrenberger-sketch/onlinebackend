@@ -78,15 +78,15 @@ final class Theme
         ],
         'kraeuter' => [
             'name'  => 'Kräuter',
-            'text'  => 'Naturprodukte: Creme, Salbeigrün, Serifen, runde Formen, drei Artikel pro Reihe. '
-                     . 'Für Säfte, Öle und Kräutermischungen, die erklärt werden wollen.',
+            'text'  => 'Naturprodukte: cremefarbener Grund, weiße Karten, kräftiges Rot als einzige '
+                     . 'Signalfarbe, Salbeigrün für den Versandhinweis. Marke mittig, alles rund.',
             'datei' => 'kraeuter',
             'werte' => [
-                'farbe_hintergrund' => '#fbf8f1', 'farbe_flaeche' => '#f1ede1', 'farbe_text' => '#2b3327',
-                'farbe_nebentext' => '#77806e', 'farbe_rahmen' => '#e3ddcd', 'farbe_knopf' => '#4e6135',
-                'farbe_knopf_text' => '#fdfbf6', 'farbe_akzent' => '#6b8f4e', 'farbe_sale' => '#a8552f',
-                'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '3',
-                'schrift_titel' => self::SCHRIFT_PALATINO, 'schrift_text' => self::SCHRIFT_GEORGIA,
+                'farbe_hintergrund' => '#fbf8f4', 'farbe_flaeche' => '#ebe8df', 'farbe_text' => '#434343',
+                'farbe_nebentext' => '#7d7a74', 'farbe_rahmen' => '#e3ded4', 'farbe_knopf' => '#c11b1a',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#849e62', 'farbe_sale' => '#c11b1a',
+                'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_HUMANIST, 'schrift_text' => self::SCHRIFT_HUMANIST,
             ],
         ],
         'kontrast' => [
@@ -132,6 +132,7 @@ final class Theme
     public const SCHRIFT_SYSTEM    = '-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Arial, sans-serif';
     public const SCHRIFT_HELVETICA = '\'Helvetica Neue\', Helvetica, Arial, sans-serif';
     public const SCHRIFT_SCHMAL    = '\'Arial Narrow\', \'Helvetica Neue\', Helvetica, Arial, sans-serif';
+    public const SCHRIFT_HUMANIST  = '\'Avenir Next\', Avenir, \'Segoe UI\', \'Trebuchet MS\', system-ui, sans-serif';
     public const SCHRIFT_GEORGIA   = 'Georgia, "Times New Roman", serif';
     public const SCHRIFT_PALATINO  = '"Iowan Old Style", "Palatino Linotype", Palatino, serif';
     public const SCHRIFT_MONO      = 'ui-monospace, \'SF Mono\', Menlo, Consolas, monospace';

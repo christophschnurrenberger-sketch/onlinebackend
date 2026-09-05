@@ -1,167 +1,189 @@
 /*
  * Stil „Kräuter“ – Kräutersäfte und Naturprodukte fürs Pferd.
  *
- * Ein kleines, erklärungsbedürftiges Sortiment: Säfte, Öle, Kräutermischungen.
- * Gekauft wird nicht nach Datenblatt, sondern nach Vertrauen. Deshalb das
- * Gegenteil des Sortimentskatalogs – wenig Artikel pro Reihe, viel Luft,
- * Serifenschrift, weiche Formen, keine harten Rahmen. Die Bilder stehen frei
- * auf der Fläche, der Text darf atmen.
+ * Gebaut nach den Bildschirmfotos eines österreichischen Kräuterherstellers,
+ * die der Betreiber beigesteuert hat. Die Merkmale dieser Bauart:
  *
- * Ergänzt assets/shop.css. Farben und Schriften kommen aus dem Backend.
+ *   – Cremefarbener Grund, graubeige Abschnitte, weiße Karten. Kein Weiß als
+ *     Grundfläche, nirgends ein harter Rahmen.
+ *   – Kräftiges Rot als einzige Signalfarbe: Wortmarke, Knöpfe, Sterne,
+ *     Prozente. Salbeigrün nur für den Versandhinweis und Häkchen,
+ *     Dunkelgrün für den Warenkorb.
+ *   – Humanistische Groteske, Überschriften sehr fett. Keine Serifen.
+ *   – Alles rund: Knöpfe als Pillen, Karten mit großem Radius, Bildflächen
+ *     in eigenem Beige innerhalb der Karte.
+ *   – Marke mittig, Menü in Versalien darunter.
+ *
+ * Kopiert wird nichts davon: keine Wortmarke, keine Schrift, keine Bilder.
+ * Übernommen ist die Bauart, nicht das Eigentum.
  */
 
 :root {
+  /* Farben, die es im Backend nicht gibt – sie gehören zur Bauart, nicht zur
+     Farbwahl des Betreibers. */
+  --krt-karte: #ffffff;
+  --krt-bild: #f1ede6;
+  --krt-gruen: #296534;
+
   --a4: 18px;
-  --a5: 28px;
-  --a6: 40px;
-  --a7: 64px;
-  --a8: 88px;
+  --a5: 26px;
+  --a6: 38px;
+  --a7: 60px;
+  --a8: 84px;
 }
 
-body { font-size: 17px; line-height: 1.65; }
+body { font-size: 16px; line-height: 1.6; }
 
-/* --- Kopf ----------------------------------------------------------------- */
+h1, h2, h3, h4 { font-weight: 800; letter-spacing: -0.015em; }
+h1 { font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.8rem); line-height: 1.1; }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); }
 
-.hinweisleiste { font-size: 0.875rem; letter-spacing: 0.04em; }
+/* --- Bänder über dem Kopf -------------------------------------------------- */
 
-.kopf { border-bottom: 1px solid var(--rahmen); }
-.kopf-innen { min-height: 88px; }
-
-.marke { font-weight: 600; letter-spacing: 0.02em; }
-
-.hauptmenue a { font-size: 0.9375rem; letter-spacing: 0.02em; }
-.hauptmenue > .menuepunkt > a:hover { color: var(--akzent); text-decoration: none; }
-.untermenue { border-radius: 16px; box-shadow: 0 12px 32px rgba(0, 0, 0, .07); }
-
-.suchfeld input { border-radius: 999px; padding-left: var(--a4); }
-
-/* --- Bühne ---------------------------------------------------------------- */
-
-.buehne { padding: var(--a8) 0; text-align: center; }
-.buehne-innen { max-width: 640px; margin: 0 auto; }
-.buehne h1 { font-weight: 600; letter-spacing: -0.01em; }
-.buehne p { font-size: 1.1875rem; }
-.buehne.mit-bild { text-align: left; }
-.buehne.mit-bild .buehne-innen { margin: 0; }
-
-/* --- Abschnitte ----------------------------------------------------------- */
-
-.abschnitt { padding: var(--a8) 0; }
-.abschnitt-kopf { flex-direction: column; align-items: center; text-align: center; gap: var(--a2); }
-.abschnitt-kopf h2 { font-weight: 600; margin: 0; }
-.abschnitt-kopf a { font-size: 0.9375rem; color: var(--akzent); text-decoration: underline; text-underline-offset: 5px; }
-
-/* --- Artikelkacheln ------------------------------------------------------- */
-
-.raster { gap: var(--a6); }
-
-.kachel { text-align: center; }
-.kachel-bild {
-  border-radius: 20px;
-  background: var(--flaeche);
-  margin-bottom: var(--a4);
-  aspect-ratio: 4 / 5;
-}
-.kachel-bild img { object-fit: contain; padding: var(--a5); }
-.kachel h3 { font-family: var(--schrift-titel); font-size: 1.0625rem; font-weight: 600; }
-.kachel .hersteller { font-size: 0.8125rem; font-style: italic; }
-.kachel .preis { justify-content: center; font-size: 1rem; margin-top: var(--a2); }
-
-.marker {
-  border-radius: 999px;
-  top: var(--a4);
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--akzent);
-  letter-spacing: 0.08em;
-  padding: 5px 14px;
-}
-.marker-aus { background: var(--nebentext); }
-
-/* --- Knöpfe --------------------------------------------------------------- */
-
-.knopf {
-  border-radius: 999px;
-  padding: 14px 30px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-.knopf:hover { opacity: 1; filter: brightness(1.12); }
-.knopf-leer:hover { background: var(--flaeche); filter: none; }
-
-/* --- Artikelseite --------------------------------------------------------- */
-
-.artikel-seite { gap: var(--a8); }
-.artikel-info h1 { font-weight: 600; }
-.artikel-info .preis { font-size: 1.625rem; font-weight: 600; }
-.galerie-gross { border-radius: 24px; }
-.galerie-gross img { object-fit: contain; padding: var(--a6); }
-.galerie-klein button { border-radius: 14px; }
-.optionswerte button { border-radius: 999px; padding-left: 18px; padding-right: 18px; }
-.menge { border-radius: 999px; }
-
-/* Anwendung, Fütterungsempfehlung, Inhaltsstoffe – der Fließtext trägt hier
-   den Verkauf, deshalb bekommt er mehr Raum als sonst. */
-.rte { line-height: 1.8; max-width: 62ch; }
-.rte h2, .rte h3 { margin-top: var(--a6); }
-.rte table { border-radius: 14px; overflow: hidden; }
-.rte th { background: var(--flaeche); font-weight: 600; }
-
-/* --- Fuß ------------------------------------------------------------------ */
-
-.fuss { border-top: 1px solid var(--rahmen); }
-.fuss-raster h4 { font-family: var(--schrift-titel); text-transform: none; letter-spacing: 0; font-size: 1rem; }
-.pille { border-radius: 999px; }
-
-@media (max-width: 900px) {
-  .raster { gap: var(--a5); }
+/* Der Versandhinweis ist das einzige Grün im Kopf – deshalb der Akzent und
+   nicht die Knopffarbe, die hier Rot ist. */
+.hinweisleiste {
+  background: var(--akzent); color: #fff;
+  font-weight: 700; font-size: 0.9375rem; padding: var(--a3) var(--a4);
 }
 
-/* --- Kopfaufbau der Manufaktur -------------------------------------------- */
-/*
- * Bewusst das Gegenteil des Fachhandels: kein Serviceband, keine Kategorien-
- * leiste in Signalfarbe. Marke mittig, Menü darunter mittig, viel Luft. So
- * treten Hersteller auf, die ihre eigenen Produkte verkaufen und nicht
- * dreißigtausend fremde.
- */
-
-.servicezeile { background: transparent; border-bottom: 1px solid var(--rahmen); }
+.servicezeile { background: var(--hintergrund); border-bottom: 1px solid var(--rahmen); }
 .servicezeile-innen { min-height: 36px; justify-content: center; gap: var(--a5); }
 .service-rechts { gap: var(--a5); }
 
-.kopf { border-bottom: 0; }
-.kopf-innen { min-height: 96px; display: grid; grid-template-columns: 1fr auto 1fr; }
-.kopf-innen .marke { grid-column: 2; justify-self: center; font-size: 1.5rem; letter-spacing: .04em; }
+/* --- Kopf: Marke mittig, Menü darunter ------------------------------------ */
+
+.kopf { border-bottom: 0; background: var(--hintergrund); }
+.kopf-innen { min-height: 92px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
 .kopf-innen .menue-schalter { grid-column: 1; justify-self: start; }
+.kopf-innen .marke {
+  grid-column: 2; justify-self: center;
+  color: var(--knopf); font-weight: 800; font-size: 1.75rem; letter-spacing: -0.02em;
+}
 .kopf-aktionen { grid-column: 3; }
-.suchfeld input { width: 190px; border-radius: 999px 0 0 999px; }
-.suchfeld button { border-radius: 0 999px 999px 0; font-weight: 600; }
+
+.suchfeld input { width: 180px; border-radius: 999px 0 0 999px; border-color: var(--rahmen); }
+.suchfeld button { border-radius: 0 999px 999px 0; font-weight: 700; }
+.warenkorb-zahl { background: var(--krt-gruen); }
 
 .kopf-nav { border-top: 0; }
 .kopf-nav .behaelter { justify-content: center; }
 .kopf-nav .hauptmenue {
   flex: 0 1 auto; flex-wrap: wrap; gap: var(--a4) var(--a6);
-  justify-content: center; padding-bottom: var(--a4);
+  justify-content: center; padding-bottom: var(--a5);
 }
-.kopf-nav .hauptmenue > .menuepunkt > a { white-space: nowrap; }
 .kopf-nav .hauptmenue > .menuepunkt > a {
-  font-family: var(--schrift-titel); font-size: 1.0625rem; letter-spacing: .02em; padding: var(--a2) 0;
+  white-space: nowrap; text-transform: uppercase;
+  font-size: 0.875rem; font-weight: 600; letter-spacing: 0.06em; padding: var(--a2) 0;
 }
+.kopf-nav .hauptmenue > .menuepunkt > a:hover { color: var(--knopf); text-decoration: none; }
+.untermenue { border-radius: 18px; border-color: var(--rahmen); box-shadow: 0 12px 32px rgba(0, 0, 0, .08); }
 
-/* Die Bühne liegt auf --flaeche. Läge die Vorteilsleiste auch darauf, sähe es
-   aus, als schwebten die Zeilen mitten in der Bühne. */
-.vorteilsleiste { background: var(--hintergrund); border-top: 1px solid var(--rahmen); border-bottom: 1px solid var(--rahmen); }
-.vorteile-innen { gap: var(--a3) var(--a7); font-size: 0.9375rem; font-style: italic; padding: var(--a4) var(--a5); }
-.vorteil::before { content: "\2740"; color: var(--akzent); font-style: normal; }
+/* Die Vorteile stehen als weiße Pillen auf der graubeigen Fläche – dieselbe
+   Form, in der weiter unten die Produktmerkmale über den Bildern liegen. */
+.vorteilsleiste { background: var(--flaeche); border: 0; }
+.vorteile-innen { gap: var(--a3) var(--a4); padding: var(--a4) var(--a5); }
+.vorteil {
+  background: var(--krt-karte); border-radius: 999px; padding: 9px 20px;
+  font-size: 0.875rem; font-weight: 600; box-shadow: 0 1px 3px rgba(0, 0, 0, .05);
+}
+.vorteil::before { content: "\2713"; color: var(--text); font-weight: 700; }
 
-.kachel-lager { justify-content: center; font-size: 0.8125rem; font-style: italic; }
-.kachel-lager::before { width: 7px; height: 7px; }
+/* --- Bühne ---------------------------------------------------------------- */
+
+.buehne { background: var(--flaeche); padding: var(--a8) 0; text-align: center; }
+/* Ohne Motiv ist die Bühne nur eine Farbfläche – die braucht nicht die Höhe
+   eines Bildes. */
+.buehne:not(.mit-bild) { padding: var(--a7) 0; }
+.buehne-innen { max-width: 660px; margin: 0 auto; }
+.buehne p { font-size: 1.125rem; }
+
+/* Mit Bild wird die Bühne zur gerundeten Karte im Seitenraster – so steht das
+   Motiv im Rahmen und nicht randlos über die ganze Breite. */
+.buehne.mit-bild {
+  max-width: var(--breite); margin: var(--a5) auto; border-radius: 26px;
+  text-align: left; text-shadow: 0 2px 18px rgba(0, 0, 0, .5); min-height: 460px;
+}
+.buehne.mit-bild .buehne-innen { margin: 0; max-width: 560px; }
+
+/* --- Abschnitte ----------------------------------------------------------- */
+
+.abschnitt { padding: var(--a8) 0; }
+.abschnitt-kopf { flex-direction: column; align-items: center; text-align: center; gap: var(--a2); }
+.abschnitt-kopf h2 { margin: 0; }
+.abschnitt-kopf a { font-size: 0.9375rem; font-weight: 600; color: var(--knopf); }
+
+/* --- Karten --------------------------------------------------------------- */
+
+.raster { gap: var(--a5); }
+
+.kachel {
+  background: var(--krt-karte); border-radius: 24px; overflow: hidden;
+  text-align: center; padding-bottom: var(--a5);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .05); transition: box-shadow .18s, transform .18s;
+}
+.kachel:hover { box-shadow: 0 12px 30px rgba(0, 0, 0, .10); transform: translateY(-3px); }
+.kachel-bild {
+  background: var(--krt-bild); border-radius: 0; aspect-ratio: 1 / 1; margin-bottom: var(--a4);
+}
+.kachel-bild img { object-fit: contain; padding: var(--a5); }
+.kachel h3 { font-size: 1rem; font-weight: 700; padding: 0 var(--a4); letter-spacing: -0.01em; }
+.kachel .hersteller { font-size: 0.8125rem; padding: 0 var(--a4); }
+.kachel .preis { justify-content: center; font-size: 1.25rem; font-weight: 800; margin-top: var(--a2); }
+.preis-vorher { font-weight: 500; }
+
+.marker {
+  border-radius: 999px; top: var(--a4); left: var(--a4); transform: none;
+  padding: 6px 14px; font-weight: 700; letter-spacing: 0.04em;
+}
+.marker-aus { background: var(--nebentext); }
+
+.kachel-lager { justify-content: center; font-size: 0.8125rem; }
+
+/* --- Knöpfe --------------------------------------------------------------- */
+
+.knopf {
+  border-radius: 999px; padding: 15px 32px; font-weight: 700; letter-spacing: 0.01em;
+  border-color: transparent;
+}
+.knopf:hover { opacity: 1; filter: brightness(1.08); }
+.knopf-leer { border-color: var(--rahmen); }
+.knopf-leer:hover { background: var(--flaeche); filter: none; }
+
+/* --- Artikelseite --------------------------------------------------------- */
+
+.artikel-seite { gap: var(--a8); }
+.artikel-info h1 { font-weight: 800; }
+.artikel-info .preis { font-size: 1.875rem; font-weight: 800; }
+.galerie-gross { background: var(--krt-bild); border-radius: 26px; }
+.galerie-gross img { object-fit: contain; padding: var(--a6); }
+.galerie-klein button { border-radius: 16px; background: var(--krt-bild); }
+.optionswerte button { border-radius: 999px; padding-left: 20px; padding-right: 20px; font-weight: 600; }
+.menge { border-radius: 999px; }
+.zusammenfassung, .auswahl, .meldung { border-radius: 20px; }
+
+/* Anwendung, Fütterung, Inhaltsstoffe – der Fließtext trägt hier den Verkauf. */
+.rte { line-height: 1.75; max-width: 64ch; }
+.rte h2, .rte h3 { margin-top: var(--a6); }
+.rte table { border-radius: 16px; overflow: hidden; }
+.rte th { background: var(--flaeche); font-weight: 700; }
+
+/* --- Fuß ------------------------------------------------------------------ */
+
+.fuss { border-top: 0; background: var(--flaeche); }
+.fuss-raster h4 { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.8125rem; font-weight: 800; }
+.pille { border-radius: 999px; }
+
+@media (max-width: 900px) {
+  .raster { gap: var(--a4); }
+  .buehne.mit-bild { border-radius: 20px; margin: var(--a4) var(--a4) 0; }
+}
 
 @media (max-width: 760px) {
   /* Auf dem Telefon wieder eine normale Zeile – das mittige Raster braucht
      Platz, den es dort nicht gibt. */
   .kopf-innen { display: flex; }
-  .kopf-innen .marke { font-size: 1.25rem; }
+  .kopf-innen .marke { font-size: 1.375rem; }
   .kopf-aktionen { width: 100%; margin-left: 0; }
   .suchfeld input { width: 100%; min-width: 0; }
   .kopf-nav .hauptmenue { padding-bottom: 0; }
