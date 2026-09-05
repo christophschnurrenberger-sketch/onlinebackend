@@ -131,18 +131,42 @@ if ($hatConfig) {
     }
 }
 
-$sicherheit = [
-    pruefung('install.php entfernt', !is_file($wurzel . '/install.php'),
+/*
+ * Ob die Datenbankdatei über das Internet abrufbar ist, prüft der Browser
+ * weiter unten selbst.
+ *
+ * Ein Selbstaufruf vom Server aus wäre naheliegend, blockiert aber auf Hostern
+ * mit nur einem Arbeitsprozess: die Anfrage wartet auf sich selbst. Der Browser
+ * hat das Problem nicht – und testet nebenbei genau das, was ein echter
+ * Besucher zu sehen bekäme.
+ *
+ * Die Prüfung ist wichtig, weil die mitgelieferte .htaccess nur auf
+ * Apache-Servern gilt. Auf nginx wird sie ignoriert; dort wäre die Datenbank
+ * ohne weitere Konfiguration herunterladbar – und damit lägen alle Kunden- und
+ * Bestelldaten offen.
+ */
+$dbPfad = null;
+if ($hatConfig && class_exists('Config')) {
+    $konfiguriert = (string) Config::get('db.path', '');
+    if ($konfiguriert !== '' && str_starts_with($konfiguriert, $wurzel)) {
+        $dbPfad = ltrim(str_replace('\\', '/', substr($konfiguriert, strlen($wurzel))), '/');
+    }
+}
+
+$sicherheit = [];
+
+$sicherheit[] = pruefung('install.php entfernt', !is_file($wurzel . '/install.php'),
         'Nach der Einrichtung bitte löschen – sonst könnte jemand den Shop neu aufsetzen.',
-        !$hatConfig),
-    pruefung('Verbindung verschlüsselt (HTTPS)',
+    !$hatConfig);
+
+$sicherheit[] = pruefung('Verbindung verschlüsselt (HTTPS)',
         (($_SERVER['HTTPS'] ?? '') !== '' && ($_SERVER['HTTPS'] ?? '') !== 'off')
         || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https',
         'Ohne HTTPS wandern Kundenadressen und Anmeldedaten im Klartext durchs Netz. '
-        . 'Bei fast allen Hostern lässt sich ein kostenloses Zertifikat aktivieren.'),
-    pruefung('.htaccess vorhanden', is_file($wurzel . '/.htaccess'),
-        'Schützt config.php und den Datenordner vor direktem Zugriff (nur bei Apache-Servern wirksam).', true),
-];
+        . 'Bei fast allen Hostern lässt sich ein kostenloses Zertifikat aktivieren.');
+
+$sicherheit[] = pruefung('.htaccess vorhanden', is_file($wurzel . '/.htaccess'),
+    'Schützt config.php und den Datenordner vor direktem Zugriff – nur auf Apache-Servern wirksam.', true);
 
 /** Zählt, was wirklich fehlt (Optionales zählt nicht als Fehler). */
 $fehlend = 0;
@@ -230,7 +254,45 @@ td:last-child{text-align:right;font-variant-numeric:tabular-nums;color:#6b7280}
       block('Shop', $anwendung);
   }
   block('Sicherheit', $sicherheit);
-  ?>
+
+  if ($dbPfad !== null): ?>
+    <ul class="liste" id="db-pruefung">
+      <li><span class="egal" id="db-symbol">○</span><div>
+        <strong>Datenbankdatei nicht über das Internet abrufbar</strong>
+        <div class="tipp" id="db-text">wird geprüft …</div>
+      </div></li>
+    </ul>
+    <script>
+    (function () {
+      var pfad = <?= json_encode($dbPfad, JSON_UNESCAPED_SLASHES) ?>;
+      var symbol = document.getElementById('db-symbol');
+      var text = document.getElementById('db-text');
+
+      function ergebnis(klasse, zeichen, meldung) {
+        symbol.className = klasse;
+        symbol.textContent = zeichen;
+        text.innerHTML = meldung;
+      }
+
+      fetch(pfad, { method: 'HEAD', cache: 'no-store' })
+        .then(function (antwort) {
+          if (antwort.ok) {
+            ergebnis('nein', '✕',
+              '<strong>Die Datenbank ist herunterladbar.</strong> Damit liegen alle Kunden- und ' +
+              'Bestelldaten offen. Auf Apache-Servern hilft die mitgelieferte .htaccess; bei nginx ' +
+              'muss der Hoster den Zugriff auf die Ordner <code>data</code> und <code>lib</code> ' +
+              'sperren. Alternativ die Datenbank über <code>config.php</code> in einen Ordner ' +
+              'außerhalb des Web-Verzeichnisses legen.');
+          } else {
+            ergebnis('ja', '✓', 'Der Zugriff wird abgewiesen (Status ' + antwort.status + ').');
+          }
+        })
+        .catch(function () {
+          ergebnis('ja', '✓', 'Der Zugriff wird abgewiesen.');
+        });
+    })();
+    </script>
+  <?php endif; ?>
 
   <h2>Grenzwerte des Servers</h2>
   <table>
