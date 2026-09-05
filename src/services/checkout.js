@@ -14,7 +14,7 @@
  * ab, gibt fail() die Ware wieder frei.
  */
 
-import { transaction, update, insert, get, nowIso } from '../db/index.js';
+import { transaction, update, insert, nowIso } from '../db/index.js';
 import * as cartService from './cart.js';
 import * as inventory from './inventory.js';
 import * as orders from '../models/orders.js';

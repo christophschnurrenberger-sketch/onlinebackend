@@ -9,7 +9,7 @@
 
 import { html, raw } from '../lib/html.js';
 import { formatMoney } from '../lib/money.js';
-import { productCard, priceHtml } from './layout.js';
+import { productCard } from './layout.js';
 
 const currencyOf = (snapshot) => snapshot.store.currency || 'EUR';
 

@@ -9,7 +9,7 @@
 
 import { writeFile, mkdir } from 'node:fs/promises';
 import { randomBytes } from 'node:crypto';
-import { extname, join } from 'node:path';
+import { join } from 'node:path';
 import { Router, readBody, sendJson, badRequest, forbidden, unauthorized } from '../lib/http.js';
 import { createMedia } from '../models/content.js';
 import { checkCsrf } from '../lib/auth.js';

@@ -8,7 +8,7 @@
  * Idempotent: mehrfaches Ausführen ergänzt nur Fehlendes.
  */
 
-import { getDb, migrate, get, insert, nowIso } from './index.js';
+import { getDb, migrate, get } from './index.js';
 import * as auth from '../lib/auth.js';
 import * as productModel from '../models/products.js';
 import * as collectionModel from '../models/collections.js';

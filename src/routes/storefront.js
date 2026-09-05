@@ -6,8 +6,8 @@
  * die Regel, an der sich hier alles orientiert.
  */
 
-import { Router, sendHtml, redirect, readForm, parseCookies, serializeCookie, setCookie, notFound as notFoundError } from '../lib/http.js';
-import { all, get } from '../db/index.js';
+import { Router, sendHtml, redirect, readForm, parseCookies, serializeCookie, setCookie } from '../lib/http.js';
+import { all } from '../db/index.js';
 import * as publish from '../services/publish.js';
 import * as cartService from '../services/cart.js';
 import * as checkoutService from '../services/checkout.js';
@@ -338,6 +338,14 @@ ${urls.map((u) => `  <url><loc>${u.loc}</loc><priority>${u.priority}</priority><
 </urlset>`;
     ctx.res.writeHead(200, { 'Content-Type': 'application/xml; charset=utf-8' });
     ctx.res.end(xml);
+  });
+
+  // Browser fragen /favicon.ico immer an. Ohne eigene Datei liefern wir das im
+  // Backend hinterlegte Icon aus – und sonst eine leere Antwort statt einer 404.
+  router.get('/favicon.ico', (ctx) => {
+    const favicon = getGroup('store').favicon_url;
+    if (favicon && favicon !== '/favicon.ico') return redirect(ctx.res, favicon, 302);
+    ctx.res.writeHead(204).end();
   });
 
   router.get('/robots.txt', (ctx) => {

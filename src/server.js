@@ -19,7 +19,7 @@ import config, { ROOT } from './config.js';
 import { getDb, migrate } from './db/index.js';
 import {
   Router, HttpError, sendJson, sendHtml, sendFile, parseCookies,
-  serializeCookie, setCookie, redirect,
+  serializeCookie, setCookie,
 } from './lib/http.js';
 import * as auth from './lib/auth.js';
 import { adminApiRouter } from './routes/admin-api.js';
