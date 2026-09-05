@@ -289,7 +289,9 @@ final class Auth
     /** Prüft das Token eines abgeschickten Formulars; bricht bei Fehlschlag ab. */
     public static function csrfPruefen(): void
     {
-        $gesendet = (string) ($_POST['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
+        // Auch aus der Adresszeile annehmen: manche Aktionen (Löschen aus der
+        // Detailansicht) sind Links statt Formulare.
+        $gesendet = (string) ($_POST['_token'] ?? $_GET['_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '');
         if (!hash_equals(self::csrfToken(), $gesendet)) {
             Log::warn('auth', 'CSRF-Prüfung fehlgeschlagen auf ' . ($_SERVER['SCRIPT_NAME'] ?? '?'));
             http_response_code(400);
