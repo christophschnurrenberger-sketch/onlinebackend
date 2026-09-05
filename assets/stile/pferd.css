@@ -85,3 +85,42 @@
 .fuss { border-top: 1px solid var(--rahmen); }
 .fuss-raster h4 { font-family: var(--schrift-titel); letter-spacing: 0.06em; }
 .pille { border-radius: 999px; }
+
+/* --- Kopfaufbau des Katalogversenders ------------------------------------- */
+/*
+ * Marineblaues Serviceband, weiße Markenzeile, sandfarbenes Kategorienband.
+ * Der Aufbau folgt dem klassischen Reitsport-Versandhandel: Telefonnummer
+ * oben, breite Suche in der Mitte, Kategorien als ruhiges Band darunter.
+ */
+
+body { font-size: 15px; }
+
+/* Marineblau, Messing, Weiß, Sand – vier Bänder, die sich unterscheiden
+   lassen. Zwei blaue übereinander wären ein Klotz. */
+.hinweisleiste { background: var(--akzent); color: #fff; letter-spacing: .02em; }
+.servicezeile { background: var(--knopf); border-bottom: 0; color: rgba(255, 255, 255, .8); }
+.servicezeile-innen { min-height: 34px; }
+.servicezeile a, .service-telefon { color: #fff; }
+
+.kopf { border-bottom: 0; }
+.kopf-innen { min-height: 86px; gap: var(--a6); }
+.suchfeld { flex: 1; max-width: 500px; }
+.suchfeld input { width: 100%; border-right: 0; }
+.suchfeld button { font-weight: 600; }
+
+.kopf-nav { background: var(--flaeche); border-top: 1px solid var(--rahmen); border-bottom: 1px solid var(--rahmen); }
+.kopf-nav .hauptmenue { gap: var(--a6); }
+.kopf-nav .hauptmenue > .menuepunkt > a {
+  font-family: var(--schrift-titel); font-size: 1rem; padding: 12px 0; color: var(--knopf);
+}
+.kopf-nav .hauptmenue > .menuepunkt > a:hover { text-decoration: underline; text-underline-offset: 5px; }
+.kopf-nav .untermenue { margin-top: 0; }
+
+.vorteilsleiste { background: var(--hintergrund); border-bottom: 1px solid var(--rahmen); }
+.vorteile-innen { gap: var(--a3) var(--a7); font-size: 0.875rem; }
+.vorteil::before { color: var(--knopf); }
+
+.kachel-lager { font-size: 0.8125rem; }
+
+/* Verfügbarkeit grün statt im Akzentbraun – der Punkt soll gelesen werden. */
+.lager-da, .kachel-lager.lager-da { color: #1a7f4b; }

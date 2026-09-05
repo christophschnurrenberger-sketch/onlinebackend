@@ -116,3 +116,53 @@ body { font-size: 17px; line-height: 1.65; }
 @media (max-width: 900px) {
   .raster { gap: var(--a5); }
 }
+
+/* --- Kopfaufbau der Manufaktur -------------------------------------------- */
+/*
+ * Bewusst das Gegenteil des Fachhandels: kein Serviceband, keine Kategorien-
+ * leiste in Signalfarbe. Marke mittig, Menü darunter mittig, viel Luft. So
+ * treten Hersteller auf, die ihre eigenen Produkte verkaufen und nicht
+ * dreißigtausend fremde.
+ */
+
+.servicezeile { background: transparent; border-bottom: 1px solid var(--rahmen); }
+.servicezeile-innen { min-height: 36px; justify-content: center; gap: var(--a5); }
+.service-rechts { gap: var(--a5); }
+
+.kopf { border-bottom: 0; }
+.kopf-innen { min-height: 96px; display: grid; grid-template-columns: 1fr auto 1fr; }
+.kopf-innen .marke { grid-column: 2; justify-self: center; font-size: 1.5rem; letter-spacing: .04em; }
+.kopf-innen .menue-schalter { grid-column: 1; justify-self: start; }
+.kopf-aktionen { grid-column: 3; }
+.suchfeld input { width: 190px; border-radius: 999px 0 0 999px; }
+.suchfeld button { border-radius: 0 999px 999px 0; font-weight: 600; }
+
+.kopf-nav { border-top: 0; }
+.kopf-nav .behaelter { justify-content: center; }
+.kopf-nav .hauptmenue {
+  flex: 0 1 auto; flex-wrap: wrap; gap: var(--a4) var(--a6);
+  justify-content: center; padding-bottom: var(--a4);
+}
+.kopf-nav .hauptmenue > .menuepunkt > a { white-space: nowrap; }
+.kopf-nav .hauptmenue > .menuepunkt > a {
+  font-family: var(--schrift-titel); font-size: 1.0625rem; letter-spacing: .02em; padding: var(--a2) 0;
+}
+
+/* Die Bühne liegt auf --flaeche. Läge die Vorteilsleiste auch darauf, sähe es
+   aus, als schwebten die Zeilen mitten in der Bühne. */
+.vorteilsleiste { background: var(--hintergrund); border-top: 1px solid var(--rahmen); border-bottom: 1px solid var(--rahmen); }
+.vorteile-innen { gap: var(--a3) var(--a7); font-size: 0.9375rem; font-style: italic; padding: var(--a4) var(--a5); }
+.vorteil::before { content: "\2740"; color: var(--akzent); font-style: normal; }
+
+.kachel-lager { justify-content: center; font-size: 0.8125rem; font-style: italic; }
+.kachel-lager::before { width: 7px; height: 7px; }
+
+@media (max-width: 760px) {
+  /* Auf dem Telefon wieder eine normale Zeile – das mittige Raster braucht
+     Platz, den es dort nicht gibt. */
+  .kopf-innen { display: flex; }
+  .kopf-innen .marke { font-size: 1.25rem; }
+  .kopf-aktionen { width: 100%; margin-left: 0; }
+  .suchfeld input { width: 100%; min-width: 0; }
+  .kopf-nav .hauptmenue { padding-bottom: 0; }
+}

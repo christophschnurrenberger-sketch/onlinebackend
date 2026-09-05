@@ -143,3 +143,42 @@
 
 .fuss { border-top: 3px solid var(--knopf); }
 .fuss-raster h4 { letter-spacing: 0.08em; font-weight: 800; }
+
+/* --- Kopfaufbau des Fachhandels ------------------------------------------- */
+/*
+ * Drei Bänder übereinander: Service, Marke mit Suche, Kategorien. Das ist der
+ * Aufbau, den fast jeder deutsche Sportfachhändler benutzt – und der Grund,
+ * warum sich so ein Shop sofort vertraut anfühlt.
+ */
+
+body { font-size: 15px; }
+
+/* Zwei Bänder in derselben Farbe verschmelzen zu einem Klotz – deshalb liegt
+   die Ankündigung eine Nuance heller über der Servicezeile. */
+.hinweisleiste { background: var(--akzent); color: #fff; }
+.servicezeile { background: var(--knopf); border-bottom: 0; color: rgba(255, 255, 255, .82); }
+.servicezeile-innen { min-height: 32px; }
+.servicezeile a { color: #fff; }
+.service-telefon { color: #fff; }
+
+.kopf { border-bottom: 0; }
+.kopf-innen { min-height: 84px; gap: var(--a6); }
+.suchfeld { flex: 1; max-width: 520px; }
+.suchfeld input { width: 100%; border-color: var(--knopf); border-right: 0; }
+.suchfeld button { text-transform: uppercase; letter-spacing: .06em; font-weight: 700; }
+
+.kopf-nav { background: var(--knopf); border-top: 0; }
+.kopf-nav .hauptmenue { gap: 0; }
+.kopf-nav .hauptmenue > .menuepunkt > a {
+  color: #fff; padding: 13px var(--a4); border-bottom: 0;
+  border-right: 1px solid rgba(255, 255, 255, .14);
+}
+.kopf-nav .hauptmenue > .menuepunkt:first-child > a { border-left: 1px solid rgba(255, 255, 255, .14); }
+.kopf-nav .hauptmenue > .menuepunkt > a:hover { background: var(--akzent); text-decoration: none; }
+.kopf-nav .untermenue { border-radius: 0; border-color: var(--rahmen); margin-top: 0; }
+
+.vorteilsleiste { background: var(--hintergrund); border-bottom: 1px solid var(--rahmen); }
+.vorteile-innen { gap: var(--a3) var(--a7); font-size: 0.8125rem; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+.vorteil::before { color: var(--akzent); }
+
+.kachel-lager { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }

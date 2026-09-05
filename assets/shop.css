@@ -113,6 +113,40 @@ a:hover { text-decoration: underline; }
 }
 .menue-schalter { display: none; background: none; border: 0; font: inherit; cursor: pointer; padding: var(--a2); }
 
+/* Servicezeile ganz oben: Öffnungszeiten, Telefon, Kontakt. Im deutschen
+   Fachhandel Standard – und der Platz, an dem Kunden zuerst nachsehen. */
+.servicezeile {
+  background: var(--flaeche); border-bottom: 1px solid var(--rahmen);
+  font-size: 0.8125rem; color: var(--nebentext);
+}
+.servicezeile-innen {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--a4); min-height: 34px; flex-wrap: wrap;
+}
+.service-rechts { display: flex; gap: var(--a4); align-items: center; }
+.service-telefon { font-weight: 600; color: var(--text); }
+
+/* Kategorienband unter der Markenzeile. */
+.kopf-nav { border-top: 1px solid var(--rahmen); }
+.kopf-nav .behaelter { display: flex; }
+
+.suchfeld { display: flex; }
+.suchfeld input { border-radius: var(--ecken) 0 0 var(--ecken); width: 240px; }
+.suchfeld button {
+  border: 1px solid var(--knopf); background: var(--knopf); color: var(--knopf-text);
+  border-radius: 0 var(--ecken) var(--ecken) 0; padding: 0 var(--a4);
+  font: inherit; font-size: 0.875rem; font-weight: 600; cursor: pointer;
+}
+
+/* Vorteilsleiste unter dem Kopf. */
+.vorteilsleiste { background: var(--flaeche); border-bottom: 1px solid var(--rahmen); }
+.vorteile-innen {
+  display: flex; flex-wrap: wrap; gap: var(--a3) var(--a6); justify-content: center;
+  padding: var(--a3) var(--a5); font-size: 0.875rem;
+}
+.vorteil { display: inline-flex; align-items: center; gap: 7px; }
+.vorteil::before { content: "\2713"; color: var(--akzent); font-weight: 700; }
+
 /* --- Startseite ----------------------------------------------------------- */
 
 .buehne { background: var(--flaeche); padding: var(--a8) 0; background-size: cover; background-position: center; }
@@ -147,6 +181,10 @@ a:hover { text-decoration: underline; }
   letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 8px; border-radius: 4px;
 }
 .marker-aus { background: var(--nebentext); }
+
+/* Lieferstatus schon in der Liste – er entscheidet mit, was angeklickt wird. */
+.kachel-lager { display: flex; align-items: center; gap: 7px; font-size: 0.8125rem; margin: var(--a2) 0 0; }
+.kachel-lager::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
 
 /* --- Artikeldetail -------------------------------------------------------- */
 
@@ -324,14 +362,31 @@ a:hover { text-decoration: underline; }
 
 @media (max-width: 760px) {
   .menue-schalter { display: block; order: -1; }
+  .kopf-nav { position: static; border: 0; background: none; min-height: 0; }
+  .kopf-nav .behaelter { padding: 0; }
   .hauptmenue {
     display: none; position: absolute; top: 100%; left: 0; right: 0;
     background: var(--hintergrund); border-bottom: 1px solid var(--rahmen);
-    flex-direction: column; gap: 0; padding: var(--a3) var(--a5);
+    flex-direction: column; gap: 0; padding: var(--a3) var(--a5); z-index: 60;
   }
   .hauptmenue.offen { display: flex; }
   .untermenue { position: static; display: block; border: 0; box-shadow: none; padding-left: var(--a4); }
-  .suchfeld input { width: 130px; }
+  /* Suche in die zweite Zeile: mit Knopf passt sie neben die Marke nicht mehr. */
+  .kopf-innen { flex-wrap: wrap; padding-bottom: var(--a3); }
+  .kopf-aktionen { order: 3; width: 100%; margin-left: 0; }
+  .suchfeld { flex: 1; }
+  .suchfeld input { width: 100%; min-width: 0; }
+  .suchfeld button { padding: 0 var(--a3); }
+  .warenkorb-wort { display: none; }
+  .servicezeile { display: none; }
+  /* Vier Vorteile untereinander schieben den Shop nach unten – deshalb auf
+     dem Telefon eine Zeile zum Wischen, wie im Handel üblich. */
+  .vorteile-innen {
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start;
+    gap: var(--a4); font-size: 0.8125rem; scrollbar-width: none;
+  }
+  .vorteile-innen::-webkit-scrollbar { display: none; }
+  .vorteil { white-space: nowrap; }
   .feldzeile { grid-template-columns: 1fr; }
   .korbzeile { grid-template-columns: 64px 1fr; }
   .korbzeile .bild { width: 64px; }

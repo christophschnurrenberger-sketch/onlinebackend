@@ -37,12 +37,15 @@ if (Util::isPost()) {
         'farbe_knopf', 'farbe_knopf_text', 'farbe_akzent', 'farbe_sale',
         'schrift_titel', 'schrift_text', 'ecken', 'inhaltsbreite', 'artikel_pro_reihe',
         'hinweisleiste', 'start_titel', 'start_text', 'start_bild', 'start_knopf',
-        'start_knopf_url', 'fusszeile_text',
+        'start_knopf_url', 'fusszeile_text', 'servicezeile',
+        'vorteil_1', 'vorteil_2', 'vorteil_3', 'vorteil_4',
     ] as $feld) {
         $werte[$feld] = Util::post($feld);
     }
     $werte['eigenes_css']         = Util::postRaw('eigenes_css');
     $werte['hinweisleiste_an']    = Util::postBool('hinweisleiste_an') ? '1' : '0';
+    $werte['servicezeile_an']     = Util::postBool('servicezeile_an') ? '1' : '0';
+    $werte['vorteile_an']         = Util::postBool('vorteile_an') ? '1' : '0';
     $werte['hersteller_zeigen']   = Util::postBool('hersteller_zeigen') ? '1' : '0';
     $werte['streichpreis_zeigen'] = Util::postBool('streichpreis_zeigen') ? '1' : '0';
     $werte['design_vorlage']      = $vorlage;
@@ -208,6 +211,43 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
           <label for="hinweisleiste">Text</label>
           <input type="text" id="hinweisleiste" name="hinweisleiste" value="<?= Util::e($e('hinweisleiste')) ?>"
                  placeholder="Versandkostenfrei ab 75 €">
+        </div>
+      </div>
+    </section>
+
+    <section class="ad-karte">
+      <div class="ad-karte-kopf"><h2>Servicezeile &amp; Vorteile</h2></div>
+      <div class="ad-karte-inhalt">
+        <div class="ad-hinweis ad-hinweis-warnung" style="margin:0 0 14px">
+          Diese Texte stehen öffentlich im Shop. In Deutschland sind Werbeaussagen
+          verbindlich – bitte nur hineinschreiben, was auch eingehalten wird.
+        </div>
+        <label class="ad-haken">
+          <input type="checkbox" name="servicezeile_an" value="1" <?= Settings::bool('servicezeile_an') ? 'checked' : '' ?>>
+          <span>Schmale Servicezeile ganz oben anzeigen</span>
+        </label>
+        <div class="ad-feld">
+          <label for="servicezeile">Text links</label>
+          <input type="text" id="servicezeile" name="servicezeile" value="<?= Util::e($e('servicezeile')) ?>"
+                 placeholder="Kundenservice Mo–Fr 9–17 Uhr">
+          <div class="ad-tipp">Rechts stehen automatisch Telefonnummer und Kontakt aus den Einstellungen.</div>
+        </div>
+        <label class="ad-haken">
+          <input type="checkbox" name="vorteile_an" value="1" <?= Settings::bool('vorteile_an') ? 'checked' : '' ?>>
+          <span>Vorteilsleiste unter dem Kopf anzeigen</span>
+        </label>
+        <div class="ad-feldzeile">
+          <div class="ad-feld"><label for="vorteil_1">Vorteil 1</label>
+            <input type="text" id="vorteil_1" name="vorteil_1" value="<?= Util::e($e('vorteil_1')) ?>"
+                   placeholder="Versandkostenfrei ab 50 €"></div>
+          <div class="ad-feld"><label for="vorteil_2">Vorteil 2</label>
+            <input type="text" id="vorteil_2" name="vorteil_2" value="<?= Util::e($e('vorteil_2')) ?>"></div>
+        </div>
+        <div class="ad-feldzeile">
+          <div class="ad-feld"><label for="vorteil_3">Vorteil 3</label>
+            <input type="text" id="vorteil_3" name="vorteil_3" value="<?= Util::e($e('vorteil_3')) ?>"></div>
+          <div class="ad-feld" style="margin:0"><label for="vorteil_4">Vorteil 4</label>
+            <input type="text" id="vorteil_4" name="vorteil_4" value="<?= Util::e($e('vorteil_4')) ?>"></div>
         </div>
       </div>
     </section>

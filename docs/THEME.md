@@ -94,6 +94,35 @@ dem Basis-Stylesheet eingebunden und überschreibt es damit:
 Änderungen am Design werden — wie alles andere — erst nach dem
 **Veröffentlichen** im Shop sichtbar.
 
+### Der Aufbau des Kopfes
+
+Der Kopf besteht aus drei Bändern übereinander — der Aufbau, den der deutsche
+Fachhandel praktisch durchgängig benutzt:
+
+```
+.servicezeile     Öffnungszeiten links, Telefon und Kontakt rechts   (abschaltbar)
+.hinweisleiste    Ankündigung über die volle Breite                  (abschaltbar)
+.kopf
+  .kopf-innen     Menüknopf, Marke, Suche mit Knopf, Warenkorb
+  .kopf-nav       Kategorienband mit .hauptmenue
+.vorteilsleiste   Drei bis vier Vorteile mit Haken                   (abschaltbar)
+```
+
+Was die Bänder enthalten, steht unter **Design → Servicezeile & Vorteile**.
+Telefonnummer und Kontaktadresse kommen aus den Shop-Einstellungen.
+
+Diese Texte stehen öffentlich im Shop. In Deutschland sind Werbeaussagen
+verbindlich — „Versandkostenfrei ab 50 €“ gehört da nur hinein, wenn es auch
+gilt. Die mitgelieferten Vorgaben sind deshalb bewusst zurückhaltend.
+
+Ein Stil kann die Bänder völlig unterschiedlich behandeln: Golf, Fahrrad und
+Pferdesport färben das Kategorienband in der Hausfarbe ein, Kräuter lässt es
+weiß und rückt Marke und Menü in die Mitte — so treten Hersteller auf, die ihre
+eigenen Produkte verkaufen statt dreißigtausend fremde.
+
+In der Artikelkachel stehen außerdem der Nachlass in Prozent (`.marker`, etwa
+„−25 %“) und der Lieferstatus mit farbigem Punkt (`.kachel-lager`).
+
 ## Stufe 2: Eigenes Stylesheet
 
 Für ein richtiges eigenes Design ersetzt du `assets/shop.css`. Die Templates
@@ -105,9 +134,9 @@ Die Klassen, die es gibt:
 | Bereich | Klassen |
 |---|---|
 | Rahmen | `.behaelter`, `.abschnitt`, `.abschnitt-kopf`, `.seitenkopf`, `.brotkrumen`, `.schmal` |
-| Kopf/Fuß | `.hinweisleiste`, `.kopf`, `.kopf-innen`, `.marke`, `.hauptmenue`, `.menuepunkt`, `.untermenue`, `.kopf-aktionen`, `.suchfeld`, `.warenkorb-link`, `.warenkorb-zahl`, `.fuss`, `.fuss-raster`, `.fuss-unten` |
+| Kopf/Fuß | `.servicezeile`, `.servicezeile-innen`, `.service-rechts`, `.service-telefon`, `.hinweisleiste`, `.kopf`, `.kopf-innen`, `.marke`, `.kopf-nav`, `.hauptmenue`, `.menuepunkt`, `.untermenue`, `.kopf-aktionen`, `.suchfeld`, `.warenkorb-link`, `.warenkorb-wort`, `.warenkorb-zahl`, `.vorteilsleiste`, `.vorteile-innen`, `.vorteil`, `.fuss`, `.fuss-raster`, `.fuss-unten` |
 | Startseite | `.buehne`, `.buehne-innen`, `.buehne.mit-bild` |
-| Katalog | `.raster`, `.kachel`, `.kachel-bild`, `.kein-bild`, `.preis`, `.preis-jetzt`, `.preis-vorher`, `.preis-sale`, `.marker`, `.marker-aus`, `.hersteller`, `.werkzeugleiste`, `.blaetterei` |
+| Katalog | `.raster`, `.kachel`, `.kachel-bild`, `.kein-bild`, `.preis`, `.preis-jetzt`, `.preis-vorher`, `.preis-sale`, `.marker`, `.marker-aus`, `.kachel-lager`, `.lager-da`, `.lager-knapp`, `.lager-aus`, `.hersteller`, `.werkzeugleiste`, `.blaetterei` |
 | Artikel | `.artikel-seite`, `.galerie-gross`, `.galerie-klein`, `.artikel-info`, `.optionsgruppe`, `.optionswerte`, `.menge`, `.kaufzeile`, `.lagerhinweis`, `.steuerhinweis`, `.rte` |
 | Warenkorb/Kasse | `.zweispaltig`, `.korbzeile`, `.zusammenfassung`, `.summenzeile`, `.feld`, `.feldzeile`, `.feldblock`, `.auswahl`, `.hakenzeile`, `.gutscheinform` |
 | Bestellung | `.bestellseite`, `.marken`, `.pille`, `.datenpaar` |

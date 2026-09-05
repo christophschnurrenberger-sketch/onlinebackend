@@ -61,6 +61,16 @@ final class Settings
         'streichpreis_zeigen' => '1',
         'hinweisleiste'    => '',
         'hinweisleiste_an' => '0',
+        // Servicezeile und Vorteilsleiste – im Fachhandel Standard über bzw.
+        // unter dem Kopf. Die Texte stehen öffentlich im Shop: bitte nur
+        // hineinschreiben, was auch stimmt.
+        'servicezeile_an'  => '0',
+        'servicezeile'     => 'Kundenservice Mo–Fr 9–17 Uhr',
+        'vorteile_an'      => '1',
+        'vorteil_1'        => 'Sichere Bezahlung',
+        'vorteil_2'        => 'Schneller Versand',
+        'vorteil_3'        => 'Rückgabe innerhalb der gesetzlichen Frist',
+        'vorteil_4'        => '',
         'start_titel'      => 'Neu im Shop',
         'start_text'       => 'Handverlesen, sofort lieferbar.',
         'start_bild'       => '',

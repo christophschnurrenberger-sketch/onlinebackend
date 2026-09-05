@@ -247,6 +247,38 @@ final class Theme
 </style>
 </head>
 <body>
+<?php
+/*
+ * Der Kopf ist bewusst dreiteilig aufgebaut, wie im deutschen Fachhandel
+ * üblich: schmale Servicezeile, darunter die Zeile mit Marke, Suche und
+ * Warenkorb, darunter das Kategorienband. Wer das nicht will, blendet die
+ * Teile über die Einstellungen aus oder überschreibt sie im Stylesheet.
+ */
+$servicelinks = array_filter([
+    'Kontakt'   => self::e('shop_email') !== '' ? 'mailto:' . self::e('shop_email') : '',
+    'Impressum' => self::e('seite_impressum') !== '' ? 'seite.php?h=' . self::e('seite_impressum') : '',
+]);
+$vorteile = array_values(array_filter([
+    self::e('vorteil_1'), self::e('vorteil_2'), self::e('vorteil_3'), self::e('vorteil_4'),
+]));
+?>
+<?php if (self::anAus('servicezeile_an') && (self::e('servicezeile') !== '' || self::e('shop_telefon') !== '')): ?>
+<div class="servicezeile">
+  <div class="behaelter servicezeile-innen">
+    <span class="service-text"><?= Util::e(self::e('servicezeile')) ?></span>
+    <span class="service-rechts">
+      <?php if (self::e('shop_telefon') !== ''): ?>
+        <a class="service-telefon" href="tel:<?= Util::e(preg_replace('/[^0-9+]/', '', self::e('shop_telefon'))) ?>">
+          <?= Util::e(self::e('shop_telefon')) ?></a>
+      <?php endif; ?>
+      <?php foreach ($servicelinks as $label => $ziel): ?>
+        <a href="<?= Util::e(self::url($ziel)) ?>"><?= Util::e($label) ?></a>
+      <?php endforeach; ?>
+    </span>
+  </div>
+</div>
+<?php endif; ?>
+
 <?php if (self::anAus('hinweisleiste_an') && self::e('hinweisleiste') !== ''): ?>
 <div class="hinweisleiste"><?= Util::e(self::e('hinweisleiste')) ?></div>
 <?php endif; ?>
@@ -261,7 +293,21 @@ final class Theme
         <?= Util::e($shopName) ?>
       <?php endif; ?>
     </a>
-    <nav>
+    <div class="kopf-aktionen">
+      <form class="suchfeld" action="<?= Util::e(Config::url('suche.php')) ?>" role="search">
+        <label class="nur-vorlesen" for="q">Suche</label>
+        <input type="search" id="q" name="q" placeholder="Wonach suchst du?" value="<?= Util::e(Util::get('q')) ?>">
+        <button type="submit" aria-label="Suchen">Suchen</button>
+      </form>
+      <a class="warenkorb-link" href="<?= Util::e(Config::url('warenkorb.php')) ?>">
+        <span class="warenkorb-wort">Warenkorb</span>
+        <span class="warenkorb-zahl" data-warenkorb-zahl><?= (int) $anzahl ?></span>
+      </a>
+    </div>
+  </div>
+
+  <nav class="kopf-nav" aria-label="Hauptmenü">
+    <div class="behaelter">
       <ul class="hauptmenue" id="hauptmenue">
         <?php foreach (($fassung['menues']['haupt'] ?? []) as $punkt): ?>
           <li class="menuepunkt">
@@ -276,18 +322,19 @@ final class Theme
           </li>
         <?php endforeach; ?>
       </ul>
-    </nav>
-    <div class="kopf-aktionen">
-      <form class="suchfeld" action="<?= Util::e(Config::url('suche.php')) ?>" role="search">
-        <label class="nur-vorlesen" for="q">Suche</label>
-        <input type="search" id="q" name="q" placeholder="Suchen…" value="<?= Util::e(Util::get('q')) ?>">
-      </form>
-      <a class="warenkorb-link" href="<?= Util::e(Config::url('warenkorb.php')) ?>">
-        Warenkorb <span class="warenkorb-zahl" data-warenkorb-zahl><?= (int) $anzahl ?></span>
-      </a>
     </div>
-  </div>
+  </nav>
 </header>
+
+<?php if (self::anAus('vorteile_an') && $vorteile !== []): ?>
+<div class="vorteilsleiste">
+  <div class="behaelter vorteile-innen">
+    <?php foreach ($vorteile as $vorteil): ?>
+      <span class="vorteil"><?= Util::e($vorteil) ?></span>
+    <?php endforeach; ?>
+  </div>
+</div>
+<?php endif; ?>
 
 <main id="inhalt">
         <?php
@@ -430,8 +477,13 @@ final class Theme
     public static function kachel(array $artikel, array $bestaende = []): void
     {
         $bild        = $artikel['bilder'][0] ?? null;
-        $sale        = ((int) $artikel['streich_max']) > ((int) $artikel['preis_max']);
+        $streich     = (int) $artikel['streich_max'];
+        $preis       = (int) $artikel['preis_max'];
+        $sale        = $streich > $preis;
         $ausverkauft = self::istAusverkauft($artikel, $bestaende);
+        // Im Handel steht auf dem Aufkleber der Nachlass, nicht das Wort "Sale".
+        $rabatt      = $sale ? (int) round(($streich - $preis) / $streich * 100) : 0;
+        $lager       = self::lieferstatus($artikel, $bestaende);
         ?>
         <article class="kachel">
           <a href="<?= Util::e(Config::url('artikel.php?h=' . rawurlencode((string) $artikel['handle']))) ?>">
@@ -444,8 +496,8 @@ final class Theme
               <?php endif; ?>
               <?php if ($ausverkauft): ?>
                 <span class="marker marker-aus">Ausverkauft</span>
-              <?php elseif ($sale && self::anAus('streichpreis_zeigen')): ?>
-                <span class="marker">Sale</span>
+              <?php elseif ($sale && $rabatt > 0 && self::anAus('streichpreis_zeigen')): ?>
+                <span class="marker">−<?= $rabatt ?>&nbsp;%</span>
               <?php endif; ?>
             </div>
             <?php if (self::anAus('hersteller_zeigen') && (string) $artikel['hersteller'] !== ''): ?>
@@ -453,9 +505,38 @@ final class Theme
             <?php endif; ?>
             <h3><?= Util::e((string) $artikel['titel']) ?></h3>
             <?= self::preisText($artikel) ?>
+            <p class="kachel-lager lager-<?= Util::e($lager[0]) ?>"><?= Util::e($lager[1]) ?></p>
           </a>
         </article>
         <?php
+    }
+
+    /**
+     * Lieferstatus für die Artikelkachel.
+     *
+     * Im Fachhandel steht die Verfügbarkeit schon in der Liste, nicht erst auf
+     * der Artikelseite – sie entscheidet oft, welcher Artikel angeklickt wird.
+     *
+     * @param array<int,int|null> $bestaende
+     * @return array{0:string,1:string} Klassenteil und Text
+     */
+    public static function lieferstatus(array $artikel, array $bestaende): array
+    {
+        $hoechster = 0;
+        foreach ($artikel['varianten'] as $variante) {
+            $frei = $bestaende[(int) $variante['id']] ?? null;
+            if ($frei === null) {
+                return ['da', 'Sofort lieferbar'];
+            }
+            $hoechster = max($hoechster, (int) $frei);
+        }
+        if ($hoechster <= 0) {
+            return ['aus', 'Zurzeit nicht lieferbar'];
+        }
+        if ($hoechster <= 5) {
+            return ['knapp', 'Nur noch ' . $hoechster . ' auf Lager'];
+        }
+        return ['da', 'Sofort lieferbar'];
     }
 
     /** Preisanzeige inklusive Streichpreis und "ab" bei Preisspannen. */

@@ -148,3 +148,45 @@
 .fuss { border-top: 3px solid var(--text); }
 .fuss-raster h4 { letter-spacing: 0.1em; font-weight: 800; }
 .pille { border-radius: 0; }
+
+/* --- Kopfaufbau der Werkstatt --------------------------------------------- */
+/*
+ * Schwarzes Serviceband, weiße Markenzeile, schwarzes Kategorienband: der
+ * Aufbau, den Radhändler und Teileversender benutzen. Alles kantig, die
+ * Signalfarbe bleibt Preisen und Aktionen vorbehalten.
+ */
+
+body { font-size: 15px; }
+
+.servicezeile { background: var(--text); border-bottom: 0; color: rgba(255, 255, 255, .7); font-weight: 500; }
+.servicezeile-innen { min-height: 30px; }
+.servicezeile a, .service-telefon { color: #fff; }
+.service-telefon { letter-spacing: .02em; }
+
+.kopf { border-bottom: 0; }
+.kopf-innen { min-height: 78px; gap: var(--a5); }
+.suchfeld { flex: 1; max-width: 480px; }
+.suchfeld input { width: 100%; border-right: 0; }
+.suchfeld button { border-color: var(--text); text-transform: uppercase; letter-spacing: .08em; font-weight: 800; }
+.suchfeld button:hover { background: var(--akzent); border-color: var(--akzent); }
+
+.kopf-nav { background: var(--text); border-top: 0; }
+.kopf-nav .hauptmenue { gap: 0; }
+.kopf-nav .hauptmenue > .menuepunkt > a {
+  color: #fff; padding: 12px var(--a4); border-right: 1px solid rgba(255, 255, 255, .12);
+}
+.kopf-nav .hauptmenue > .menuepunkt > a:hover { background: var(--akzent); color: #fff; text-decoration: none; }
+.kopf-nav .untermenue { border-color: var(--text); margin-top: 0; }
+
+.vorteilsleiste { background: var(--flaeche); border-bottom: 2px solid var(--text); }
+.vorteile-innen {
+  gap: var(--a3) var(--a6); font-size: 0.75rem; text-transform: uppercase;
+  letter-spacing: .08em; font-weight: 800;
+}
+.vorteil::before { content: "\2022"; color: var(--akzent); font-size: 1.1rem; line-height: 0; }
+
+.kachel-lager { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+
+/* Die Signalfarbe gehört Preisen und Aktionen. Verfügbarkeit muss grün sein –
+   rot hieße hier das Gegenteil von dem, was gemeint ist. */
+.lager-da, .kachel-lager.lager-da { color: #1a7f4b; }
