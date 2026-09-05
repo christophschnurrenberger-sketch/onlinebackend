@@ -1,0 +1,16 @@
+# Zugriff auf Daten, Konfiguration und Programmbibliothek unterbinden.
+# Apache-Server (die meisten Webhoster) lesen diese Datei automatisch.
+
+<FilesMatch "^(config\.php|pruefsummen\.txt)$">
+  Require all denied
+</FilesMatch>
+
+RedirectMatch 404 ^/(data|lib)/
+RedirectMatch 404 /\.git
+
+# Hochgeladene Dateien nie als Programmcode ausführen.
+<Directory "uploads">
+  php_flag engine off
+</Directory>
+
+Options -Indexes
