@@ -207,6 +207,37 @@ $sicherheit[] = pruefung('Schutzregeln (.htaccess) vollständig', $fehlendeSchut
           . 'versteckter Dateien einschalten und erneut hochladen.',
     !$istApache);
 
+/*
+ * Reste einer früheren Fassung aufspüren.
+ *
+ * Wird eine neue Fassung über eine alte gespielt, bleiben gelöschte Dateien auf
+ * dem Server liegen – FTP-Programme räumen nicht auf. Besonders tückisch ist
+ * eine übrig gebliebene index.html: Apache liefert sie bevorzugt aus, noch vor
+ * index.php. Dann erscheint die alte Oberfläche, deren Stylesheets und Skripte
+ * es nicht mehr gibt ("404" in der Browser-Konsole) – der Shop selbst wäre
+ * völlig in Ordnung.
+ */
+$altlasten = [];
+foreach (['admin', ''] as $bereich) {
+    $ordnerPfad = $wurzel . ($bereich === '' ? '' : '/' . $bereich);
+    if (is_file($ordnerPfad . '/index.html') && is_file($ordnerPfad . '/index.php')) {
+        $altlasten[] = ($bereich === '' ? '' : $bereich . '/') . 'index.html';
+    }
+}
+foreach (['admin/js', 'admin/css', 'src', 'public', 'tests', 'node_modules', 'package.json',
+          'package-lock.json', '.env', '.env.example', 'docs/API.md'] as $rest) {
+    if (file_exists($wurzel . '/' . $rest)) {
+        $altlasten[] = $rest;
+    }
+}
+
+$sicherheit[] = pruefung('Keine Reste einer früheren Fassung', $altlasten === [],
+    $altlasten === []
+        ? ''
+        : 'Auf dem Server liegen noch: ' . implode(', ', $altlasten) . '. Diese bitte per FTP löschen. '
+          . 'Solange eine alte index.html neben der index.php liegt, zeigt der Server die alte Seite – '
+          . 'daher die 404-Meldungen für Stylesheets und Skripte in der Browser-Konsole.');
+
 /** Zählt, was wirklich fehlt (Optionales zählt nicht als Fehler). */
 $fehlend = 0;
 foreach ([$php, $ordner, $anwendung, $sicherheit] as $gruppe) {

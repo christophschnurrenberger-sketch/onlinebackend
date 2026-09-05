@@ -38,6 +38,13 @@ Kommandozeile.
    Datenbank. Der Rest wird angelegt.
 5. **`install.php` löschen.** Das Backend erinnert dich daran.
 
+> **Aktualisierst du eine ältere Fassung?** Lösche den Shop-Ordner auf dem
+> Server vorher komplett — **außer** `config.php`, `data/` und `uploads/`.
+> Überschreiben allein reicht nicht: Eine übrig gebliebene `index.html` wird von
+> Apache bevorzugt ausgeliefert, noch vor der `index.php`. Dann siehst du die
+> alte Oberfläche und in der Browser-Konsole `404`-Meldungen für Dateien, die es
+> nicht mehr gibt. Der Systemcheck weist darauf hin.
+
 > **„Internal Server Error“ nach dem Hochladen?** Das kommt von Apache, nicht
 > vom Shop. Benenne die `.htaccess` im Shop-Ordner testweise in `htaccess.txt`
 > um und lade neu. Ist der Fehler weg, erlaubt dein Hoster keine eigenen

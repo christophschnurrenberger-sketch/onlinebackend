@@ -192,11 +192,27 @@ Neue Dateien hochladen und die alten überschreiben — `config.php`, `data/` un
 `uploads/` dabei auslassen. Fehlende Tabellen oder Spalten ergänzt das System
 beim nächsten Aufruf von selbst. Vorher eine Sicherung ziehen.
 
+**Wichtig: Überschreiben räumt nicht auf.** Dateien, die es in der neuen Fassung
+nicht mehr gibt, bleiben auf dem Server liegen — FTP-Programme löschen nichts
+von selbst. Meist ist das harmlos, in einem Fall aber nicht:
+
+> Liegt neben einer `index.php` noch eine alte **`index.html`**, liefert Apache
+> die `index.html` aus. Sie hat Vorrang. Im Browser erscheint dann die alte
+> Oberfläche, deren Stylesheets und Skripte gelöscht sind — die Konsole meldet
+> `404` für Dateien wie `admin.css` oder `app.js`. Der Shop selbst ist völlig in
+> Ordnung; es wird nur die falsche Datei ausgeliefert.
+
+Der Systemcheck prüft das unter **„Keine Reste einer früheren Fassung"** und
+listet auf, was zu löschen ist. Bei einem größeren Sprung ist der sauberste Weg:
+den Shop-Ordner auf dem Server löschen — **außer** `config.php`, `data/` und
+`uploads/` — und die neue Fassung frisch hochladen.
+
 ## 9. Wenn etwas klemmt
 
 | Symptom | Ursache |
 |---|---|
 | **Internal Server Error** auf *allen* Seiten | Fast immer die `.htaccess`. Siehe unten. |
+| Backend zeigt eine alte oder leere Seite, Konsole meldet `404` für `admin.css`, `app.js` … | Reste einer früheren Fassung, meist eine `index.html` neben der `index.php`. Siehe Abschnitt 8. |
 | Weiße Seite | PHP-Version zu alt oder ein Fehler. `systemcheck.php` aufrufen; die Fehlermeldung steht im Fehlerprotokoll des Hosters. |
 | „Der Shop ist noch nicht eingerichtet“ | `config.php` fehlt — `install.php` aufrufen. |
 | „Noch nichts veröffentlicht“ | Im Backend auf **Veröffentlichen** klicken. |
