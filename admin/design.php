@@ -11,33 +11,12 @@ $seitentitel = 'Design';
 $benoetigtesRecht = 'pflegen';
 require __DIR__ . '/partials/header.php';
 
-/** Fertige Farbschemata zum Starten. */
-$vorlagen = [
-    'basis' => ['Basis (hell, neutral)', [
-        'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f7f7f8', 'farbe_text' => '#16181d',
-        'farbe_nebentext' => '#6b7280', 'farbe_rahmen' => '#e5e7eb', 'farbe_knopf' => '#16181d',
-        'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#2f6f4f', 'farbe_sale' => '#c0392b',
-        'ecken' => '10px',
-    ]],
-    'kontrast' => ['Kontrast (schwarz-weiß, kantig)', [
-        'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f2f2f2', 'farbe_text' => '#000000',
-        'farbe_nebentext' => '#666666', 'farbe_rahmen' => '#000000', 'farbe_knopf' => '#000000',
-        'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#000000', 'farbe_sale' => '#d40000',
-        'ecken' => '0px',
-    ]],
-    'warm' => ['Warm (Sand und Terrakotta)', [
-        'farbe_hintergrund' => '#fdfaf5', 'farbe_flaeche' => '#f4ede3', 'farbe_text' => '#2c231b',
-        'farbe_nebentext' => '#7d6c5b', 'farbe_rahmen' => '#e2d6c6', 'farbe_knopf' => '#8c4a2f',
-        'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#6b7f4f', 'farbe_sale' => '#b4432a',
-        'ecken' => '14px',
-    ]],
-    'dunkel' => ['Dunkel', [
-        'farbe_hintergrund' => '#12141a', 'farbe_flaeche' => '#1b1f28', 'farbe_text' => '#f0f2f5',
-        'farbe_nebentext' => '#9aa3b2', 'farbe_rahmen' => '#2a303c', 'farbe_knopf' => '#f0f2f5',
-        'farbe_knopf_text' => '#12141a', 'farbe_akzent' => '#6bd6a4', 'farbe_sale' => '#ff7a6b',
-        'ecken' => '10px',
-    ]],
-];
+/*
+ * Die fertigen Stile stehen in lib/Theme.php – dort werden sie auch beim
+ * Ausliefern der Shopseiten gebraucht (für die Stildatei). Eine Liste, zwei
+ * Verwender: so kann nichts auseinanderlaufen.
+ */
+$stile = Theme::STILE;
 
 if (Util::isPost()) {
     Auth::csrfPruefen();
@@ -45,11 +24,12 @@ if (Util::isPost()) {
     $werte = [];
     $vorlage = Util::post('design_vorlage');
 
-    if (Util::post('aktion') === 'vorlage' && isset($vorlagen[$vorlage])) {
-        $werte = $vorlagen[$vorlage][1];
+    if (Util::post('aktion') === 'vorlage' && isset($stile[$vorlage])) {
+        $werte = $stile[$vorlage]['werte'];
         $werte['design_vorlage'] = $vorlage;
         Settings::setMany($werte);
-        Util::redirect('design.php?meldung=' . rawurlencode('Farbschema „' . $vorlagen[$vorlage][0] . '“ übernommen.'));
+        Util::redirect('design.php?meldung=' . rawurlencode(
+            'Stil „' . $stile[$vorlage]['name'] . '“ übernommen. Zum Sichtbarwerden bitte veröffentlichen.'));
     }
 
     foreach ([
@@ -74,11 +54,12 @@ if (Util::isPost()) {
 $e = static fn(string $k): string => Settings::get($k);
 
 $schriften = [
-    "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif" => 'System (serifenlos)',
-    "'Helvetica Neue', Helvetica, Arial, sans-serif" => 'Helvetica',
-    'Georgia, "Times New Roman", serif' => 'Georgia (Serif)',
-    '"Iowan Old Style", "Palatino Linotype", Palatino, serif' => 'Palatino (Serif)',
-    "ui-monospace, 'SF Mono', Menlo, Consolas, monospace" => 'Monospace',
+    Theme::SCHRIFT_SYSTEM    => 'System (serifenlos)',
+    Theme::SCHRIFT_HELVETICA => 'Helvetica',
+    Theme::SCHRIFT_SCHMAL    => 'Arial Narrow (schmal)',
+    Theme::SCHRIFT_GEORGIA   => 'Georgia (Serif)',
+    Theme::SCHRIFT_PALATINO  => 'Palatino (Serif)',
+    Theme::SCHRIFT_MONO      => 'Monospace',
 ];
 
 $farben = [
@@ -103,25 +84,67 @@ $farben = [
 
 <div class="ad-hinweis ad-hinweis-info">
   <strong>So funktioniert das Design</strong>
-  Diese Werte werden als CSS-Variablen in jede Shopseite geschrieben. Ein späteres eigenes Theme
-  überschreibt entweder diese Variablen oder ersetzt <code>assets/shop.css</code> – die Seitenstruktur
-  bleibt dabei unverändert. Änderungen werden im Shop erst nach dem Veröffentlichen sichtbar.
+  Diese Werte werden als CSS-Variablen in jede Shopseite geschrieben. Die Branchenstile laden
+  zusätzlich eine Datei aus <code>assets/stile/</code>, die Abstände, Rahmen und Versalien mitbringt –
+  die Seitenstruktur bleibt dabei unverändert. Änderungen werden im Shop erst nach dem
+  Veröffentlichen sichtbar.
 </div>
+
+<?php
+/** Zeichnet eine Auswahlkachel mit Farbprobe. */
+$stilkachel = static function (string $schluessel, array $stil, string $aktuell): void {
+    $w = $stil['werte'];
+    $an = $schluessel === $aktuell;
+    ?>
+    <label class="ad-stil<?= $an ? ' ist-aktiv' : '' ?>">
+      <input type="radio" name="design_vorlage" value="<?= Util::e($schluessel) ?>" <?= $an ? 'checked' : '' ?>>
+      <span class="ad-stil-probe" style="background:<?= Util::e($w['farbe_hintergrund']) ?>;
+            border-color:<?= Util::e($w['farbe_rahmen']) ?>">
+        <span class="ad-stil-kopf" style="background:<?= Util::e($w['farbe_knopf']) ?>"></span>
+        <span class="ad-stil-titel" style="font-family:<?= Util::e($w['schrift_titel']) ?>;
+              color:<?= Util::e($w['farbe_text']) ?>">Aa</span>
+        <span class="ad-stil-knopf" style="background:<?= Util::e($w['farbe_knopf']) ?>;
+              color:<?= Util::e($w['farbe_knopf_text']) ?>;border-radius:<?= Util::e($w['ecken']) ?>"></span>
+        <span class="ad-stil-punkt" style="background:<?= Util::e($w['farbe_akzent']) ?>"></span>
+        <span class="ad-stil-flaeche" style="background:<?= Util::e($w['farbe_flaeche']) ?>"></span>
+      </span>
+      <span class="ad-stil-name"><?= Util::e($stil['name']) ?>
+        <?php if ($stil['datei'] !== ''): ?><em>eigene Stildatei</em><?php endif; ?>
+      </span>
+      <span class="ad-stil-text"><?= Util::e($stil['text']) ?></span>
+    </label>
+    <?php
+};
+$aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
+?>
 
 <form method="post" style="margin-bottom:16px">
   <?= Auth::csrfFeld() ?>
   <input type="hidden" name="aktion" value="vorlage">
   <section class="ad-karte">
     <div class="ad-karte-kopf">
-      <h2>Farbschema übernehmen</h2>
-      <select name="design_vorlage">
-        <?php foreach ($vorlagen as $wert => [$label, $unused]): ?>
-          <option value="<?= Util::e($wert) ?>" <?= $e('design_vorlage') === $wert ? 'selected' : '' ?>>
-            <?= Util::e($label) ?>
-          </option>
+      <h2>Shop-Stil</h2>
+      <button class="ad-knopf ad-knopf-voll" type="submit">Ausgewählten Stil übernehmen</button>
+    </div>
+    <div class="ad-karte-inhalt">
+      <p class="ad-tipp" style="margin-top:0">
+        Ein Stil setzt Farben, Schriften, Ecken und Rasterbreite auf einen Schlag – die Branchenstile
+        bringen zusätzlich eine eigene Stildatei mit, die Abstände, Rahmen und Versalien mitbringt.
+        <strong>Achtung:</strong> Beim Übernehmen werden die Farben und Schriften unten überschrieben.
+        Danach kannst du alles einzeln nachjustieren.
+      </p>
+      <h3 class="ad-stil-gruppe">Für eine Branche gebaut</h3>
+      <div class="ad-stil-raster">
+        <?php foreach ($stile as $schluessel => $stil): ?>
+          <?php if ($stil['datei'] !== '') { $stilkachel($schluessel, $stil, $aktuellerStil); } ?>
         <?php endforeach; ?>
-      </select>
-      <button class="ad-knopf" type="submit">Übernehmen</button>
+      </div>
+      <h3 class="ad-stil-gruppe">Neutrale Farbschemata</h3>
+      <div class="ad-stil-raster">
+        <?php foreach ($stile as $schluessel => $stil): ?>
+          <?php if ($stil['datei'] === '') { $stilkachel($schluessel, $stil, $aktuellerStil); } ?>
+        <?php endforeach; ?>
+      </div>
     </div>
   </section>
 </form>

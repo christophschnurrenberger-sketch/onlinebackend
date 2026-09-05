@@ -1,0 +1,145 @@
+/*
+ * Stil „Golf“ – Sportfachhandel.
+ *
+ * Gedacht für Golfschläger, Bekleidung, Schuhe und Zubehör: ein Sortiment mit
+ * vielen Marken, bei dem der Kunde vergleicht. Deshalb ein ruhiges, geordnetes
+ * Raster, viel Weiß und ein tiefes Grün, das nur an den Stellen auftritt, an
+ * denen es etwas zu sagen gibt – Kopfzeile, Knöpfe, Marker.
+ *
+ * Ergänzt assets/shop.css und wird davor geladen. Farben, Schriften und Ecken
+ * kommen weiterhin aus den Design-Einstellungen im Backend; hier stehen nur
+ * Dinge, die sich nicht als Variable ausdrücken lassen: Rhythmus, Versalien,
+ * Rahmen, Verhalten beim Überfahren.
+ */
+
+:root {
+  --a5: 22px;
+  --a7: 56px;
+  --a8: 72px;
+}
+
+/* --- Kopf ----------------------------------------------------------------- */
+
+.hinweisleiste {
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.kopf { border-bottom: 2px solid var(--knopf); }
+.kopf-innen { min-height: 76px; }
+
+.marke {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 800;
+}
+
+.hauptmenue a {
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid transparent;
+}
+.hauptmenue > .menuepunkt > a:hover {
+  border-bottom-color: var(--akzent);
+  text-decoration: none;
+}
+.untermenue a { text-transform: none; font-weight: 500; letter-spacing: 0; border: 0; }
+
+.suchfeld input { width: 220px; }
+
+/* --- Bühne ---------------------------------------------------------------- */
+
+.buehne { padding: var(--a8) 0; border-bottom: 1px solid var(--rahmen); }
+.buehne h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  font-weight: 800;
+}
+.buehne-innen { max-width: 620px; margin-left: 0; }
+
+/* --- Abschnitte ----------------------------------------------------------- */
+
+.abschnitt-kopf {
+  border-bottom: 2px solid var(--text);
+  padding-bottom: var(--a3);
+  align-items: flex-end;
+}
+.abschnitt-kopf h2 {
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 800;
+  margin: 0;
+}
+.abschnitt-kopf a {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--akzent);
+}
+
+/* --- Artikelkacheln ------------------------------------------------------- */
+
+.kachel {
+  border: 1px solid var(--rahmen);
+  border-radius: var(--ecken);
+  padding: var(--a3);
+  background: var(--hintergrund);
+  transition: border-color .15s, box-shadow .15s;
+}
+.kachel:hover {
+  border-color: var(--knopf);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, .08);
+}
+.kachel-bild { background: #fff; border-radius: 0; margin-bottom: var(--a4); }
+.kachel-bild img { object-fit: contain; padding: var(--a3); }
+.kachel .hersteller {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--akzent);
+}
+.kachel h3 { font-weight: 600; }
+.kachel .preis { font-size: 1.0625rem; font-weight: 700; margin-top: var(--a2); }
+
+.marker {
+  border-radius: 0;
+  top: 0;
+  left: 0;
+  letter-spacing: 0.08em;
+  padding: 5px 10px;
+}
+
+/* --- Knöpfe --------------------------------------------------------------- */
+
+.knopf {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 700;
+  font-size: 0.875rem;
+  padding: 14px 26px;
+}
+.knopf:hover { opacity: 1; background: var(--akzent); border-color: var(--akzent); color: #fff; }
+.knopf-leer:hover { background: var(--flaeche); color: var(--text); border-color: var(--knopf); }
+
+/* --- Artikelseite --------------------------------------------------------- */
+
+.artikel-info .preis { font-size: 1.875rem; font-weight: 800; }
+.optionsgruppe .titel {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: 0.75rem;
+}
+.optionswerte button { min-width: 52px; font-weight: 600; }
+.galerie-gross { background: #fff; border: 1px solid var(--rahmen); }
+.galerie-gross img { object-fit: contain; padding: var(--a5); }
+
+/* --- Fuß ------------------------------------------------------------------ */
+
+.fuss { border-top: 3px solid var(--knopf); }
+.fuss-raster h4 { letter-spacing: 0.08em; font-weight: 800; }

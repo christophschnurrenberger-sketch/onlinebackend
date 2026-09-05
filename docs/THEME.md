@@ -25,8 +25,62 @@ die Startseite. Die Werte werden bei jedem Seitenaufruf als CSS-Variablen in den
 </style>
 ```
 
-Vier Vorlagen (Basis, Kontrast, Warm, Dunkel) setzen alle Farben auf einmal.
-Die Vorschau daneben zeigt das Ergebnis, bevor du speicherst.
+### Fertige Stile
+
+Ganz oben auf der Design-Seite steht die Auswahl **Shop-Stil**. Ein Klick auf
+eine Kachel, dann auf *Ausgewählten Stil übernehmen* — das setzt Farben,
+Schriften, Ecken, Rasterbreite und Artikel pro Reihe auf einmal.
+
+Es gibt zwei Sorten:
+
+| Stil | Bringt eine Stildatei mit | Gedacht für |
+|---|---|---|
+| **Golf** | `assets/stile/golf.css` | Sportfachhandel: tiefes Grün, viel Weiß, Versalien, geordnetes Raster |
+| **Fahrrad** | `assets/stile/rad.css` | Technik: Schwarz, Signalrot, schmale Versalien, kantig, große Preise |
+| **Pferdesport** | `assets/stile/pferd.css` | Katalogsortiment: Marineblau auf Sand, Serifenüberschriften, ruhige Karten |
+| **Kräuter** | `assets/stile/kraeuter.css` | Naturprodukte: Creme, Salbeigrün, Serifen, runde Formen, drei Artikel pro Reihe |
+| Basis, Kontrast, Warm, Dunkel | — | Reine Farbschemata ohne eigene Datei |
+
+Die vier Branchenstile sind nach dem gebaut, was in der jeweiligen Branche
+üblich ist. Sie kopieren keinen bestimmten Shop und enthalten keine fremden
+Logos, Schriften oder Bilder — nur Systemschriften und CSS.
+
+Die Stildatei wird **nach** `assets/shop.css` und **vor** den CSS-Variablen aus
+den Design-Einstellungen geladen. Daraus folgt die Arbeitsteilung:
+
+- Die Stildatei macht das, was keine Variable ausdrücken kann: Abstände,
+  Rahmen, Versalien, Hover-Verhalten, Bildausschnitte.
+- Die Farben und Schriften bleiben im Backend änderbar — auch bei aktivem Stil.
+  Wer nach dem Übernehmen die Akzentfarbe ändert, behält den Stil und bekommt
+  seine Farbe.
+
+Achtung: Beim Übernehmen eines Stils werden die eingestellten Farben und
+Schriften überschrieben. Der Rest — Startseitentexte, Ankündigungsleiste,
+eigenes CSS — bleibt unangetastet.
+
+### Einen eigenen Stil hinzufügen
+
+Zwei Schritte, beide klein:
+
+1. `assets/stile/meinstil.css` anlegen. Als Vorlage eignet sich eine der vier
+   Dateien; sie sind bewusst kurz und kommentiert.
+2. In `lib/Theme.php` einen Eintrag in `Theme::STILE` ergänzen:
+
+```php
+'meinstil' => [
+    'name'  => 'Mein Stil',
+    'text'  => 'Kurze Beschreibung für die Auswahlkachel im Backend.',
+    'datei' => 'meinstil',      // Dateiname ohne .css, oder '' für keine Datei
+    'werte' => [
+        'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f5f5f5',
+        // ... alle Werte wie bei den mitgelieferten Stilen
+    ],
+],
+```
+
+Der Schlüssel der Liste ist zugleich der einzige erlaubte Dateiname — die
+Einstellung aus der Datenbank wird nie direkt in die Adresse geschrieben.
+Danach steht der Stil im Backend zur Auswahl.
 
 Für kleinere Eingriffe gibt es dort auch ein Feld **Eigenes CSS**. Es wird nach
 dem Basis-Stylesheet eingebunden und überschreibt es damit:

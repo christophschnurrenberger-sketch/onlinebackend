@@ -1,0 +1,118 @@
+/*
+ * Stil „Kräuter“ – Kräutersäfte und Naturprodukte fürs Pferd.
+ *
+ * Ein kleines, erklärungsbedürftiges Sortiment: Säfte, Öle, Kräutermischungen.
+ * Gekauft wird nicht nach Datenblatt, sondern nach Vertrauen. Deshalb das
+ * Gegenteil des Sortimentskatalogs – wenig Artikel pro Reihe, viel Luft,
+ * Serifenschrift, weiche Formen, keine harten Rahmen. Die Bilder stehen frei
+ * auf der Fläche, der Text darf atmen.
+ *
+ * Ergänzt assets/shop.css. Farben und Schriften kommen aus dem Backend.
+ */
+
+:root {
+  --a4: 18px;
+  --a5: 28px;
+  --a6: 40px;
+  --a7: 64px;
+  --a8: 88px;
+}
+
+body { font-size: 17px; line-height: 1.65; }
+
+/* --- Kopf ----------------------------------------------------------------- */
+
+.hinweisleiste { font-size: 0.875rem; letter-spacing: 0.04em; }
+
+.kopf { border-bottom: 1px solid var(--rahmen); }
+.kopf-innen { min-height: 88px; }
+
+.marke { font-weight: 600; letter-spacing: 0.02em; }
+
+.hauptmenue a { font-size: 0.9375rem; letter-spacing: 0.02em; }
+.hauptmenue > .menuepunkt > a:hover { color: var(--akzent); text-decoration: none; }
+.untermenue { border-radius: 16px; box-shadow: 0 12px 32px rgba(0, 0, 0, .07); }
+
+.suchfeld input { border-radius: 999px; padding-left: var(--a4); }
+
+/* --- Bühne ---------------------------------------------------------------- */
+
+.buehne { padding: var(--a8) 0; text-align: center; }
+.buehne-innen { max-width: 640px; margin: 0 auto; }
+.buehne h1 { font-weight: 600; letter-spacing: -0.01em; }
+.buehne p { font-size: 1.1875rem; }
+.buehne.mit-bild { text-align: left; }
+.buehne.mit-bild .buehne-innen { margin: 0; }
+
+/* --- Abschnitte ----------------------------------------------------------- */
+
+.abschnitt { padding: var(--a8) 0; }
+.abschnitt-kopf { flex-direction: column; align-items: center; text-align: center; gap: var(--a2); }
+.abschnitt-kopf h2 { font-weight: 600; margin: 0; }
+.abschnitt-kopf a { font-size: 0.9375rem; color: var(--akzent); text-decoration: underline; text-underline-offset: 5px; }
+
+/* --- Artikelkacheln ------------------------------------------------------- */
+
+.raster { gap: var(--a6); }
+
+.kachel { text-align: center; }
+.kachel-bild {
+  border-radius: 20px;
+  background: var(--flaeche);
+  margin-bottom: var(--a4);
+  aspect-ratio: 4 / 5;
+}
+.kachel-bild img { object-fit: contain; padding: var(--a5); }
+.kachel h3 { font-family: var(--schrift-titel); font-size: 1.0625rem; font-weight: 600; }
+.kachel .hersteller { font-size: 0.8125rem; font-style: italic; }
+.kachel .preis { justify-content: center; font-size: 1rem; margin-top: var(--a2); }
+
+.marker {
+  border-radius: 999px;
+  top: var(--a4);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--akzent);
+  letter-spacing: 0.08em;
+  padding: 5px 14px;
+}
+.marker-aus { background: var(--nebentext); }
+
+/* --- Knöpfe --------------------------------------------------------------- */
+
+.knopf {
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.knopf:hover { opacity: 1; filter: brightness(1.12); }
+.knopf-leer:hover { background: var(--flaeche); filter: none; }
+
+/* --- Artikelseite --------------------------------------------------------- */
+
+.artikel-seite { gap: var(--a8); }
+.artikel-info h1 { font-weight: 600; }
+.artikel-info .preis { font-size: 1.625rem; font-weight: 600; }
+.galerie-gross { border-radius: 24px; }
+.galerie-gross img { object-fit: contain; padding: var(--a6); }
+.galerie-klein button { border-radius: 14px; }
+.optionswerte button { border-radius: 999px; padding-left: 18px; padding-right: 18px; }
+.menge { border-radius: 999px; }
+
+/* Anwendung, Fütterungsempfehlung, Inhaltsstoffe – der Fließtext trägt hier
+   den Verkauf, deshalb bekommt er mehr Raum als sonst. */
+.rte { line-height: 1.8; max-width: 62ch; }
+.rte h2, .rte h3 { margin-top: var(--a6); }
+.rte table { border-radius: 14px; overflow: hidden; }
+.rte th { background: var(--flaeche); font-weight: 600; }
+
+/* --- Fuß ------------------------------------------------------------------ */
+
+.fuss { border-top: 1px solid var(--rahmen); }
+.fuss-raster h4 { font-family: var(--schrift-titel); text-transform: none; letter-spacing: 0; font-size: 1rem; }
+.pille { border-radius: 999px; }
+
+@media (max-width: 900px) {
+  .raster { gap: var(--a5); }
+}

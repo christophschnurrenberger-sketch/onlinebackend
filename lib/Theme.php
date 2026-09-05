@@ -9,8 +9,147 @@
  */
 final class Theme
 {
+    /**
+     * Fertige Shop-Stile.
+     *
+     * Ein Stil besteht aus zwei Teilen: den Farb- und Schriftwerten (sie landen
+     * als CSS-Variablen im Kopf jeder Seite) und optional einer Stildatei unter
+     * assets/stile/. Die Datei macht das, was sich nicht als Variable ausdrücken
+     * lässt – Versalien, Rahmen, Abstände, Verhalten beim Überfahren.
+     *
+     * Die vier Branchenstile sind nach dem gebaut, was in der jeweiligen Branche
+     * üblich ist; sie kopieren keinen fremden Shop. Wer sie anpassen will,
+     * ändert entweder die Werte im Backend oder die Datei.
+     *
+     * Die Schlüssel dieser Liste sind zugleich der einzige erlaubte Dateiname –
+     * so kann über die Einstellung kein fremder Pfad eingeschleust werden.
+     */
+    public const STILE = [
+        'basis' => [
+            'name'  => 'Basis',
+            'text'  => 'Neutral und zurückhaltend. Der Ausgangspunkt für ein eigenes Design.',
+            'datei' => '',
+            'werte' => [
+                'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f7f7f8', 'farbe_text' => '#16181d',
+                'farbe_nebentext' => '#6b7280', 'farbe_rahmen' => '#e5e7eb', 'farbe_knopf' => '#16181d',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#2f6f4f', 'farbe_sale' => '#c0392b',
+                'ecken' => '10px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_HELVETICA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'golf' => [
+            'name'  => 'Golf',
+            'text'  => 'Sportfachhandel: tiefes Grün, viel Weiß, Versalien, geordnetes Raster. '
+                     . 'Für Schläger, Bekleidung, Schuhe und Zubehör.',
+            'datei' => 'golf',
+            'werte' => [
+                'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f1f5f2', 'farbe_text' => '#0f2419',
+                'farbe_nebentext' => '#5d6b63', 'farbe_rahmen' => '#dbe3dd', 'farbe_knopf' => '#14532d',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#2f8f4e', 'farbe_sale' => '#c0392b',
+                'ecken' => '6px', 'inhaltsbreite' => '1400px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_HELVETICA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'rad' => [
+            'name'  => 'Fahrrad',
+            'text'  => 'Technisch und kantig: Schwarz, Signalrot, schmale Versalien, große Preise. '
+                     . 'Für Räder, Komponenten, Ersatzteile und Werkstattzubehör.',
+            'datei' => 'rad',
+            'werte' => [
+                'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f2f3f5', 'farbe_text' => '#14161a',
+                'farbe_nebentext' => '#6a7078', 'farbe_rahmen' => '#d9dce1', 'farbe_knopf' => '#14161a',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#e2231a', 'farbe_sale' => '#e2231a',
+                'ecken' => '0px', 'inhaltsbreite' => '1400px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_SCHMAL, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'pferd' => [
+            'name'  => 'Pferdesport',
+            'text'  => 'Reitsport und Stallbedarf: Marineblau auf Sand, Serifenüberschriften, ruhige Karten. '
+                     . 'Für ein breites Katalogsortiment.',
+            'datei' => 'pferd',
+            'werte' => [
+                'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f4f0e8', 'farbe_text' => '#1b2436',
+                'farbe_nebentext' => '#6f6a60', 'farbe_rahmen' => '#e2dccd', 'farbe_knopf' => '#1d3557',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#9a6a2f', 'farbe_sale' => '#b23a2f',
+                'ecken' => '6px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_GEORGIA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'kraeuter' => [
+            'name'  => 'Kräuter',
+            'text'  => 'Naturprodukte: Creme, Salbeigrün, Serifen, runde Formen, drei Artikel pro Reihe. '
+                     . 'Für Säfte, Öle und Kräutermischungen, die erklärt werden wollen.',
+            'datei' => 'kraeuter',
+            'werte' => [
+                'farbe_hintergrund' => '#fbf8f1', 'farbe_flaeche' => '#f1ede1', 'farbe_text' => '#2b3327',
+                'farbe_nebentext' => '#77806e', 'farbe_rahmen' => '#e3ddcd', 'farbe_knopf' => '#4e6135',
+                'farbe_knopf_text' => '#fdfbf6', 'farbe_akzent' => '#6b8f4e', 'farbe_sale' => '#a8552f',
+                'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '3',
+                'schrift_titel' => self::SCHRIFT_PALATINO, 'schrift_text' => self::SCHRIFT_GEORGIA,
+            ],
+        ],
+        'kontrast' => [
+            'name'  => 'Kontrast',
+            'text'  => 'Schwarz auf Weiß, kantig, ohne Farbe.',
+            'datei' => '',
+            'werte' => [
+                'farbe_hintergrund' => '#ffffff', 'farbe_flaeche' => '#f2f2f2', 'farbe_text' => '#000000',
+                'farbe_nebentext' => '#666666', 'farbe_rahmen' => '#000000', 'farbe_knopf' => '#000000',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#000000', 'farbe_sale' => '#d40000',
+                'ecken' => '0px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_HELVETICA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'warm' => [
+            'name'  => 'Warm',
+            'text'  => 'Sand und Terrakotta, weiche Ecken.',
+            'datei' => '',
+            'werte' => [
+                'farbe_hintergrund' => '#fdfaf5', 'farbe_flaeche' => '#f4ede3', 'farbe_text' => '#2c231b',
+                'farbe_nebentext' => '#7d6c5b', 'farbe_rahmen' => '#e2d6c6', 'farbe_knopf' => '#8c4a2f',
+                'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#6b7f4f', 'farbe_sale' => '#b4432a',
+                'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_GEORGIA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+        'dunkel' => [
+            'name'  => 'Dunkel',
+            'text'  => 'Heller Text auf dunklem Grund.',
+            'datei' => '',
+            'werte' => [
+                'farbe_hintergrund' => '#12141a', 'farbe_flaeche' => '#1b1f28', 'farbe_text' => '#f0f2f5',
+                'farbe_nebentext' => '#9aa3b2', 'farbe_rahmen' => '#2a303c', 'farbe_knopf' => '#f0f2f5',
+                'farbe_knopf_text' => '#12141a', 'farbe_akzent' => '#6bd6a4', 'farbe_sale' => '#ff7a6b',
+                'ecken' => '10px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
+                'schrift_titel' => self::SCHRIFT_HELVETICA, 'schrift_text' => self::SCHRIFT_SYSTEM,
+            ],
+        ],
+    ];
+
+    /* Schriftstapel. Nur Systemschriften – sie sind sofort da und kosten keine
+       fremde Verbindung. Diese Werte stehen auch in der Auswahl im Backend. */
+    public const SCHRIFT_SYSTEM    = '-apple-system, BlinkMacSystemFont, \'Segoe UI\', Roboto, Arial, sans-serif';
+    public const SCHRIFT_HELVETICA = '\'Helvetica Neue\', Helvetica, Arial, sans-serif';
+    public const SCHRIFT_SCHMAL    = '\'Arial Narrow\', \'Helvetica Neue\', Helvetica, Arial, sans-serif';
+    public const SCHRIFT_GEORGIA   = 'Georgia, "Times New Roman", serif';
+    public const SCHRIFT_PALATINO  = '"Iowan Old Style", "Palatino Linotype", Palatino, serif';
+    public const SCHRIFT_MONO      = 'ui-monospace, \'SF Mono\', Menlo, Consolas, monospace';
+
     /** @var array<string,mixed>|null Die live geschaltete Fassung. */
     private static ?array $fassung = null;
+
+    /**
+     * Name der Stildatei der veröffentlichten Fassung, oder '' für keine.
+     *
+     * Der Wert kommt aus der Datenbank und landet in einer URL – deshalb wird
+     * er nicht durchgereicht, sondern in der Liste oben nachgeschlagen.
+     */
+    public static function stilDatei(): string
+    {
+        $schluessel = self::e('design_vorlage');
+        return (string) (self::STILE[$schluessel]['datei'] ?? '');
+    }
 
     /** Lädt die veröffentlichte Fassung; zeigt sonst den Hinweis und bricht ab. */
     public static function fassung(): array
@@ -97,6 +236,9 @@ final class Theme
 <link rel="icon" href="<?= Util::e(self::url(self::e('favicon_url'))) ?>">
 <?php endif; ?>
 <link rel="stylesheet" href="<?= Util::e(Config::url('assets/shop.css')) ?>">
+<?php if (self::stilDatei() !== ''): ?>
+<link rel="stylesheet" href="<?= Util::e(Config::url('assets/stile/' . self::stilDatei() . '.css')) ?>">
+<?php endif; ?>
 <style>
 :root {
 <?= self::cssVariablen() ?>

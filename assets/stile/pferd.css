@@ -1,0 +1,87 @@
+/*
+ * Stil „Pferdesport“ – Reitsport- und Stallbedarf.
+ *
+ * Sättel, Trensen, Decken, Reitbekleidung, Stallzubehör: ein breites,
+ * traditionsreiches Sortiment, das viele Kunden aus dem Katalog kennen.
+ * Deshalb ein ruhiger, verlässlicher Auftritt – Serifen in den Überschriften,
+ * warmes Sandpapierweiß in den Flächen, Marineblau als Hausfarbe und ein
+ * lederbrauner Akzent. Nichts blinkt, nichts drängt.
+ *
+ * Ergänzt assets/shop.css. Farben und Schriften kommen aus dem Backend.
+ */
+
+:root {
+  --a5: 24px;
+  --a7: 52px;
+  --a8: 68px;
+}
+
+/* --- Kopf ----------------------------------------------------------------- */
+
+.hinweisleiste { font-size: 0.875rem; letter-spacing: 0.02em; }
+
+.kopf { border-bottom: 1px solid var(--rahmen); box-shadow: 0 1px 0 rgba(0, 0, 0, .04); }
+.kopf-innen { min-height: 78px; }
+
+.marke { font-weight: 700; letter-spacing: 0; }
+
+.hauptmenue a { font-size: 0.9375rem; font-weight: 500; }
+.hauptmenue > .menuepunkt > a:hover { color: var(--knopf); text-decoration: underline; text-underline-offset: 6px; }
+.untermenue { box-shadow: 0 10px 30px rgba(0, 0, 0, .10); }
+
+.suchfeld input { width: 210px; }
+
+/* --- Bühne ---------------------------------------------------------------- */
+
+.buehne { padding: var(--a8) 0; }
+.buehne h1 { font-weight: 700; letter-spacing: -0.01em; }
+.buehne p { font-size: 1.0625rem; }
+.buehne-innen { max-width: 580px; margin-left: 0; }
+
+/* --- Abschnitte ----------------------------------------------------------- */
+
+.abschnitt-kopf { border-bottom: 1px solid var(--rahmen); padding-bottom: var(--a3); align-items: flex-end; }
+.abschnitt-kopf h2 { font-weight: 700; margin: 0; }
+.abschnitt-kopf a { font-size: 0.875rem; font-weight: 600; color: var(--knopf); }
+
+/* --- Artikelkacheln ------------------------------------------------------- */
+
+.kachel {
+  background: var(--hintergrund);
+  border: 1px solid var(--rahmen);
+  border-radius: var(--ecken);
+  padding: var(--a3) var(--a3) var(--a4);
+  transition: box-shadow .18s, transform .18s;
+}
+.kachel:hover { box-shadow: 0 10px 26px rgba(29, 53, 87, .12); transform: translateY(-2px); }
+.kachel-bild { background: var(--flaeche); margin-bottom: var(--a4); }
+.kachel .hersteller { font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; }
+.kachel h3 { font-family: var(--schrift-titel); font-weight: 600; font-size: 1rem; }
+.kachel .preis { margin-top: var(--a2); font-size: 1.0625rem; font-weight: 700; }
+
+.marker { border-radius: 999px; padding: 4px 12px; letter-spacing: 0.06em; }
+
+/* --- Knöpfe --------------------------------------------------------------- */
+
+.knopf { font-weight: 600; padding: 13px 26px; }
+.knopf:hover { opacity: 1; filter: brightness(1.15); }
+.knopf-leer:hover { background: var(--flaeche); filter: none; }
+
+/* --- Artikelseite --------------------------------------------------------- */
+
+.artikel-info h1 { font-weight: 700; }
+.artikel-info .preis { font-size: 1.75rem; font-weight: 700; }
+.optionsgruppe .titel { font-size: 0.875rem; letter-spacing: 0.02em; }
+.optionswerte button { min-width: 52px; }
+.steuerhinweis { font-style: italic; }
+
+/* Größentabellen und Materialangaben sind hier der halbe Verkauf. */
+.rte table { border: 1px solid var(--rahmen); }
+.rte th { background: var(--flaeche); font-family: var(--schrift-titel); }
+.rte tr:nth-child(even) td { background: rgba(0, 0, 0, .02); }
+
+/* --- Fuß ------------------------------------------------------------------ */
+
+.fuss { border-top: 1px solid var(--rahmen); }
+.fuss-raster h4 { font-family: var(--schrift-titel); letter-spacing: 0.06em; }
+.pille { border-radius: 999px; }

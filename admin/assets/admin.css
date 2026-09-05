@@ -327,6 +327,46 @@ td.ad-zahl-rechts, th.ad-zahl-rechts { text-align: right; font-variant-numeric: 
   padding: 10px 12px; font-family: var(--mono); font-size: 12.5px; word-break: break-all;
 }
 
+/* --- Stilauswahl (Design) ------------------------------------------------- */
+
+.ad-stil-gruppe {
+  font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .05em;
+  color: var(--nebentext); margin: 18px 0 10px;
+}
+.ad-stil-gruppe:first-of-type { margin-top: 4px; }
+
+.ad-stil-raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+
+.ad-stil {
+  display: block; cursor: pointer; border: 2px solid var(--rahmen); border-radius: var(--ecken);
+  padding: 10px; background: var(--flaeche); transition: border-color .12s, box-shadow .12s;
+}
+.ad-stil:hover { border-color: var(--rahmen-kraeftig); }
+.ad-stil.ist-aktiv, .ad-stil:has(input:checked) {
+  border-color: var(--gruen); box-shadow: 0 0 0 3px var(--gruen-bg);
+}
+.ad-stil input { position: absolute; opacity: 0; pointer-events: none; }
+
+/* Miniatur: Kopfleiste, Überschrift, Knopf, Akzentpunkt, Fläche. */
+.ad-stil-probe {
+  display: block; position: relative; height: 92px; border: 1px solid; border-radius: 6px;
+  overflow: hidden; margin-bottom: 9px;
+}
+.ad-stil-kopf { position: absolute; inset: 0 0 auto 0; height: 14px; }
+.ad-stil-titel { position: absolute; left: 10px; top: 24px; font-size: 19px; font-weight: 700; line-height: 1; }
+.ad-stil-knopf { position: absolute; left: 10px; top: 52px; width: 46px; height: 14px; }
+.ad-stil-punkt { position: absolute; left: 62px; top: 54px; width: 10px; height: 10px; border-radius: 50%; }
+.ad-stil-flaeche { position: absolute; inset: auto 0 0 0; height: 20px; }
+
+.ad-stil-name { display: block; font-size: 13.5px; font-weight: 600; }
+.ad-stil-name em {
+  display: block; width: fit-content; margin: 4px 0 0;
+  font-style: normal; font-size: 10.5px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--gruen); background: var(--gruen-bg);
+  padding: 2px 7px; border-radius: 999px; white-space: nowrap;
+}
+.ad-stil-text { display: block; font-size: 12px; color: var(--nebentext); line-height: 1.45; margin-top: 3px; }
+
 /* --- Kleine Bildschirme --------------------------------------------------- */
 
 @media (max-width: 940px) {

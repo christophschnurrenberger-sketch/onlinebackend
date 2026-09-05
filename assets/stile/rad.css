@@ -1,0 +1,150 @@
+/*
+ * Stil „Fahrrad“ – Rad- und Werkstattfachhandel.
+ *
+ * Räder, Komponenten, Bekleidung, Ersatzteile: ein technisches Sortiment, bei
+ * dem Zahlen zählen – Rahmengröße, Übersetzung, Gewicht, Preis. Der Stil ist
+ * entsprechend hart: kantig, hoher Kontrast, schmale Versalien in den
+ * Überschriften und eine Signalfarbe, die nur für Preise und Aktionen da ist.
+ *
+ * Ergänzt assets/shop.css. Farben und Schriften kommen aus dem Backend.
+ */
+
+:root {
+  --a5: 20px;
+  --a7: 44px;
+  --a8: 60px;
+}
+
+/* --- Kopf ----------------------------------------------------------------- */
+
+.hinweisleiste {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kopf { border-bottom: 3px solid var(--text); }
+.kopf-innen { min-height: 72px; }
+
+.marke {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  font-style: italic;
+}
+
+.hauptmenue a {
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.hauptmenue > .menuepunkt > a:hover { color: var(--akzent); text-decoration: none; }
+.untermenue { border-radius: 0; border-width: 2px; border-color: var(--text); box-shadow: none; }
+.untermenue a { text-transform: none; letter-spacing: 0; font-weight: 500; border-radius: 0; }
+
+.warenkorb-zahl { border-radius: 0; background: var(--akzent); color: #fff; }
+.suchfeld input { border-width: 2px; border-color: var(--text); }
+
+/* --- Bühne ---------------------------------------------------------------- */
+
+.buehne {
+  padding: var(--a8) 0;
+  border-bottom: 3px solid var(--text);
+  position: relative;
+}
+.buehne h1 {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.05;
+}
+.buehne-innen { max-width: 640px; margin-left: 0; }
+
+/* --- Abschnitte ----------------------------------------------------------- */
+
+.abschnitt-kopf { align-items: flex-end; }
+.abschnitt-kopf h2 {
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  margin: 0;
+  padding-left: var(--a3);
+  border-left: 6px solid var(--akzent);
+}
+.abschnitt-kopf a {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* --- Artikelkacheln ------------------------------------------------------- */
+
+.kachel {
+  border: 2px solid var(--rahmen);
+  padding: var(--a3) var(--a3) var(--a4);
+  background: var(--hintergrund);
+  transition: border-color .12s;
+}
+.kachel:hover { border-color: var(--text); }
+.kachel-bild { border-radius: 0; background: var(--flaeche); margin-bottom: var(--a3); }
+.kachel-bild img { object-fit: contain; padding: var(--a2); }
+.kachel .hersteller {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+.kachel h3 { font-weight: 600; font-size: 0.9375rem; }
+.kachel .preis {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-top: var(--a2);
+  letter-spacing: -0.01em;
+}
+
+.marker {
+  border-radius: 0;
+  top: 0;
+  left: 0;
+  padding: 5px 10px;
+  letter-spacing: 0.1em;
+  font-weight: 800;
+}
+
+/* --- Knöpfe --------------------------------------------------------------- */
+
+.knopf {
+  border-radius: 0;
+  border-width: 2px;
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-size: 0.875rem;
+  padding: 13px 26px;
+}
+.knopf:hover { opacity: 1; background: var(--akzent); border-color: var(--akzent); color: #fff; }
+.knopf-leer { border-color: var(--text); }
+.knopf-leer:hover { background: var(--text); color: var(--hintergrund); border-color: var(--text); }
+
+/* --- Artikelseite --------------------------------------------------------- */
+
+.artikel-info .preis { font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; }
+.optionsgruppe .titel { text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; }
+.optionswerte button { border-radius: 0; border-width: 2px; min-width: 52px; font-weight: 700; }
+.menge { border-radius: 0; border-width: 2px; }
+.galerie-gross { border-radius: 0; }
+.galerie-klein button { border-radius: 0; border-width: 2px; }
+
+/* Technische Daten lesen sich als Tabelle besser mit Zebrastreifen. */
+.rte table { border: 2px solid var(--rahmen); }
+.rte tr:nth-child(even) td { background: var(--flaeche); }
+.rte th { background: var(--text); color: var(--hintergrund); text-transform: uppercase; font-size: 0.8125rem; letter-spacing: 0.04em; }
+
+/* --- Fuß ------------------------------------------------------------------ */
+
+.fuss { border-top: 3px solid var(--text); }
+.fuss-raster h4 { letter-spacing: 0.1em; font-weight: 800; }
+.pille { border-radius: 0; }

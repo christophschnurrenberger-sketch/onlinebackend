@@ -5,7 +5,9 @@ Artikel, Kategorien, Inhalte und Einstellungen. Mit einem Klick auf
 **Veröffentlichen** geht dieser Stand in den **Shop** — vorher sieht ihn niemand.
 
 Zahlungen, Versandzonen, Steuern, Rabatte, Bestandsführung, Bestellabwicklung
-und Rechtstexte sind eingebaut.
+und Rechtstexte sind eingebaut. Für das Aussehen liegen vier fertige Stile bei —
+**Golf**, **Fahrrad**, **Pferdesport** und **Kräuter** —, umschaltbar im Backend
+unter *Design*.
 
 ```
 ┌──────────────────┐   Veröffentlichen   ┌──────────────────┐
@@ -145,6 +147,7 @@ suche.php          Suche              sitemap.php     Sitemap
 lib/               Programmklassen (per .htaccess nicht direkt erreichbar)
 admin/             Backend
 assets/            Stylesheet und JavaScript des Shops
+assets/stile/      Fertige Shop-Stile (Golf, Fahrrad, Pferdesport, Kräuter)
 data/              Datenbank bei SQLite
 uploads/           Hochgeladene Bilder
 ```
