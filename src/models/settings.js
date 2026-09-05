@@ -78,7 +78,7 @@ export const DEFAULTS = {
     order_number_start: 1000,
     prices_include_tax: true,
     default_tax_bp: 1900,
-    thank_you_text: 'Danke für deine Bestellung! Du erhältst gleich eine Bestätigung per E-Mail.',
+    thank_you_text: 'Du erhältst gleich eine Bestätigung per E-Mail. Wir melden uns, sobald die Sendung unterwegs ist.',
     min_order_total: 0,
   },
 
