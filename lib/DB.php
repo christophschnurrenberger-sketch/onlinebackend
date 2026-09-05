@@ -69,8 +69,37 @@ final class DB
     public static function run(string $sql, array $params = []): PDOStatement
     {
         $stmt = self::pdo()->prepare($sql);
-        $stmt->execute($params);
+        self::binden($stmt, $params);
+        $stmt->execute();
         return $stmt;
+    }
+
+    /**
+     * Bindet Parameter mit ihrem tatsächlichen Typ.
+     *
+     * Ohne das bindet PDO alles als Text – und SQLite vergleicht eine Zahl nie
+     * mit einem Text: "preis > '0'" wäre immer falsch, ganz gleich wie hoch der
+     * Preis ist. Genau solche Vergleiche stecken in Kategorieregeln,
+     * Bestandsprüfungen und Filtern, deshalb wird hier zentral getypt.
+     */
+    private static function binden(PDOStatement $stmt, array $params): void
+    {
+        $positionell = array_is_list($params);
+        foreach ($params as $schluessel => $wert) {
+            $name = $positionell ? ((int) $schluessel + 1) : (is_string($schluessel) ? ':' . ltrim($schluessel, ':') : $schluessel);
+
+            if (is_bool($wert)) {
+                $stmt->bindValue($name, $wert ? 1 : 0, PDO::PARAM_INT);
+            } elseif (is_int($wert)) {
+                $stmt->bindValue($name, $wert, PDO::PARAM_INT);
+            } elseif ($wert === null) {
+                $stmt->bindValue($name, null, PDO::PARAM_NULL);
+            } elseif (is_float($wert)) {
+                $stmt->bindValue($name, (string) $wert);
+            } else {
+                $stmt->bindValue($name, (string) $wert);
+            }
+        }
     }
 
     /** @return array<int,array<string,mixed>> */

@@ -74,7 +74,7 @@ final class Theme
         header('Content-Type: text/html; charset=utf-8');
         ?>
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-waehrung="<?= Util::e(self::e('waehrung', 'EUR')) ?>">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /lib/
+Disallow: /data/
+Disallow: /warenkorb.php
+Disallow: /kasse.php
+Disallow: /bestellung.php
+Disallow: /zahlung.php
+Disallow: /suche.php
+Disallow: /install.php
+Disallow: /systemcheck.php
