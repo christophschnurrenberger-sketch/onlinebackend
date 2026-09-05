@@ -234,9 +234,16 @@ foreach (['admin/js', 'admin/css', 'src', 'public', 'tests', 'node_modules', 'pa
 $sicherheit[] = pruefung('Keine Reste einer früheren Fassung', $altlasten === [],
     $altlasten === []
         ? ''
-        : 'Auf dem Server liegen noch: ' . implode(', ', $altlasten) . '. Diese bitte per FTP löschen. '
-          . 'Solange eine alte index.html neben der index.php liegt, zeigt der Server die alte Seite – '
-          . 'daher die 404-Meldungen für Stylesheets und Skripte in der Browser-Konsole.');
+        : 'Auf dem Server liegen noch: ' . implode(', ', $altlasten) . '. Solange eine alte index.html '
+          . 'neben der index.php liegt, liefert der Server die alte Seite aus – daher die 404-Meldungen '
+          . 'für Stylesheets und Skripte in der Browser-Konsole. '
+          . (is_file($wurzel . '/aufraeumen.php')
+              ? 'Ein Klick auf aufraeumen.php räumt das auf.'
+              : 'Bitte per FTP löschen, oder aufraeumen.php hochladen und aufrufen.'));
+
+$sicherheit[] = pruefung('aufraeumen.php entfernt', !is_file($wurzel . '/aufraeumen.php'),
+    'Wird nur zum Aufräumen nach einem Update gebraucht. Danach bitte löschen – die Datei bietet das '
+    . 'selbst an.', $altlasten !== []);
 
 /** Zählt, was wirklich fehlt (Optionales zählt nicht als Fehler). */
 $fehlend = 0;

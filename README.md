@@ -38,12 +38,13 @@ Kommandozeile.
    Datenbank. Der Rest wird angelegt.
 5. **`install.php` löschen.** Das Backend erinnert dich daran.
 
-> **Aktualisierst du eine ältere Fassung?** Lösche den Shop-Ordner auf dem
-> Server vorher komplett — **außer** `config.php`, `data/` und `uploads/`.
-> Überschreiben allein reicht nicht: Eine übrig gebliebene `index.html` wird von
-> Apache bevorzugt ausgeliefert, noch vor der `index.php`. Dann siehst du die
+> **Aktualisierst du eine ältere Fassung?** Überschreiben allein reicht nicht:
+> Dein FTP-Programm löscht nichts. Eine übrig gebliebene `index.html` wird von
+> Apache bevorzugt ausgeliefert, noch vor der `index.php` — dann siehst du die
 > alte Oberfläche und in der Browser-Konsole `404`-Meldungen für Dateien, die es
-> nicht mehr gibt. Der Systemcheck weist darauf hin.
+> nicht mehr gibt. Ruf danach einmal **`aufraeumen.php`** auf: Sie listet die
+> Reste auf und entfernt sie auf Klick. `config.php`, `data/` und `uploads/`
+> rührt sie nicht an.
 
 > **„Internal Server Error“ nach dem Hochladen?** Das kommt von Apache, nicht
 > vom Shop. Benenne die `.htaccess` im Shop-Ordner testweise in `htaccess.txt`
@@ -130,6 +131,7 @@ Details zu jedem Bereich stehen in [`docs/`](docs/).
 
 ```
 install.php        Einmalige Einrichtung – danach löschen
+aufraeumen.php     Entfernt Reste einer früheren Fassung – danach löschen
 systemcheck.php    Prüft den Server; läuft auch ohne Datenbank
 config.php         Wird vom Installer erzeugt (nicht im Git)
 
