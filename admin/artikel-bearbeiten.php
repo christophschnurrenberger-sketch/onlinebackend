@@ -55,6 +55,8 @@ if (Util::isPost()) {
                 'option1'       => (string) (Util::postArray('v_o1')[$nr] ?? ''),
                 'option2'       => (string) (Util::postArray('v_o2')[$nr] ?? ''),
                 'option3'       => (string) (Util::postArray('v_o3')[$nr] ?? ''),
+                'inhalt_menge'  => (string) (Util::postArray('v_menge')[$nr] ?? ''),
+                'inhalt_einheit' => (string) (Util::postArray('v_einheit')[$nr] ?? ''),
             ]);
         }
 
@@ -241,12 +243,15 @@ $typen        = Artikel::typen();
         <p class="ad-tipp">
           Nach dem Ändern von Optionen einmal speichern – danach lassen sich die Varianten
           unten bearbeiten. Ohne Optionen hat der Artikel genau eine Variante.
+          <strong>Inhalt und Einheit</strong> füllen den Grundpreis („19,49 €/l“). Der ist für alles
+          Pflicht, was nach Gewicht, Volumen, Länge oder Fläche verkauft wird – und einer der
+          häufigsten Abmahngründe. Bei Stückware leer lassen.
         </p>
 
         <div style="margin-top:16px">
           <div class="ad-variante ad-variante-kopf">
             <div>Variante</div><div>Preis</div><div>Streichpreis</div>
-            <div>Artikelnr.</div><div>Bestand</div><div></div>
+            <div>Artikelnr.</div><div>Bestand</div><div>Inhalt</div><div>Einheit</div><div></div>
           </div>
           <div id="variantenliste">
             <?php foreach ($varianten as $nr => $variante): ?>
@@ -260,6 +265,16 @@ $typen        = Artikel::typen();
                 <input type="text" name="v_streich[]" value="<?= Util::e(Util::geldFeld($variante['streichpreis'] !== null ? (int) $variante['streichpreis'] : null)) ?>" placeholder="—" inputmode="decimal">
                 <input type="text" name="v_nummer[]" value="<?= Util::e((string) $variante['artikelnummer']) ?>" placeholder="SKU">
                 <input type="number" name="v_bestand[]" value="<?= (int) $variante['bestand'] ?>">
+                <input type="text" name="v_menge[]" value="<?= Util::e(Util::mengeFeld((int) ($variante['inhalt_menge'] ?? 0))) ?>"
+                       placeholder="1" inputmode="decimal" title="Füllmenge für den Grundpreis">
+                <select name="v_einheit[]" title="Einheit der Füllmenge">
+                  <option value="">–</option>
+                  <?php foreach (Util::EINHEITEN as $kuerzel => [$anzeige]): ?>
+                    <option value="<?= Util::e($kuerzel) ?>"
+                      <?= (string) ($variante['inhalt_einheit'] ?? '') === $kuerzel ? 'selected' : '' ?>>
+                      <?= Util::e($anzeige) ?></option>
+                  <?php endforeach; ?>
+                </select>
                 <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
                         data-zeile-weg=".ad-variante" title="Variante entfernen">✕</button>
               </div>
@@ -411,6 +426,13 @@ $typen        = Artikel::typen();
     <input type="text" name="v_streich[]" placeholder="—" inputmode="decimal">
     <input type="text" name="v_nummer[]" placeholder="SKU">
     <input type="number" name="v_bestand[]" value="0">
+    <input type="text" name="v_menge[]" placeholder="1" inputmode="decimal">
+    <select name="v_einheit[]">
+      <option value="">–</option>
+      <?php foreach (Util::EINHEITEN as $kuerzel => [$anzeige]): ?>
+        <option value="<?= Util::e($kuerzel) ?>"><?= Util::e($anzeige) ?></option>
+      <?php endforeach; ?>
+    </select>
     <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
             data-zeile-weg=".ad-variante" title="Variante entfernen">✕</button>
   </div>

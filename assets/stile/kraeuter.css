@@ -188,3 +188,20 @@ h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); }
   .suchfeld input { width: 100%; min-width: 0; }
   .kopf-nav .hauptmenue { padding-bottom: 0; }
 }
+
+/* --- Preis- und Vertrauensangaben ----------------------------------------- */
+
+.grundpreis { font-size: 0.8125rem; font-weight: 600; }
+.preishinweis { font-size: 0.75rem; }
+.kachel .grundpreis { margin-top: 2px; }
+
+.kaufzusagen { border-top-color: var(--rahmen); font-size: 0.9375rem; }
+.kaufzusagen li { margin-bottom: var(--a2); }
+
+.fuss-vertrauen { border-top-color: var(--rahmen); }
+.zahlart {
+  border-radius: 999px; background: var(--krt-karte); border-color: transparent;
+  font-weight: 600; padding: 6px 16px;
+}
+.zahlarten-titel { font-weight: 600; }
+.anbieter { font-size: 0.9375rem; }

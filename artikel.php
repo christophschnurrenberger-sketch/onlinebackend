@@ -126,6 +126,16 @@ Theme::kopf([
           <span class="preis-vorher"><?= Util::e(Util::geld($streich)) ?></span>
         <?php endif; ?>
       </div>
+      <?php
+      $grundpreis = Util::grundpreis(
+          $preis,
+          (int) ($vorauswahl['inhalt_menge'] ?? 0),
+          (string) ($vorauswahl['inhalt_einheit'] ?? '')
+      );
+      ?>
+      <?php if ($grundpreis !== ''): ?>
+        <p class="grundpreis" data-grundpreis><?= Util::e($grundpreis) ?></p>
+      <?php endif; ?>
       <p class="steuerhinweis">
         inkl. MwSt., zzgl.
         <a href="<?= Util::e(Config::url('seite.php?h=' . rawurlencode($versandseite))) ?>">Versandkosten</a>
@@ -186,6 +196,35 @@ Theme::kopf([
           </button>
         </div>
       </form>
+
+      <?php
+      /*
+       * Was direkt am Kaufknopf steht, entscheidet mit über den Abbruch:
+       * Lieferzeit, Rückgaberecht und die Frage, womit überhaupt bezahlt
+       * werden kann. Alle drei Angaben kommen aus den Einstellungen bzw. aus
+       * den tatsächlich freigeschalteten Zahlarten – nichts davon ist
+       * Dekoration.
+       */
+      $zusagen = [];
+      if (Theme::e('lieferzeit') !== '') {
+          $zusagen[] = ['lieferung', Theme::e('lieferzeit')];
+      }
+      $widerruf = (int) Theme::e('widerruf_tage', '14');
+      if ($widerruf > 0) {
+          $zusagen[] = ['ruecksendung', $widerruf . ' Tage Widerrufsrecht'];
+      }
+      $zahlarten = array_map(static fn(array $z): string => (string) $z['name'], Zahlung::verfuegbare());
+      if ($zahlarten !== []) {
+          $zusagen[] = ['zahlung', 'Zahlung: ' . implode(', ', $zahlarten)];
+      }
+      ?>
+      <?php if ($zusagen !== []): ?>
+        <ul class="kaufzusagen">
+          <?php foreach ($zusagen as [$art, $text]): ?>
+            <li class="zusage-<?= Util::e($art) ?>"><?= Util::e($text) ?></li>
+          <?php endforeach; ?>
+        </ul>
+      <?php endif; ?>
 
       <?php if ((string) $artikel['beschreibung'] !== ''): ?>
         <div class="rte"><?= $artikel['beschreibung'] ?></div>

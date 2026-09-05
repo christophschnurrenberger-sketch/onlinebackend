@@ -125,7 +125,27 @@ weiß und rückt Marke und Menü in die Mitte — so treten Hersteller auf, die 
 eigenen Produkte verkaufen statt dreißigtausend fremde.
 
 In der Artikelkachel stehen außerdem der Nachlass in Prozent (`.marker`, etwa
-„−25 %“) und der Lieferstatus mit farbigem Punkt (`.kachel-lager`).
+„−25 %“), der Lieferstatus mit farbigem Punkt (`.kachel-lager`), der Grundpreis
+(`.grundpreis`) und der Steuerhinweis (`.preishinweis`).
+
+### Preis- und Vertrauensangaben
+
+Diese Angaben entscheiden mit, ob ein Shop als echt wahrgenommen wird — und
+zwei davon sind in Deutschland Pflicht:
+
+| Angabe | Wo | Warum |
+|---|---|---|
+| **Grundpreis** („19,49 €/l“) | Kachel und Artikelseite | Pflicht nach Preisangabenverordnung für alles, was nach Gewicht, Volumen, Länge oder Fläche verkauft wird. Gepflegt wird er pro Variante über **Inhalt** und **Einheit**. |
+| **inkl. MwSt., zzgl. Versand** | Kachel und Artikelseite | Pflicht, sobald ein Preis genannt wird. |
+| **Lieferzeit** | am Kaufknopf | Einstellungen → Shop-Daten |
+| **Widerrufsfrist** | am Kaufknopf | Einstellungen → Shop-Daten, mindestens 14 Tage |
+| **Zahlungsarten** | am Kaufknopf und im Fuß | kommen aus den tatsächlich freigeschalteten Zahlarten |
+| **Anschrift, Telefon, USt-IdNr.** | Fuß | Einstellungen → Shop-Daten |
+| **Gütesiegel** | Fuß | Einstellungen → Shop-Daten, nur eintragen, wenn wirklich vorhanden |
+
+Der Grundpreis rechnet auf 1 l bzw. 1 kg um; bei Mengen bis 250 g/ml auf
+100 g/ml, weil „249,00 €/l“ bei einer 50-ml-Flasche niemandem hilft. Bei
+Stückware bleibt die Zeile leer.
 
 ## Stufe 2: Eigenes Stylesheet
 

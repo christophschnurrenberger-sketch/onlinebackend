@@ -58,6 +58,37 @@
       <input type="text" id="ort" name="ort" value="<?= Util::e($e('ort')) ?>"></div>
   </div>
 
+  <h3 style="margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--rahmen)">Zusagen &amp; Gütesiegel</h3>
+  <div class="ad-hinweis ad-hinweis-info" style="margin:0 0 14px">
+    Lieferzeit und Widerrufsfrist stehen im Shop direkt am Kaufknopf – dort, wo entschieden wird.
+    Beides ist verbindlich: die angegebene Lieferzeit muss eingehalten werden, und unter 14 Tagen
+    Widerrufsrecht geht es im Fernabsatz nicht.
+  </div>
+  <div class="ad-feldzeile">
+    <div class="ad-feld"><label for="lieferzeit">Lieferzeit</label>
+      <input type="text" id="lieferzeit" name="lieferzeit" value="<?= Util::e($e('lieferzeit')) ?>"
+             placeholder="Lieferzeit 2–4 Werktage"></div>
+    <div class="ad-feld"><label for="widerruf_tage">Widerrufsfrist (Tage)</label>
+      <input type="number" id="widerruf_tage" name="widerruf_tage" min="14" max="365"
+             value="<?= (int) ($e('widerruf_tage') ?: 14) ?>"></div>
+  </div>
+  <div class="ad-feld"><label for="siegel_bild">Gütesiegel: Bild (Adresse)</label>
+    <input type="text" id="siegel_bild" name="siegel_bild" value="<?= Util::e($e('siegel_bild')) ?>"
+           placeholder="uploads/siegel.png">
+    <div class="ad-tipp">
+      Erscheint im Fuß. Nur eintragen, wenn du das Siegel wirklich führst – ein nachgebautes
+      Siegel ist wettbewerbswidrig und wird abgemahnt.
+    </div>
+  </div>
+  <div class="ad-feldzeile">
+    <div class="ad-feld"><label for="siegel_url">Siegel: Prüflink</label>
+      <input type="url" id="siegel_url" name="siegel_url" value="<?= Util::e($e('siegel_url')) ?>"
+             placeholder="https://…"></div>
+    <div class="ad-feld"><label for="siegel_text">Siegel: Beschriftung</label>
+      <input type="text" id="siegel_text" name="siegel_text" value="<?= Util::e($e('siegel_text')) ?>"
+             placeholder="Geprüfter Onlineshop"></div>
+  </div>
+
   <h3 style="margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--rahmen)">Soziale Netzwerke</h3>
   <div class="ad-feldzeile">
     <div class="ad-feld"><label for="social_instagram">Instagram</label>

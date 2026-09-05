@@ -68,6 +68,8 @@ final class Veroeffentlichung
                     'option2'      => (string) $v['option2'],
                     'option3'      => (string) $v['option3'],
                     'bild_url'     => (string) $v['bild_url'],
+                    'inhalt_menge'   => (int) ($v['inhalt_menge'] ?? 0),
+                    'inhalt_einheit' => (string) ($v['inhalt_einheit'] ?? ''),
                 ], $voll['varianten']),
                 'preis_min'     => $preise === [] ? 0 : min($preise),
                 'preis_max'     => $preise === [] ? 0 : max($preise),

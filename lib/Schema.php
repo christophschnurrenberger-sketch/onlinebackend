@@ -26,13 +26,24 @@
 final class Schema
 {
     /** Version des Schemas – wird in den Einstellungen gespeichert. */
-    public const VERSION = 1;
+    public const VERSION = 2;
 
     public static function migrate(): void
     {
         foreach (self::tables() as $sql) {
             DB::pdo()->exec(self::translate($sql));
         }
+        /*
+         * Spalten, die in späteren Fassungen dazugekommen sind. Bestehende
+         * Tabellen ändert "CREATE TABLE IF NOT EXISTS" nicht – deshalb hier.
+         */
+        foreach ([
+            ['varianten', 'inhalt_menge', '%INT% NOT NULL DEFAULT 0'],
+            ['varianten', 'inhalt_einheit', '%STR(8)% NOT NULL DEFAULT ""'],
+        ] as [$tabelle, $spalte, $definition]) {
+            self::ensureColumn($tabelle, $spalte, $definition);
+        }
+
         foreach (self::indexes() as $sql) {
             // MySQL kennt kein "CREATE INDEX IF NOT EXISTS".
             if (!DB::isSqlite()) {
@@ -196,6 +207,10 @@ final class Schema
                 ueberverkauf   %INT%      NOT NULL DEFAULT 0,
                 gewicht_g      %INT%      NOT NULL DEFAULT 0,
                 versandpflicht %INT%      NOT NULL DEFAULT 1,
+                /* Füllmenge für den Grundpreis nach Preisangabenverordnung.
+                   In Tausendsteln der Einheit, damit 0,75 l ganzzahlig bleibt. */
+                inhalt_menge   %INT%      NOT NULL DEFAULT 0,
+                inhalt_einheit %STR(8)%   NOT NULL DEFAULT "",
                 steuer_id      %INT%,
                 bild_url       %STR(255)% NOT NULL DEFAULT "",
                 position       %INT%      NOT NULL DEFAULT 0,

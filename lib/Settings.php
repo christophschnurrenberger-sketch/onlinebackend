@@ -71,6 +71,13 @@ final class Settings
         'vorteil_2'        => 'Schneller Versand',
         'vorteil_3'        => 'Rückgabe innerhalb der gesetzlichen Frist',
         'vorteil_4'        => '',
+        // Angaben, die den Kauf absichern: Lieferzeit, Widerrufsfrist,
+        // Gütesiegel. Sie stehen am Kaufknopf und im Fuß.
+        'lieferzeit'       => 'Lieferzeit 2–4 Werktage',
+        'widerruf_tage'    => '14',
+        'siegel_bild'      => '',
+        'siegel_url'       => '',
+        'siegel_text'      => '',
         'start_titel'      => 'Neu im Shop',
         'start_text'       => 'Handverlesen, sofort lieferbar.',
         'start_bild'       => '',

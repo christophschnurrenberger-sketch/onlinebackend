@@ -182,6 +182,16 @@ a:hover { text-decoration: underline; }
 }
 .marker-aus { background: var(--nebentext); }
 
+/* Grundpreis und Steuerhinweis.
+
+   Beide sind in Deutschland Pflicht, sobald ein Preis genannt wird: der
+   Grundpreis bei allem, was nach Gewicht, Volumen, Länge oder Fläche verkauft
+   wird, der Steuer- und Versandhinweis immer. Sie stehen deshalb direkt unter
+   dem Preis und nicht irgendwo im Kleingedruckten. */
+.grundpreis { font-size: 0.8125rem; color: var(--nebentext); margin: var(--a1) 0 0; }
+.preishinweis { font-size: 0.75rem; color: var(--nebentext); margin: 2px 0 0; }
+.kachel .grundpreis, .kachel .preishinweis { padding: 0 var(--a1); }
+
 /* Lieferstatus schon in der Liste – er entscheidet mit, was angeklickt wird. */
 .kachel-lager { display: flex; align-items: center; gap: 7px; font-size: 0.8125rem; margin: var(--a2) 0 0; }
 .kachel-lager::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
@@ -246,6 +256,17 @@ a:hover { text-decoration: underline; }
 .knopf-leer { background: transparent; color: var(--text); border-color: var(--rahmen); }
 .knopf-breit { width: 100%; }
 .knopf-klein { padding: 7px 14px; font-size: 0.875rem; }
+
+/* Zusagen am Kaufknopf: Lieferzeit, Widerruf, Zahlarten. */
+.kaufzusagen {
+  list-style: none; margin: var(--a4) 0 0; padding: var(--a4) 0 0;
+  border-top: 1px solid var(--rahmen); font-size: 0.875rem;
+}
+.kaufzusagen li { display: flex; align-items: flex-start; gap: var(--a3); margin-bottom: var(--a2); }
+.kaufzusagen li::before { flex: none; width: 1.1em; text-align: center; }
+.zusage-lieferung::before { content: "\2192"; }
+.zusage-ruecksendung::before { content: "\21BA"; }
+.zusage-zahlung::before { content: "\2713"; }
 
 /* --- Warenkorb und Kasse -------------------------------------------------- */
 
@@ -345,6 +366,26 @@ a:hover { text-decoration: underline; }
 .fuss-raster h4 { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--a3); }
 .fuss-raster ul { list-style: none; margin: 0; padding: 0; }
 .fuss-raster li { margin-bottom: var(--a2); font-size: 0.9375rem; }
+.anbieter { font-style: normal; font-size: 0.9375rem; line-height: 1.6; margin: 0 0 var(--a3); }
+.fuss-telefon { font-weight: 600; }
+
+/* Zahlungsarten und Gütesiegel. Beides steht hier, weil Kunden vor dem Kauf
+   danach suchen – und weil beides echt sein muss: die Zahlarten kommen aus
+   den freigeschalteten Zahlarten, das Siegel lädt nur, wenn eines hinterlegt
+   ist. Erfundene Siegel sind wettbewerbswidrig. */
+.fuss-vertrauen {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--a4); margin-top: var(--a6); padding-top: var(--a5);
+  border-top: 1px solid var(--rahmen);
+}
+.zahlarten { display: flex; flex-wrap: wrap; align-items: center; gap: var(--a2); }
+.zahlarten-titel { font-size: 0.8125rem; color: var(--nebentext); margin-right: var(--a2); }
+.zahlart {
+  font-size: 0.8125rem; padding: 5px 12px; border-radius: 6px;
+  border: 1px solid var(--rahmen); background: var(--hintergrund);
+}
+.siegel img { max-height: 64px; width: auto; }
+
 .fuss-unten {
   border-top: 1px solid var(--rahmen); margin-top: var(--a6); padding-top: var(--a4);
   font-size: 0.8125rem; color: var(--nebentext);

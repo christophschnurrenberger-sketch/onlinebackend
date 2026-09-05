@@ -269,13 +269,13 @@ td.ad-zahl-rechts, th.ad-zahl-rechts { text-align: right; font-variant-numeric: 
 /* --- Varianteneditor ------------------------------------------------------ */
 
 .ad-variante {
-  display: grid; grid-template-columns: minmax(110px,1.4fr) minmax(80px,1fr) minmax(80px,1fr) 90px 78px 34px;
+  display: grid; grid-template-columns: minmax(100px,1.3fr) minmax(74px,1fr) minmax(74px,1fr) 84px 70px 62px 74px 34px;
   gap: 8px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rahmen);
 }
 .ad-variante:last-child { border-bottom: 0; }
-.ad-variante input {
+.ad-variante input, .ad-variante select {
   padding: 6px 9px; border: 1px solid var(--rahmen-kraeftig); border-radius: var(--ecken-klein);
-  font: inherit; font-size: 13px; width: 100%;
+  font: inherit; font-size: 13px; width: 100%; background: var(--flaeche);
 }
 .ad-variante-kopf { font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--schwach); font-weight: 600; }
 .ad-block { border: 1px solid var(--rahmen); border-radius: var(--ecken-klein); padding: 12px; margin-bottom: 10px; background: var(--flaeche2); }

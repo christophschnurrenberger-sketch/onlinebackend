@@ -402,6 +402,9 @@ final class Artikel
                 'ueberverkauf'    => !empty($roh['ueberverkauf']) ? 1 : 0,
                 'gewicht_g'       => max(0, (int) ($roh['gewicht_g'] ?? 0)),
                 'versandpflicht'  => !empty($roh['versandpflicht']) ? 1 : 0,
+                'inhalt_menge'    => max(0, Util::mengeAus($roh['inhalt_menge'] ?? 0)),
+                'inhalt_einheit'  => isset(Util::EINHEITEN[(string) ($roh['inhalt_einheit'] ?? '')])
+                                     ? (string) $roh['inhalt_einheit'] : '',
                 'steuer_id'       => !empty($roh['steuer_id']) ? (int) $roh['steuer_id'] : null,
                 'bild_url'        => mb_substr((string) ($roh['bild_url'] ?? ''), 0, 255, 'UTF-8'),
                 'position'        => $position++,

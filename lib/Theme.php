@@ -399,17 +399,70 @@ $vorteile = array_values(array_filter([
 
       <div>
         <h4>Kontakt</h4>
+        <?php
+        /*
+         * Anschrift, Telefon und Umsatzsteuer-ID stehen bewusst ausgeschrieben
+         * im Fuß, nicht nur im Impressum. Wer dahinter steckt und wie man ihn
+         * erreicht, ist in der Forschung zur Glaubwürdigkeit von Webseiten der
+         * stärkste Einzelfaktor – und bei Fake-Shops fehlt genau das.
+         */
+        $anbieter = array_values(array_filter([
+            self::e('firma'),
+            self::e('strasse'),
+            trim(self::e('plz') . ' ' . self::e('ort')),
+        ]));
+        ?>
+        <?php if ($anbieter !== []): ?>
+          <address class="anbieter">
+            <?= implode('<br>', array_map([Util::class, 'e'], $anbieter)) ?>
+          </address>
+        <?php endif; ?>
         <ul>
+          <?php if (self::e('shop_telefon') !== ''): ?>
+            <li><a class="fuss-telefon" href="tel:<?= Util::e(preg_replace('/[^0-9+]/', '', self::e('shop_telefon'))) ?>">
+              <?= Util::e(self::e('shop_telefon')) ?></a></li>
+          <?php endif; ?>
           <?php if (self::e('shop_email') !== ''): ?>
             <li><a href="mailto:<?= Util::e(self::e('shop_email')) ?>"><?= Util::e(self::e('shop_email')) ?></a></li>
           <?php endif; ?>
-          <?php if (self::e('shop_telefon') !== ''): ?><li><?= Util::e(self::e('shop_telefon')) ?></li><?php endif; ?>
-          <?php if (self::e('ort') !== ''): ?>
-            <li><?= Util::e(trim(self::e('strasse') . ', ' . self::e('plz') . ' ' . self::e('ort'), ' ,')) ?></li>
+          <?php if (self::e('ust_id') !== ''): ?>
+            <li class="klein nebentext">USt-IdNr. <?= Util::e(self::e('ust_id')) ?></li>
           <?php endif; ?>
         </ul>
       </div>
     </div>
+
+    <?php
+    $zahlarten = [];
+    try {
+        $zahlarten = array_map(static fn(array $z): string => (string) $z['name'], Zahlung::verfuegbare());
+    } catch (Throwable $e) {
+        // Ohne Datenbank keine Zahlarten – der Fuß bleibt trotzdem stehen.
+    }
+    $siegelBild = self::e('siegel_bild');
+    ?>
+    <?php if ($zahlarten !== [] || $siegelBild !== ''): ?>
+      <div class="fuss-vertrauen">
+        <?php if ($zahlarten !== []): ?>
+          <div class="zahlarten">
+            <span class="zahlarten-titel">Zahlungsarten</span>
+            <?php foreach ($zahlarten as $name): ?>
+              <span class="zahlart"><?= Util::e($name) ?></span>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
+        <?php if ($siegelBild !== ''): ?>
+          <div class="siegel">
+            <?php if (self::e('siegel_url') !== ''): ?>
+              <a href="<?= Util::e(self::e('siegel_url')) ?>" rel="noopener" target="_blank">
+            <?php endif; ?>
+            <img src="<?= Util::e(self::url($siegelBild)) ?>"
+                 alt="<?= Util::e(self::e('siegel_text') ?: 'Gütesiegel') ?>" loading="lazy">
+            <?php if (self::e('siegel_url') !== ''): ?></a><?php endif; ?>
+          </div>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
 
     <div class="fuss-unten">
       <span>© <?= $jahr ?> <?= Util::e(self::e('firma') ?: self::e('shop_name')) ?></span>
@@ -506,6 +559,11 @@ $vorteile = array_values(array_filter([
             <?php endif; ?>
             <h3><?= Util::e((string) $artikel['titel']) ?></h3>
             <?= self::preisText($artikel) ?>
+            <?php $grundpreis = self::grundpreisText($artikel); ?>
+            <?php if ($grundpreis !== ''): ?>
+              <p class="grundpreis"><?= Util::e($grundpreis) ?></p>
+            <?php endif; ?>
+            <p class="preishinweis">inkl. MwSt., zzgl. Versand</p>
             <p class="kachel-lager lager-<?= Util::e($lager[0]) ?>"><?= Util::e($lager[1]) ?></p>
           </a>
         </article>
@@ -538,6 +596,29 @@ $vorteile = array_values(array_filter([
             return ['knapp', 'Nur noch ' . $hoechster . ' auf Lager'];
         }
         return ['da', 'Sofort lieferbar'];
+    }
+
+    /**
+     * Grundpreis des Artikels für die Liste, etwa "25,99 €/l".
+     *
+     * Genommen wird die günstigste Variante mit hinterlegter Füllmenge – das
+     * ist die, deren Preis in der Kachel steht. Ohne Füllmenge bleibt die
+     * Zeile leer; bei Stückware gibt es keinen Grundpreis.
+     */
+    public static function grundpreisText(array $artikel): string
+    {
+        $beste = null;
+        foreach ($artikel['varianten'] ?? [] as $variante) {
+            if ((int) ($variante['inhalt_menge'] ?? 0) <= 0 || (string) ($variante['inhalt_einheit'] ?? '') === '') {
+                continue;
+            }
+            if ($beste === null || (int) $variante['preis'] < (int) $beste['preis']) {
+                $beste = $variante;
+            }
+        }
+        return $beste === null
+            ? ''
+            : Util::grundpreis((int) $beste['preis'], (int) $beste['inhalt_menge'], (string) $beste['inhalt_einheit']);
     }
 
     /** Preisanzeige inklusive Streichpreis und "ab" bei Preisspannen. */

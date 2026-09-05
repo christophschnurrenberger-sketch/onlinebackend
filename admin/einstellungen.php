@@ -39,6 +39,12 @@ if (Util::isPost()) {
                     'plz' => Util::post('plz'), 'ort' => Util::post('ort'),
                     'social_instagram' => Util::post('social_instagram'),
                     'social_facebook' => Util::post('social_facebook'),
+                    'lieferzeit' => Util::post('lieferzeit'),
+                    // Unter 14 Tagen gibt es im Fernabsatz kein Widerrufsrecht.
+                    'widerruf_tage' => (string) max(14, Util::postInt('widerruf_tage', 14)),
+                    'siegel_bild' => Util::post('siegel_bild'),
+                    'siegel_url' => Util::post('siegel_url'),
+                    'siegel_text' => Util::post('siegel_text'),
                 ]);
                 break;
 

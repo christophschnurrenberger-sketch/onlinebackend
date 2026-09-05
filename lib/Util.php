@@ -33,6 +33,73 @@ final class Util
         return $waehrung === 'CHF' ? $zeichen . ' ' . $text : $text . ' ' . $zeichen;
     }
 
+    /**
+     * Einheiten für die Füllmenge und ihr Umrechnungsfaktor auf die
+     * Grundpreis-Basiseinheit (1 l, 1 kg, 1 m, 1 m²).
+     *
+     * @var array<string,array{0:string,1:float,2:string}> Kürzel => [Anzeige, Faktor, Basis]
+     */
+    public const EINHEITEN = [
+        'ml'  => ['ml', 0.001, 'l'],
+        'l'   => ['l',  1.0,   'l'],
+        'g'   => ['g',  0.001, 'kg'],
+        'kg'  => ['kg', 1.0,   'kg'],
+        'cm'  => ['cm', 0.01,  'm'],
+        'm'   => ['m',  1.0,   'm'],
+        'm2'  => ['m²', 1.0,   'm²'],
+        'stk' => ['Stück', 1.0, 'Stück'],
+    ];
+
+    /**
+     * Grundpreis nach Preisangabenverordnung: "19,49 €/l".
+     *
+     * Pflicht für alles, was nach Gewicht, Volumen, Länge oder Fläche verkauft
+     * wird – und einer der häufigsten Abmahngründe im deutschen Onlinehandel.
+     * Basis ist seit 2022 einheitlich 1 kg bzw. 1 l; bei Mengen bis 250 g/ml
+     * darf auf 100 g/ml bezogen werden, was hier automatisch geschieht, weil
+     * "12,99 €/l" bei einer 50-ml-Flasche niemandem hilft.
+     *
+     * @param int $menge Füllmenge in Tausendsteln der Einheit (0,75 l => 750)
+     */
+    public static function grundpreis(int $preisCent, int $menge, string $einheit): string
+    {
+        $eintrag = self::EINHEITEN[$einheit] ?? null;
+        if ($eintrag === null || $menge <= 0 || $preisCent <= 0 || $einheit === 'stk') {
+            return '';
+        }
+        [, $faktor, $basis] = $eintrag;
+
+        $inBasis = ($menge / 1000) * $faktor;
+        if ($inBasis <= 0) {
+            return '';
+        }
+
+        $bezug = 1.0;
+        $label = $basis;
+        if (in_array($basis, ['l', 'kg'], true) && $inBasis <= 0.25) {
+            $bezug = 0.1;
+            $label = $basis === 'l' ? '100 ml' : '100 g';
+        }
+
+        return self::geld((int) round($preisCent / $inBasis * $bezug)) . '/' . $label;
+    }
+
+    /** Füllmenge als Eingabewert: 750 → "0,75". */
+    public static function mengeFeld(int $menge): string
+    {
+        return $menge === 0 ? '' : rtrim(rtrim(number_format($menge / 1000, 3, ',', ''), '0'), ',');
+    }
+
+    /** Liest "0,75" oder "750" als Tausendstel. */
+    public static function mengeAus($eingabe): int
+    {
+        if ($eingabe === null || $eingabe === '') {
+            return 0;
+        }
+        $text = str_replace(',', '.', preg_replace('/[^\d,.\-]/', '', (string) $eingabe) ?? '');
+        return $text === '' ? 0 : (int) round(((float) $text) * 1000);
+    }
+
     /** Cent als reine Zahl für Eingabefelder: 1990 → "19,90". */
     public static function geldFeld(?int $cent): string
     {
