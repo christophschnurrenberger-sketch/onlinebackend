@@ -55,6 +55,12 @@ Kommandozeile.
 > [docs/BETRIEB.md](docs/BETRIEB.md). Bleibt der Fehler, liegt es an PHP;
 > dann hilft `systemcheck.php`.
 
+> **Nicht jedes Mal per FTP?** `.github/workflows/webspace.yml` lädt den Shop
+> nach jedem Push automatisch auf den Webspace — mit Syntaxprüfung vorweg und
+> ohne `config.php`, `data/` und `uploads/` anzurühren. Einzurichten sind nur
+> drei Zugangsdaten in den GitHub-Einstellungen, siehe Abschnitt 9 in
+> [docs/BETRIEB.md](docs/BETRIEB.md).
+
 **Voraussetzungen:** PHP 8.1 oder neuer, dazu PDO mit SQLite *oder* MySQL.
 Beides bringt praktisch jeder Hoster mit. Fehlt etwas, sagt der Systemcheck,
 wo im Hosting-Menü du es umstellst.

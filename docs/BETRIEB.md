@@ -214,7 +214,53 @@ Der Systemcheck prüft dasselbe unter **„Keine Reste einer früheren Fassung"*
 Alternativ von Hand: den Shop-Ordner auf dem Server löschen — **außer**
 `config.php`, `data/` und `uploads/` — und die neue Fassung frisch hochladen.
 
-## 9. Wenn etwas klemmt
+## 9. Automatisch auf den Webspace hochladen
+
+Statt nach jeder Änderung per FTP zu hantieren, kann GitHub das übernehmen:
+`.github/workflows/webspace.yml` lädt den Shop nach jedem Push hoch.
+
+**Einmalig einzurichten** — im GitHub-Repository unter *Settings → Secrets and
+variables → Actions*:
+
+| Art | Name | Wert |
+|---|---|---|
+| Secret | `WEBSPACE_SERVER` | Serveradresse, bei IONOS z. B. `home123456789.1and1-data.host` |
+| Secret | `WEBSPACE_BENUTZER` | Benutzername, bei IONOS z. B. `u12345678` |
+| Secret | `WEBSPACE_PASSWORT` | Passwort des FTP-/SFTP-Zugangs |
+| Variable | `WEBSPACE_PROTOKOLL` | `ftps` (Vorgabe) oder `sftp` |
+| Variable | `WEBSPACE_ORDNER` | Zielordner, Vorgabe `/`, bei einem Unterordner z. B. `/shop` |
+
+Die Zugangsdaten stehen bei IONOS im Kundenkonto unter *Hosting → SFTP-Zugänge*
+bzw. *FTP-Zugänge*. Lege dort am besten einen eigenen Zugang nur für die
+Übertragung an — dann lässt er sich später abschalten, ohne dass dein
+Hauptzugang betroffen ist.
+
+**Vor dem ersten scharfen Lauf** unter *Actions → Auf den Webspace hochladen →
+Run workflow* einmal mit angehaktem **Probelauf** starten. Dann zeigt das
+Protokoll Zeile für Zeile, was passieren würde, ohne eine Datei anzufassen.
+
+### Was übertragen wird und was nicht
+
+Der Lauf spiegelt das Repository auf den Webspace, löscht also auch Dateien,
+die es nicht mehr gibt — genau das Problem, das eine übrig gebliebene
+`index.html` sonst verursacht. Ausgenommen sind:
+
+| Bleibt unangetastet | Warum |
+|---|---|
+| `config.php` | deine Konfiguration, liegt nicht im Repository |
+| `data/` | die Datenbank |
+| `uploads/` | die hochgeladenen Bilder |
+| `install.php`, `aufraeumen.php` | wären dauerhaft erreichbar ein offenes Tor; bei Bedarf von Hand hochladen |
+| `.github/`, `docs/`, `*.md`, `.git*` | gehört nicht auf einen Webserver |
+
+Die Schutzdateien `data/.htaccess` und `uploads/.htaccess` werden trotzdem
+mitgeschickt — ohne sie wäre die Datenbank herunterladbar.
+
+Vor der Übertragung prüft der Lauf jede PHP-Datei mit `php -l`. Ein Tippfehler
+bricht den Lauf ab, statt den Shop lahmzulegen. Hat sich das Datenbankschema
+geändert, zieht der Shop das beim nächsten Seitenaufruf selbst nach.
+
+## 10. Wenn etwas klemmt
 
 | Symptom | Ursache |
 |---|---|

@@ -1,0 +1,147 @@
+# Lädt den Shop nach jedem Push auf den Webspace.
+#
+# Warum lftp und keine fertige Action: lftp spricht FTP, FTPS und SFTP mit
+# demselben Befehl, spiegelt statt nur hochzuladen (gelöschte Dateien
+# verschwinden also auch auf dem Server) und ist kein fremdes Stück Software,
+# das Zugangsdaten zu sehen bekommt.
+#
+# Einmalig einzurichten (Repository → Settings):
+#
+#   Secrets and variables → Actions → Secrets:
+#     WEBSPACE_SERVER    z. B. home123456789.1and1-data.host
+#     WEBSPACE_BENUTZER  z. B. u12345678
+#     WEBSPACE_PASSWORT  das Passwort des FTP-/SFTP-Zugangs
+#
+#   Secrets and variables → Actions → Variables (nur wenn nötig):
+#     WEBSPACE_PROTOKOLL  ftps (Vorgabe) oder sftp
+#     WEBSPACE_ORDNER     Zielordner, Vorgabe /
+#
+# Vor dem ersten scharfen Lauf: oben auf „Run workflow“ klicken und den
+# Probelauf angehakt lassen. Dann zeigt das Protokoll, was passieren würde,
+# ohne eine Datei anzufassen.
+
+name: Auf den Webspace hochladen
+
+on:
+  push:
+    branches: [claude/shop-cms-backend-frontend-4rwzqp]
+  workflow_dispatch:
+    inputs:
+      probelauf:
+        description: 'Nur anzeigen, was passieren würde (nichts übertragen)'
+        type: boolean
+        default: true
+
+# Zwei gleichzeitige Übertragungen auf denselben Webspace geben ein Chaos.
+concurrency:
+  group: webspace
+  cancel-in-progress: false
+
+jobs:
+  hochladen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Ein Tippfehler in einer PHP-Datei legt den ganzen Shop lahm. Deshalb
+      # wird vor der Übertragung jede Datei geprüft; schlägt das fehl, bricht
+      # der Lauf ab und auf dem Webspace ändert sich nichts.
+      - name: PHP-Dateien prüfen
+        run: |
+          fehler=0
+          while IFS= read -r datei; do
+            php -l "$datei" > /dev/null || { echo "FEHLER in $datei"; fehler=1; }
+          done < <(find . -path ./.git -prune -o -name '*.php' -print)
+          exit $fehler
+
+      - name: lftp installieren
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      - name: Übertragen
+        env:
+          SERVER:    ${{ secrets.WEBSPACE_SERVER }}
+          BENUTZER:  ${{ secrets.WEBSPACE_BENUTZER }}
+          PASSWORT:  ${{ secrets.WEBSPACE_PASSWORT }}
+          PROTOKOLL: ${{ vars.WEBSPACE_PROTOKOLL || 'ftps' }}
+          ORDNER:    ${{ vars.WEBSPACE_ORDNER || '/' }}
+          PROBELAUF: ${{ inputs.probelauf }}
+        run: |
+          set -euo pipefail
+
+          # Solange keine Zugangsdaten hinterlegt sind, tut dieser Lauf nichts.
+          # Ein roter Haken bei jedem Push wäre nur Lärm – der Hinweis genügt.
+          if [ -z "${SERVER:-}" ] || [ -z "${BENUTZER:-}" ] || [ -z "${PASSWORT:-}" ]; then
+            echo "::warning::Keine Zugangsdaten hinterlegt – es wurde nichts übertragen."
+            echo "Anzulegen unter Settings → Secrets and variables → Actions → Secrets:"
+            echo "  WEBSPACE_SERVER, WEBSPACE_BENUTZER, WEBSPACE_PASSWORT"
+            exit 0
+          fi
+
+          case "$PROTOKOLL" in
+            sftp) ZIEL="sftp://$SERVER" ;;
+            ftp)  ZIEL="ftp://$SERVER"  ;;
+            *)    ZIEL="ftp://$SERVER"  ;;   # ftps = FTP mit TLS, siehe ssl-force unten
+          esac
+
+          TROCKEN=""
+          if [ "${PROBELAUF:-false}" = "true" ]; then
+            TROCKEN="--dry-run"
+            echo "== Probelauf: es wird nichts übertragen =="
+          fi
+
+          # Was nie angefasst wird:
+          #   config.php          die Konfiguration des Betreibers
+          #   data/               die Datenbank
+          #   uploads/            die hochgeladenen Bilder
+          #   install.php         wäre nach der Einrichtung ein offenes Tor
+          #   aufraeumen.php      dito
+          #   .git*, .github/     gehört nicht auf einen Webserver
+          #   docs/, *.md         Betriebsunterlagen, kein Programmcode
+          AUSNAHMEN="--exclude ^\.git --exclude ^\.github/ --exclude ^docs/ --exclude \.md$ \
+                     --exclude ^config\.php$ --exclude ^data/ --exclude ^uploads/ \
+                     --exclude ^install\.php$ --exclude ^aufraeumen\.php$"
+
+          # Das Passwort geht über die Umgebung, nicht über die Befehlszeile:
+          # sonst stünde es in der Prozessliste des Läufers.
+          #
+          # xfer:make-backup no ist wichtig: sonst legt lftp neben jeder
+          # geänderten Datei eine Kopie "datei~20260101120000~" ab. Die wäre
+          # nicht nur Müll, sondern würde vom Server als Text ausgeliefert –
+          # also Programmcode im Klartext, mitsamt allem, was darin steht.
+          export LFTP_PASSWORD="$PASSWORT"
+
+          EINSTELLUNGEN="
+            set cmd:fail-exit yes;
+            set net:max-retries 3;
+            set net:timeout 20;
+            set ftp:ssl-force $([ \"$PROTOKOLL\" = 'ftps' ] && echo true || echo false);
+            set ftp:ssl-protect-data true;
+            set sftp:auto-confirm yes;
+            set xfer:clobber yes;
+            set xfer:make-backup no;
+          "
+
+          lftp -c "
+            $EINSTELLUNGEN
+            open -u '$BENUTZER' --env-password '$ZIEL';
+            mirror --reverse --delete --verbose --parallel=2 $TROCKEN $AUSNAHMEN ./ '$ORDNER';
+          "
+
+          # data/ und uploads/ sind oben ausgenommen, damit die Spiegelung dort
+          # nichts löscht. Ihre Schutzdateien müssen aber trotzdem hinauf –
+          # ohne sie wäre die Datenbank herunterladbar.
+          if [ -z "$TROCKEN" ]; then
+            lftp -c "
+              $EINSTELLUNGEN
+              open -u '$BENUTZER' --env-password '$ZIEL';
+              mkdir -p -f '$ORDNER/data' '$ORDNER/uploads';
+              put -O '$ORDNER/data' data/.htaccess data/index.html;
+              put -O '$ORDNER/uploads' uploads/.htaccess uploads/index.html;
+            "
+          fi
+
+      - name: Ergebnis
+        if: success()
+        run: |
+          echo "Fertig. Wenn sich das Datenbankschema geändert hat, holt der Shop das"
+          echo "beim nächsten Seitenaufruf von selbst nach."
