@@ -60,6 +60,7 @@ $schriften = [
     Theme::SCHRIFT_SYSTEM    => 'System (serifenlos)',
     Theme::SCHRIFT_HELVETICA => 'Helvetica',
     Theme::SCHRIFT_SCHMAL    => 'Arial Narrow (schmal)',
+    Theme::SCHRIFT_QUELLE    => 'Source Sans 3 (mitgeliefert)',
     Theme::SCHRIFT_HUMANIST  => 'Avenir / Segoe (humanistisch)',
     Theme::SCHRIFT_GEORGIA   => 'Georgia (Serif)',
     Theme::SCHRIFT_PALATINO  => 'Palatino (Serif)',

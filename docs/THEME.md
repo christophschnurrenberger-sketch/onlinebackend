@@ -98,6 +98,19 @@ dem Basis-Stylesheet eingebunden und überschreibt es damit:
 Änderungen am Design werden — wie alles andere — erst nach dem
 **Veröffentlichen** im Shop sichtbar.
 
+### Mitgelieferte Schrift
+
+Unter `assets/schriften/` liegt **Source Sans 3** (Adobe, SIL Open Font
+License) als WOFF2 in drei Schnitten. Der Shop liefert sie selbst aus — nicht
+über Google Fonts, denn dabei ginge bei jedem Seitenaufruf die IP-Adresse des
+Besuchers an einen Server in den USA; dafür sind deutsche Seitenbetreiber
+bereits abgemahnt worden.
+
+Im Backend steht sie unter *Design → Typografie* als **„Source Sans 3
+(mitgeliefert)"** zur Auswahl. Wird eine andere Schrift eingestellt, lädt der
+Browser die Dateien gar nicht erst — die `@font-face`-Regeln in `shop.css`
+kosten dann nichts.
+
 ### Der Aufbau des Kopfes
 
 Der Kopf besteht aus drei Bändern übereinander — der Aufbau, den der deutsche
@@ -123,6 +136,16 @@ Ein Stil kann die Bänder völlig unterschiedlich behandeln: Golf, Fahrrad und
 Pferdesport färben das Kategorienband in der Hausfarbe ein, Kräuter lässt es
 weiß und rückt Marke und Menü in die Mitte — so treten Hersteller auf, die ihre
 eigenen Produkte verkaufen statt dreißigtausend fremde.
+
+Das Untermenü (`.untermenue`) ist im Kräuterstil ein Band über die volle
+Inhaltsbreite mit automatischen Spalten — dafür gibt der Menüpunkt seine
+Positionierung ab (`position: static`) und das Band übernimmt sie. Kein
+zusätzliches Markup, kein JavaScript.
+
+Der Fuß besteht aus vier Spalten: Marke mit Sozialsymbolen, zwei Linkspalten
+in `<details>` (am Schreibtisch offen, auf dem Telefon von `shop.js`
+zugeklappt) und einem Hilfeblock mit großer Telefonnummer, Servicezeiten,
+E-Mail, Anschrift und USt-IdNr.
 
 In der Artikelkachel stehen außerdem der Nachlass in Prozent (`.marker`, etwa
 „−25 %“), der Lieferstatus mit farbigem Punkt (`.kachel-lager`), der Grundpreis

@@ -7,6 +7,35 @@
  * die Seitenstruktur bleibt in beiden Fällen unverändert.
  */
 
+/*
+ * Mitgelieferte Schrift.
+ *
+ * Source Sans 3 von Adobe, SIL Open Font License – die Dateien liegen unter
+ * assets/schriften/. Selbst ausgeliefert und nicht von Google geladen: ein
+ * Shop, der Google Fonts einbindet, schickt bei jedem Aufruf die IP-Adresse
+ * seiner Besucher nach Amerika, und genau dafür sind deutsche Seitenbetreiber
+ * schon abgemahnt worden.
+ *
+ * Wird eine Schrift nicht benutzt, lädt der Browser die Datei auch nicht –
+ * die Regeln hier kosten also nichts, solange im Design eine andere Schrift
+ * eingestellt ist.
+ */
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('schriften/SourceSans3-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('schriften/SourceSans3-Semibold.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Source Sans 3';
+  src: url('schriften/SourceSans3-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
 /* Rückfallwerte; der Server überschreibt sie im <head> jeder Seite. */
 :root {
   --hintergrund: #ffffff;
@@ -106,6 +135,8 @@ a:hover { text-decoration: underline; }
   background: var(--hintergrund); color: var(--text);
 }
 .warenkorb-link { display: inline-flex; align-items: center; gap: var(--a2); font-size: 0.9375rem; }
+.symbol { display: block; flex: none; }
+.suchfeld button { display: inline-flex; align-items: center; justify-content: center; }
 .warenkorb-zahl {
   display: inline-grid; place-items: center; min-width: 22px; height: 22px; padding: 0 6px;
   border-radius: 11px; background: var(--knopf); color: var(--knopf-text);
@@ -366,8 +397,31 @@ a:hover { text-decoration: underline; }
 .fuss-raster h4 { font-size: 0.875rem; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: var(--a3); }
 .fuss-raster ul { list-style: none; margin: 0; padding: 0; }
 .fuss-raster li { margin-bottom: var(--a2); font-size: 0.9375rem; }
-.anbieter { font-style: normal; font-size: 0.9375rem; line-height: 1.6; margin: 0 0 var(--a3); }
-.fuss-telefon { font-weight: 600; }
+.anbieter { font-style: normal; font-size: 0.9375rem; line-height: 1.6; margin: var(--a4) 0 var(--a2); color: var(--nebentext); }
+
+/* Fußspalten. <details> statt Klapp-JavaScript: am Schreibtisch offen ohne
+   sichtbare Marke, auf dem Telefon zusammengeklappt. */
+.fuss-spalte { border: 0; }
+.fuss-spalte > summary { list-style: none; cursor: default; }
+.fuss-spalte > summary::-webkit-details-marker { display: none; }
+.fuss-spalte > summary h4 { display: inline-block; margin: 0 0 var(--a3); }
+
+.sozial { display: flex; gap: var(--a2); margin-top: var(--a4); }
+.sozial a {
+  width: 38px; height: 38px; display: grid; place-items: center;
+  border: 1px solid var(--rahmen); border-radius: 50%; color: var(--text);
+}
+.sozial a:hover { background: var(--hintergrund); border-color: var(--text); }
+
+/* Hilfeblock: die Telefonnummer ist hier die wichtigste Zeile der Seite. */
+.hilfe-telefon {
+  display: inline-flex; align-items: center; gap: var(--a2);
+  font-size: 1.3125rem; font-weight: 700; line-height: 1.2;
+}
+.hilfe-telefon:hover { text-decoration: none; color: var(--akzent); }
+.hilfe-zeiten { font-size: 0.8125rem; color: var(--nebentext); margin: var(--a2) 0 var(--a3); }
+.hilfe-mail { display: inline-flex; align-items: center; gap: var(--a2); font-size: 0.9375rem; }
+.hilfe-mail:hover { text-decoration: underline; }
 
 /* Zahlungsarten und Gütesiegel. Beides steht hier, weil Kunden vor dem Kauf
    danach suchen – und weil beides echt sein muss: die Zahlarten kommen aus
@@ -419,6 +473,13 @@ a:hover { text-decoration: underline; }
   .suchfeld input { width: 100%; min-width: 0; }
   .suchfeld button { padding: 0 var(--a3); }
   .warenkorb-wort { display: none; }
+  /* Fußspalten aufklappbar – shop.js schließt sie beim Laden. */
+  .fuss-spalte > summary { cursor: pointer; display: flex; align-items: center; justify-content: space-between; }
+  .fuss-spalte > summary h4 { margin: 0; }
+  .fuss-spalte > summary::after { content: "+"; font-size: 1.25rem; line-height: 1; color: var(--nebentext); }
+  .fuss-spalte[open] > summary::after { content: "\2212"; }
+  .fuss-spalte { border-bottom: 1px solid var(--rahmen); padding: var(--a3) 0; }
+  .fuss-spalte ul { padding-top: var(--a3); }
   .servicezeile { display: none; }
   /* Vier Vorteile untereinander schieben den Shop nach unten – deshalb auf
      dem Telefon eine Zeile zum Wischen, wie im Handel üblich. */

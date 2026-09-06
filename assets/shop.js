@@ -19,6 +19,19 @@
     });
   }
 
+  /* --- Fußspalten auf dem Telefon zuklappen ------------------------------ */
+
+  /*
+   * Im Quelltext stehen die Spalten offen – ohne JavaScript bleiben sie also
+   * lesbar. Auf schmalen Bildschirmen wären vier ausgeklappte Spalten aber ein
+   * halber Meter Scrollweg, deshalb hier zu.
+   */
+  if (window.matchMedia('(max-width: 760px)').matches) {
+    Array.prototype.forEach.call(document.querySelectorAll('.fuss-spalte[open]'), function (spalte) {
+      spalte.removeAttribute('open');
+    });
+  }
+
   /* --- Mengenknöpfe ------------------------------------------------------ */
 
   document.addEventListener('click', function (e) {

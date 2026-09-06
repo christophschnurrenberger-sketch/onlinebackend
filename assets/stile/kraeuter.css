@@ -102,7 +102,7 @@ h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); }
    Motiv im Rahmen und nicht randlos über die ganze Breite. */
 .buehne.mit-bild {
   max-width: var(--breite); margin: var(--a5) auto; border-radius: 26px;
-  text-align: left; text-shadow: 0 2px 18px rgba(0, 0, 0, .5); min-height: 460px;
+  text-align: left; text-shadow: 0 1px 10px rgba(0, 0, 0, .35); min-height: 420px;
 }
 .buehne.mit-bild .buehne-innen { margin: 0; max-width: 560px; }
 
@@ -174,6 +174,50 @@ h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); }
 .fuss-raster h4 { text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.8125rem; font-weight: 800; }
 .pille { border-radius: 999px; }
 
+/* --- Mehrspaltiges Menüband ------------------------------------------------ */
+/*
+ * Im Fachhandel klappt unter dem Kategorienband keine schmale Liste auf,
+ * sondern eine Fläche über die ganze Inhaltsbreite. Dafür reicht CSS: der
+ * Menüpunkt gibt seine Positionierung ab, das Band übernimmt sie.
+ */
+.kopf-nav .behaelter { position: relative; }
+.kopf-nav .menuepunkt { position: static; }
+.untermenue {
+  left: 0; right: 0; min-width: 0; padding: var(--a5) var(--a5) var(--a4);
+  border-radius: 0 0 22px 22px; border-top: 1px solid var(--rahmen);
+  column-width: 200px; column-gap: var(--a6);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .10);
+}
+.untermenue li { break-inside: avoid; }
+.untermenue a {
+  padding: 7px 10px; border-radius: 10px; font-size: 0.9375rem;
+}
+.untermenue a:hover { background: var(--flaeche); color: var(--knopf); }
+
+/* --- Abschnittsrhythmus ---------------------------------------------------- */
+/*
+ * Getönt wird nur, was keine Artikelkacheln enthält. Kacheln sind weiß mit
+ * beiger Bildfläche – auf Graubeige verschwämme beides ineinander. Der
+ * Wechsel Creme/Graubeige trennt die Bereiche trotzdem ohne eine einzige Linie.
+ */
+.abschnitt:has(.beitragsraster) { background: var(--flaeche); }
+
+/* --- Fuß -------------------------------------------------------------------- */
+
+.fuss-raster { grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: var(--a7); }
+.fuss-marke p { max-width: 34ch; }
+.sozial a { background: var(--krt-karte); border-color: transparent; box-shadow: 0 1px 3px rgba(0, 0, 0, .05); }
+.sozial a:hover { color: var(--knopf); }
+
+.fuss-hilfe h4 { text-transform: none; letter-spacing: -0.01em; font-size: 1.125rem; font-weight: 800; }
+.hilfe-telefon { color: var(--knopf); font-size: 1.5rem; }
+.hilfe-telefon:hover { color: var(--knopf); }
+.hilfe-mail { color: var(--text); }
+
+@media (max-width: 1000px) {
+  .fuss-raster { grid-template-columns: 1fr 1fr; gap: var(--a5) var(--a6); }
+}
+
 @media (max-width: 900px) {
   .raster { gap: var(--a4); }
   .buehne.mit-bild { border-radius: 20px; margin: var(--a4) var(--a4) 0; }
@@ -187,6 +231,11 @@ h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2rem); }
   .kopf-aktionen { width: 100%; margin-left: 0; }
   .suchfeld input { width: 100%; min-width: 0; }
   .kopf-nav .hauptmenue { padding-bottom: 0; }
+  /* Vier Spalten nebeneinander gehen auf dem Telefon nicht auf – untereinander
+     mit Aufklappmarke ist die uebliche und lesbare Form. */
+  .fuss-raster { grid-template-columns: 1fr; gap: var(--a4); }
+  .hilfe-telefon { font-size: 1.25rem; }
+  .fuss-hilfe { padding-top: var(--a4); }
 }
 
 /* --- Preis- und Vertrauensangaben ----------------------------------------- */

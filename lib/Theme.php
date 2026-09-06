@@ -86,7 +86,7 @@ final class Theme
                 'farbe_nebentext' => '#7d7a74', 'farbe_rahmen' => '#e3ded4', 'farbe_knopf' => '#c11b1a',
                 'farbe_knopf_text' => '#ffffff', 'farbe_akzent' => '#849e62', 'farbe_sale' => '#c11b1a',
                 'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '4',
-                'schrift_titel' => self::SCHRIFT_HUMANIST, 'schrift_text' => self::SCHRIFT_HUMANIST,
+                'schrift_titel' => self::SCHRIFT_QUELLE, 'schrift_text' => self::SCHRIFT_QUELLE,
             ],
         ],
         'kontrast' => [
@@ -133,6 +133,8 @@ final class Theme
     public const SCHRIFT_HELVETICA = '\'Helvetica Neue\', Helvetica, Arial, sans-serif';
     public const SCHRIFT_SCHMAL    = '\'Arial Narrow\', \'Helvetica Neue\', Helvetica, Arial, sans-serif';
     public const SCHRIFT_HUMANIST  = '\'Avenir Next\', Avenir, \'Segoe UI\', \'Trebuchet MS\', system-ui, sans-serif';
+    /* Liegt als Datei bei, siehe assets/schriften/. */
+    public const SCHRIFT_QUELLE    = '\'Source Sans 3\', system-ui, -apple-system, \'Segoe UI\', Roboto, Arial, sans-serif';
     public const SCHRIFT_GEORGIA   = 'Georgia, "Times New Roman", serif';
     public const SCHRIFT_PALATINO  = '"Iowan Old Style", "Palatino Linotype", Palatino, serif';
     public const SCHRIFT_MONO      = 'ui-monospace, \'SF Mono\', Menlo, Consolas, monospace';
@@ -298,9 +300,10 @@ $vorteile = array_values(array_filter([
       <form class="suchfeld" action="<?= Util::e(Config::url('suche.php')) ?>" role="search">
         <label class="nur-vorlesen" for="q">Suche</label>
         <input type="search" id="q" name="q" placeholder="Wonach suchst du?" value="<?= Util::e(Util::get('q')) ?>">
-        <button type="submit" aria-label="Suchen">Suchen</button>
+        <button type="submit" aria-label="Suchen"><?= self::symbol('lupe', 18) ?><span class="nur-vorlesen">Suchen</span></button>
       </form>
       <a class="warenkorb-link" href="<?= Util::e(Config::url('warenkorb.php')) ?>">
+        <?= self::symbol('tasche') ?>
         <span class="warenkorb-wort">Warenkorb</span>
         <span class="warenkorb-zahl" data-warenkorb-zahl><?= (int) $anzahl ?></span>
       </a>
@@ -358,53 +361,64 @@ $vorteile = array_values(array_filter([
 <footer class="fuss">
   <div class="behaelter">
     <div class="fuss-raster">
-      <div>
+      <div class="fuss-marke">
         <h4><?= Util::e(self::e('shop_name')) ?></h4>
         <p class="nebentext"><?= Util::e(self::e('fusszeile_text') ?: self::e('shop_beschreibung')) ?></p>
         <?php
         $sozial = array_filter([
-            'Instagram' => self::e('social_instagram'),
-            'Facebook'  => self::e('social_facebook'),
-        ]);
-        if ($sozial !== []): ?>
-          <ul>
-            <?php foreach ($sozial as $name => $url): ?>
-              <li><a href="<?= Util::e($url) ?>" rel="noopener"><?= Util::e($name) ?></a></li>
+            'instagram' => ['Instagram', self::e('social_instagram')],
+            'facebook'  => ['Facebook', self::e('social_facebook')],
+        ], static fn(array $e): bool => $e[1] !== '');
+        ?>
+        <?php if ($sozial !== []): ?>
+          <div class="sozial">
+            <?php foreach ($sozial as $symbol => [$name, $url]): ?>
+              <a href="<?= Util::e($url) ?>" rel="noopener" target="_blank" aria-label="<?= Util::e($name) ?>">
+                <?= self::symbol($symbol) ?>
+              </a>
             <?php endforeach; ?>
-          </ul>
+          </div>
         <?php endif; ?>
       </div>
 
+      <?php
+      /*
+       * Die Spalten stecken in <details>. Am Schreibtisch stehen sie offen und
+       * die Aufklappmarke ist weg; auf dem Telefon klappt shop.js sie zu, damit
+       * der Fuß nicht länger wird als die Seite davor. Ohne JavaScript bleiben
+       * sie offen – lesbar ist er dann immer noch.
+       */
+      ?>
       <?php if (!empty($fassung['menues']['fuss'])): ?>
-      <div>
-        <h4>Shop</h4>
+      <details class="fuss-spalte" open>
+        <summary><h4>Shop</h4></summary>
         <ul>
           <?php foreach ($fassung['menues']['fuss'] as $punkt): ?>
             <li><a href="<?= Util::e(self::url((string) $punkt['url'])) ?>"><?= Util::e((string) $punkt['label']) ?></a></li>
           <?php endforeach; ?>
         </ul>
-      </div>
+      </details>
       <?php endif; ?>
 
       <?php if ($rechtsseiten !== []): ?>
-      <div>
-        <h4>Rechtliches</h4>
+      <details class="fuss-spalte" open>
+        <summary><h4>Rechtliches</h4></summary>
         <ul>
           <?php foreach ($rechtsseiten as [$label, $handle]): ?>
             <li><a href="<?= Util::e(Config::url('seite.php?h=' . rawurlencode($handle))) ?>"><?= Util::e($label) ?></a></li>
           <?php endforeach; ?>
         </ul>
-      </div>
+      </details>
       <?php endif; ?>
 
-      <div>
-        <h4>Kontakt</h4>
+      <div class="fuss-hilfe">
         <?php
         /*
          * Anschrift, Telefon und Umsatzsteuer-ID stehen bewusst ausgeschrieben
          * im Fuß, nicht nur im Impressum. Wer dahinter steckt und wie man ihn
          * erreicht, ist in der Forschung zur Glaubwürdigkeit von Webseiten der
-         * stärkste Einzelfaktor – und bei Fake-Shops fehlt genau das.
+         * stärkste Einzelfaktor – und bei Fake-Shops fehlt genau das. Die
+         * Telefonnummer steht deshalb groß und nicht als Fußnote.
          */
         $anbieter = array_values(array_filter([
             self::e('firma'),
@@ -412,23 +426,28 @@ $vorteile = array_values(array_filter([
             trim(self::e('plz') . ' ' . self::e('ort')),
         ]));
         ?>
+        <h4>Fragen? Wir helfen.</h4>
+        <?php if (self::e('shop_telefon') !== ''): ?>
+          <a class="hilfe-telefon" href="tel:<?= Util::e(preg_replace('/[^0-9+]/', '', self::e('shop_telefon'))) ?>">
+            <?= self::symbol('telefon', 22) ?><span><?= Util::e(self::e('shop_telefon')) ?></span>
+          </a>
+        <?php endif; ?>
+        <?php if (self::e('servicezeile') !== ''): ?>
+          <p class="hilfe-zeiten"><?= Util::e(self::e('servicezeile')) ?></p>
+        <?php endif; ?>
+        <?php if (self::e('shop_email') !== ''): ?>
+          <a class="hilfe-mail" href="mailto:<?= Util::e(self::e('shop_email')) ?>">
+            <?= self::symbol('brief', 18) ?><span><?= Util::e(self::e('shop_email')) ?></span>
+          </a>
+        <?php endif; ?>
         <?php if ($anbieter !== []): ?>
           <address class="anbieter">
             <?= implode('<br>', array_map([Util::class, 'e'], $anbieter)) ?>
           </address>
         <?php endif; ?>
-        <ul>
-          <?php if (self::e('shop_telefon') !== ''): ?>
-            <li><a class="fuss-telefon" href="tel:<?= Util::e(preg_replace('/[^0-9+]/', '', self::e('shop_telefon'))) ?>">
-              <?= Util::e(self::e('shop_telefon')) ?></a></li>
-          <?php endif; ?>
-          <?php if (self::e('shop_email') !== ''): ?>
-            <li><a href="mailto:<?= Util::e(self::e('shop_email')) ?>"><?= Util::e(self::e('shop_email')) ?></a></li>
-          <?php endif; ?>
-          <?php if (self::e('ust_id') !== ''): ?>
-            <li class="klein nebentext">USt-IdNr. <?= Util::e(self::e('ust_id')) ?></li>
-          <?php endif; ?>
-        </ul>
+        <?php if (self::e('ust_id') !== ''): ?>
+          <p class="klein nebentext">USt-IdNr. <?= Util::e(self::e('ust_id')) ?></p>
+        <?php endif; ?>
       </div>
     </div>
 
@@ -514,6 +533,29 @@ $vorteile = array_values(array_filter([
     {
         $css = self::e('eigenes_css');
         return $css === '' ? '' : preg_replace('#</?(script|style)#i', '', $css);
+    }
+
+    /**
+     * Kleine Strichsymbole für Kopf und Fuß.
+     *
+     * Bewusst als SVG im Quelltext und nicht als Symbolschrift oder Bild: kein
+     * zusätzlicher Ladevorgang, sie erben die Textfarbe, und sie sind auch dann
+     * da, wenn eine externe Verbindung scheitert.
+     */
+    public static function symbol(string $name, int $groesse = 20): string
+    {
+        $pfade = [
+            'lupe'      => '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+            'tasche'    => '<path d="M6 8h12l1 12H5L6 8Z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/>',
+            'telefon'   => '<path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1Z"/>',
+            'instagram' => '<rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/>',
+            'facebook'  => '<path d="M14.5 8.5h2.5V5h-2.5A3.5 3.5 0 0 0 11 8.5V11H8.5v3.5H11V21h3.5v-6.5H17l.5-3.5h-3V9a.5.5 0 0 1 .5-.5Z"/>',
+            'brief'     => '<rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/>',
+        ];
+        $d = $pfade[$name] ?? '';
+        return $d === '' ? '' : '<svg class="symbol" viewBox="0 0 24 24" width="' . $groesse . '" height="' . $groesse
+            . '" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" '
+            . 'stroke-linejoin="round" aria-hidden="true" focusable="false">' . $d . '</svg>';
     }
 
     /** Macht aus einem gespeicherten Pfad eine benutzbare Adresse. */

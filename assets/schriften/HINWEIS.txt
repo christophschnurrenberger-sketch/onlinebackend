@@ -1,0 +1,11 @@
+Source Sans 3
+Copyright 2010-2024 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.
+Lizenz: SIL Open Font License 1.1 – siehe LICENSE.txt.
+
+Die Schrift liegt hier als Datei und wird vom Shop selbst ausgeliefert. Sie
+wird bewusst NICHT von Google Fonts geladen: dabei ginge bei jedem Seitenaufruf
+die IP-Adresse des Besuchers an einen Server in den USA, und dafür sind
+deutsche Seitenbetreiber bereits abgemahnt worden.
+
+Eingebunden wird sie in assets/shop.css (@font-face). Im Backend steht sie
+unter Design als "Source Sans 3 (mitgeliefert)" zur Auswahl.
