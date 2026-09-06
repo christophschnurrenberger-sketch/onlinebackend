@@ -37,7 +37,7 @@ if (Util::isPost()) {
         'farbe_knopf', 'farbe_knopf_text', 'farbe_akzent', 'farbe_sale',
         'schrift_titel', 'schrift_text', 'ecken', 'inhaltsbreite', 'artikel_pro_reihe',
         'hinweisleiste', 'start_titel', 'start_text', 'start_bild', 'start_knopf',
-        'start_knopf_url', 'fusszeile_text', 'servicezeile',
+        'start_knopf_url', 'fusszeile_text', 'servicezeile', 'stempel_text', 'stempel_ort',
         'vorteil_1', 'vorteil_2', 'vorteil_3', 'vorteil_4',
     ] as $feld) {
         $werte[$feld] = Util::post($feld);
@@ -61,6 +61,8 @@ $schriften = [
     Theme::SCHRIFT_HELVETICA => 'Helvetica',
     Theme::SCHRIFT_SCHMAL    => 'Arial Narrow (schmal)',
     Theme::SCHRIFT_QUELLE    => 'Source Sans 3 (mitgeliefert)',
+    Theme::SCHRIFT_PETRONA   => 'Petrona (Serif, mitgeliefert)',
+    Theme::SCHRIFT_CABIN     => 'Cabin (Grotesk, mitgeliefert)',
     Theme::SCHRIFT_HUMANIST  => 'Avenir / Segoe (humanistisch)',
     Theme::SCHRIFT_GEORGIA   => 'Georgia (Serif)',
     Theme::SCHRIFT_PALATINO  => 'Palatino (Serif)',
@@ -186,6 +188,15 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
         <div class="bk-feld">
           <label for="start_text">Unterzeile</label>
           <input type="text" id="start_text" name="start_text" value="<?= Util::e($e('start_text')) ?>">
+        </div>
+        <div class="bk-feldzeile">
+          <div class="bk-feld"><label for="stempel_text">Stempel: Text</label>
+            <input type="text" id="stempel_text" name="stempel_text" value="<?= Util::e($e('stempel_text')) ?>"
+                   placeholder="seit 1998">
+            <div class="bk-tipp">Runder Stempel auf der Bühne. Leer lassen blendet ihn aus.</div></div>
+          <div class="bk-feld"><label for="stempel_ort">Stempel: Ort</label>
+            <input type="text" id="stempel_ort" name="stempel_ort" value="<?= Util::e($e('stempel_ort')) ?>"
+                   placeholder="Brandenburg"></div>
         </div>
         <div class="bk-feld">
           <label for="start_bild">Hintergrundbild (Adresse)</label>

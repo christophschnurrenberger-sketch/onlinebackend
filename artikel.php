@@ -112,7 +112,7 @@ Theme::kopf([
       <?php endif; ?>
       <h1><?= Util::e((string) $artikel['titel']) ?></h1>
       <?php if ((string) $artikel['untertitel'] !== ''): ?>
-        <p class="nebentext" style="font-size:1.0625rem"><?= Util::e((string) $artikel['untertitel']) ?></p>
+        <p class="untertitel"><?= Util::e((string) $artikel['untertitel']) ?></p>
       <?php endif; ?>
 
       <?php

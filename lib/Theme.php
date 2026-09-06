@@ -89,6 +89,19 @@ final class Theme
                 'schrift_titel' => self::SCHRIFT_QUELLE, 'schrift_text' => self::SCHRIFT_QUELLE,
             ],
         ],
+        'stube' => [
+            'name'  => 'Kräuterstube',
+            'text'  => 'Handgemacht: Creme und Terrakotta, Serifenüberschriften, Handschrift für '
+                     . 'Randnotizen, Bogenbilder. Für kleine Manufakturen, die selbst mischen.',
+            'datei' => 'stube',
+            'werte' => [
+                'farbe_hintergrund' => '#fbf5ea', 'farbe_flaeche' => '#eadfc9', 'farbe_text' => '#33281f',
+                'farbe_nebentext' => '#7a6a55', 'farbe_rahmen' => '#e0cfb2', 'farbe_knopf' => '#b4694a',
+                'farbe_knopf_text' => '#fbf5ea', 'farbe_akzent' => '#56694a', 'farbe_sale' => '#b4694a',
+                'ecken' => '18px', 'inhaltsbreite' => '1200px', 'artikel_pro_reihe' => '3',
+                'schrift_titel' => self::SCHRIFT_PETRONA, 'schrift_text' => self::SCHRIFT_CABIN,
+            ],
+        ],
         'kontrast' => [
             'name'  => 'Kontrast',
             'text'  => 'Schwarz auf Weiß, kantig, ohne Farbe.',
@@ -133,8 +146,10 @@ final class Theme
     public const SCHRIFT_HELVETICA = '\'Helvetica Neue\', Helvetica, Arial, sans-serif';
     public const SCHRIFT_SCHMAL    = '\'Arial Narrow\', \'Helvetica Neue\', Helvetica, Arial, sans-serif';
     public const SCHRIFT_HUMANIST  = '\'Avenir Next\', Avenir, \'Segoe UI\', \'Trebuchet MS\', system-ui, sans-serif';
-    /* Liegt als Datei bei, siehe assets/schriften/. */
+    /* Liegen als Datei bei, siehe assets/schriften/. */
     public const SCHRIFT_QUELLE    = '\'Source Sans 3\', system-ui, -apple-system, \'Segoe UI\', Roboto, Arial, sans-serif';
+    public const SCHRIFT_PETRONA   = 'Petrona, Georgia, \'Times New Roman\', serif';
+    public const SCHRIFT_CABIN     = 'Cabin, system-ui, -apple-system, \'Segoe UI\', Roboto, Arial, sans-serif';
     public const SCHRIFT_GEORGIA   = 'Georgia, "Times New Roman", serif';
     public const SCHRIFT_PALATINO  = '"Iowan Old Style", "Palatino Linotype", Palatino, serif';
     public const SCHRIFT_MONO      = 'ui-monospace, \'SF Mono\', Menlo, Consolas, monospace';
@@ -293,7 +308,14 @@ $vorteile = array_values(array_filter([
       <?php if (self::e('logo_url') !== ''): ?>
         <img src="<?= Util::e(self::url(self::e('logo_url'))) ?>" alt="<?= Util::e($shopName) ?>">
       <?php else: ?>
-        <?= Util::e($shopName) ?>
+        <span class="marke-name"><?= Util::e($shopName) ?></span>
+        <?php /* Der Slogan gehört zur Wortmarke, nicht in eine eigene Zeile:
+                 "Kräuter für Pferd, Hund und Katze · seit 1998" sagt in acht
+                 Wörtern, was sonst ein Absatz erklären müsste. Ob er
+                 erscheint, entscheidet der Stil. */ ?>
+        <?php if (self::e('shop_slogan') !== ''): ?>
+          <span class="marke-slogan"><?= Util::e(self::e('shop_slogan')) ?></span>
+        <?php endif; ?>
       <?php endif; ?>
     </a>
     <div class="kopf-aktionen">

@@ -1,11 +1,19 @@
-Source Sans 3
-Copyright 2010-2024 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'.
-Lizenz: SIL Open Font License 1.1 – siehe LICENSE.txt.
+Mitgelieferte Schriften
+=======================
 
-Die Schrift liegt hier als Datei und wird vom Shop selbst ausgeliefert. Sie
-wird bewusst NICHT von Google Fonts geladen: dabei ginge bei jedem Seitenaufruf
-die IP-Adresse des Besuchers an einen Server in den USA, und dafür sind
-deutsche Seitenbetreiber bereits abgemahnt worden.
+Source Sans 3        Adobe, SIL Open Font License 1.1 – LICENSE.txt
+Petrona              SIL Open Font License 1.1 – OFL-Petrona.txt
+Cabin                SIL Open Font License 1.1 – OFL-Cabin.txt
+Caveat               SIL Open Font License 1.1 – OFL-Caveat.txt
 
-Eingebunden wird sie in assets/shop.css (@font-face). Im Backend steht sie
-unter Design als "Source Sans 3 (mitgeliefert)" zur Auswahl.
+Petrona, Cabin und Caveat sind variable Schriften und auf den lateinischen
+Zeichensatz zusammengestrichen (pyftsubset), damit sie 43 bis 78 kB statt 165
+bis 400 kB wiegen.
+
+Alle Schriften liegen hier als Datei und werden vom Shop selbst ausgeliefert.
+Sie werden bewusst NICHT von Google Fonts geladen: dabei ginge bei jedem
+Seitenaufruf die IP-Adresse des Besuchers an einen Server in den USA, und
+dafür sind deutsche Seitenbetreiber bereits abgemahnt worden.
+
+Eingebunden werden sie in assets/shop.css (@font-face). Im Backend stehen sie
+unter Design zur Auswahl, erkennbar am Zusatz "(mitgeliefert)".

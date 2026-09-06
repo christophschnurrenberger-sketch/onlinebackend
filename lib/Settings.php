@@ -78,6 +78,10 @@ final class Settings
         'siegel_bild'      => '',
         'siegel_url'       => '',
         'siegel_text'      => '',
+        // Runder Stempel auf der Bühne: "seit 1998" über "Brandenburg".
+        // Leer lassen blendet ihn aus.
+        'stempel_text'     => '',
+        'stempel_ort'      => '',
         'start_titel'      => 'Neu im Shop',
         'start_text'       => 'Handverlesen, sofort lieferbar.',
         'start_bild'       => '',

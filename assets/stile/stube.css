@@ -1,0 +1,268 @@
+/*
+ * Stil „Kräuterstube“ – Manufaktur statt Sortimentsshop.
+ *
+ * Gebaut nach einem Entwurf, den der Betreiber beigesteuert hat. Der Kern des
+ * Auftritts ist nicht die Farbe, sondern der Dreiklang aus drei Schriften:
+ *
+ *   Petrona  Serif, trägt Überschriften, Preise und die Wortmarke
+ *   Cabin    Grotesk, trägt den Fließtext
+ *   Caveat   Handschrift, trägt Randnotizen – und nur die
+ *
+ * Die Handschrift ist der ganze Trick. Sie steht dort, wo im Laden jemand
+ * etwas dazusagen würde: „nichts für Katzen“, „einschleichend füttern“,
+ * „heute frisch abgefüllt“. Nie im Fließtext, nie in einer Überschrift,
+ * nie länger als eine Zeile – sonst kippt es ins Bemühte.
+ *
+ * Dazu Bogenformen statt Rechtecke, Terrakotta als einzige Signalfarbe,
+ * Olivgrün für Ruhiges, und ein dunkelbrauner Fuß, der die Seite zumacht.
+ */
+
+:root {
+  --stb-handschrift: Caveat, 'Segoe Script', cursive;
+  --stb-dunkel: #33281f;      /* Fuß */
+  --stb-bogen: 46% 46% 14px 14px / 34% 34% 14px 14px;
+  --stb-streifen: repeating-linear-gradient(
+      -45deg, rgba(122, 106, 85, .10) 0 10px, rgba(122, 106, 85, 0) 10px 20px);
+
+  --a4: 18px;
+  --a5: 26px;
+  --a6: 40px;
+  --a7: 64px;
+  --a8: 92px;
+}
+
+body { font-size: 16.5px; line-height: 1.6; }
+
+h1, h2, h3, h4 { font-weight: 500; letter-spacing: -0.005em; }
+h1 { font-size: clamp(2.1rem, 1.5rem + 2.8vw, 3.3rem); line-height: 1.12; }
+h2 { font-size: clamp(1.6rem, 1.2rem + 1.8vw, 2.3rem); }
+h3 { font-size: 1.25rem; }
+
+/* --- Bänder über dem Kopf -------------------------------------------------- */
+
+/* Die Ankündigung ist kein Werbebanner, sondern eine Notiz an der Tür. */
+.hinweisleiste {
+  background: var(--hintergrund); color: var(--nebentext);
+  font-family: var(--stb-handschrift); font-size: 1.25rem; letter-spacing: .01em;
+  padding: var(--a3) var(--a4) 0;
+}
+
+.servicezeile { background: var(--hintergrund); border-bottom: 0; }
+.servicezeile-innen { min-height: 34px; }
+
+/* --- Kopf ------------------------------------------------------------------ */
+
+.kopf { background: var(--hintergrund); border-bottom: 1px solid var(--rahmen); }
+.kopf-innen { min-height: 84px; align-items: flex-start; padding-top: var(--a5); }
+
+.marke { font-weight: 500; letter-spacing: -0.01em; line-height: 1.1; }
+.marke .marke-name { font-size: 1.75rem; }
+.marke-slogan {
+  display: block; font-family: var(--schrift-text); font-size: 0.8125rem;
+  font-weight: 400; color: var(--nebentext); letter-spacing: 0; margin-top: 3px;
+}
+
+.kopf-aktionen { padding-top: 6px; }
+.suchfeld input { width: 180px; border-radius: 8px 0 0 8px; background: var(--hintergrund); }
+.suchfeld button { border-radius: 0 8px 8px 0; }
+.warenkorb-link .symbol { display: none; }
+.warenkorb-zahl { background: none; color: var(--knopf); font-weight: 500; min-width: 0; }
+.warenkorb-link { color: var(--knopf); }
+
+/* Menü rechts unter der Wortmarke, ohne Band und ohne Versalien. */
+.kopf-nav { border-top: 0; }
+.kopf-nav .behaelter { justify-content: flex-end; padding-bottom: var(--a4); }
+.kopf-nav .hauptmenue { flex: 0 1 auto; gap: var(--a5); }
+.kopf-nav .hauptmenue > .menuepunkt > a {
+  font-size: 1.0625rem; padding: 0; white-space: nowrap;
+}
+.kopf-nav .hauptmenue > .menuepunkt > a:hover { color: var(--knopf); text-decoration: none; }
+.untermenue {
+  border-radius: 14px; border-color: var(--rahmen); box-shadow: 0 14px 34px rgba(51, 40, 31, .12);
+  column-width: 190px; column-gap: var(--a5); padding: var(--a4);
+}
+.untermenue a { border-radius: 8px; }
+.untermenue a:hover { background: var(--flaeche); }
+
+/* Vorteile in Handschrift, mit Punkten getrennt statt in Kästchen. */
+.vorteilsleiste { background: var(--hintergrund); border-bottom: 1px solid var(--rahmen); border-top: 0; }
+.vorteile-innen { gap: var(--a3) var(--a6); padding: var(--a3) var(--a5); }
+.vorteil { font-family: var(--stb-handschrift); font-size: 1.1875rem; color: var(--nebentext); }
+.vorteil::before { content: "·"; color: var(--knopf); font-size: 1.4rem; line-height: 0; }
+
+/* --- Bühne ----------------------------------------------------------------- */
+
+.buehne { background: var(--hintergrund); padding: var(--a8) 0 var(--a7); position: relative; }
+/* .buehne-innen ist zugleich der Seitencontainer. Wird hier max-width gesetzt,
+   rutscht der Text aus der Seitenflucht – deshalb bleibt der Container stehen
+   und der Text wird über padding-right auf die linke Hälfte gedrängt. */
+.buehne-innen { max-width: var(--breite); margin: 0 auto; padding-right: 42%; }
+.buehne h1 { font-weight: 500; }
+.buehne p { font-size: 1.1875rem; color: var(--nebentext); max-width: 46ch; }
+.buehne .knopf { margin-top: var(--a3); }
+
+.buehne.mit-bild {
+  border-radius: 24px; max-width: var(--breite); margin: var(--a5) auto 0;
+  min-height: 460px; text-shadow: 0 1px 10px rgba(51, 40, 31, .45);
+}
+.buehne.mit-bild p { color: inherit; }
+
+/* Der Stempel: rund, oliv, leicht schief – wie aufgedrückt. */
+.stempel {
+  position: absolute; right: 6%; bottom: var(--a7);
+  width: 116px; height: 116px; border-radius: 50%;
+  background: var(--akzent); color: var(--hintergrund);
+  display: grid; place-content: center; text-align: center;
+  transform: rotate(-8deg); line-height: 1.15; padding: var(--a3);
+}
+.stempel-text { font-family: var(--schrift-titel); font-size: 1.375rem; display: block; }
+.stempel-ort {
+  display: block; font-size: 0.625rem; text-transform: uppercase;
+  letter-spacing: .16em; opacity: .85; margin-top: 4px;
+}
+
+/* --- Abschnitte ------------------------------------------------------------ */
+
+.abschnitt { padding: var(--a8) 0; }
+.abschnitt-kopf { align-items: baseline; gap: var(--a4); border: 0; }
+.abschnitt-kopf h2 { margin: 0; }
+.abschnitt-kopf a {
+  font-family: var(--stb-handschrift); font-size: 1.1875rem;
+  color: var(--knopf); text-decoration: none;
+}
+.abschnitt-kopf a::after { content: " →"; }
+.abschnitt-kopf a:hover { text-decoration: underline; }
+
+/* --- Artikelkacheln -------------------------------------------------------- */
+
+.raster { gap: var(--a6) var(--a5); }
+
+.kachel { background: none; border: 0; padding: 0; }
+.kachel:hover { box-shadow: none; transform: none; }
+.kachel-bild {
+  aspect-ratio: 3 / 4; border-radius: var(--stb-bogen);
+  background: var(--flaeche) var(--stb-streifen); margin-bottom: var(--a4);
+}
+/* Freistellen statt beschneiden: Kräuter werden auf Weiß fotografiert, ein
+   Bildausschnitt würde die Tüte anschneiden. */
+.kachel-bild img { object-fit: contain; padding: var(--a5); }
+.kein-bild { background: var(--stb-streifen); color: var(--nebentext); font-family: var(--stb-handschrift); font-size: 1.0625rem; }
+
+/* Im Entwurf steht der Name oben und der botanische Name kursiv darunter –
+   im Quelltext ist es umgekehrt. Statt das Markup umzubauen, dreht der Stil
+   die Reihenfolge; für Vorleseprogramme bleibt sie, wie sie war. */
+.kachel > a { display: flex; flex-direction: column; }
+.kachel-bild { order: 0; }
+.kachel h3 { order: 1; }
+.kachel .hersteller { order: 2; }
+.kachel .preis { order: 3; }
+.kachel .grundpreis { order: 4; }
+.kachel .preishinweis { order: 5; }
+.kachel-lager { order: 6; }
+
+.kachel h3 { font-size: 1.3125rem; font-weight: 500; margin-bottom: 2px; }
+/* Der Hersteller steht hier, wo im Entwurf der lateinische Name steht:
+   klein, kursiv, unter dem Titel. */
+.kachel .hersteller {
+  font-family: var(--schrift-titel); font-style: italic; font-size: 0.9375rem;
+  color: var(--nebentext); text-transform: none; letter-spacing: 0; margin: 0 0 var(--a2);
+}
+.kachel .preis {
+  font-family: var(--schrift-titel); font-size: 1.375rem; font-weight: 500;
+  color: var(--knopf); margin-top: var(--a3);
+}
+.preis-jetzt { color: var(--knopf); }
+.preis-vorher { font-family: var(--schrift-text); font-size: 0.875rem; }
+.grundpreis { font-family: var(--schrift-text); font-size: 0.8125rem; color: var(--nebentext); }
+.preishinweis { font-size: 0.6875rem; opacity: .8; }
+
+/* Der Lieferstatus ist eine Randnotiz, keine Statusmeldung. */
+.kachel-lager { font-family: var(--stb-handschrift); font-size: 1.0625rem; }
+.kachel-lager::before { display: none; }
+
+.marker {
+  border-radius: 4px; top: var(--a3); left: var(--a3); transform: rotate(-3deg);
+  font-family: var(--schrift-text); letter-spacing: .04em; padding: 5px 11px;
+}
+
+/* --- Knöpfe ---------------------------------------------------------------- */
+
+.knopf {
+  border-radius: 8px; padding: 14px 30px; font-family: var(--schrift-titel);
+  font-size: 1.0625rem; font-weight: 500; letter-spacing: 0; border-color: transparent;
+}
+.knopf:hover { opacity: 1; filter: brightness(.94); }
+.knopf-leer { border-color: var(--rahmen); color: var(--text); }
+.knopf-leer:hover { background: var(--flaeche); filter: none; }
+
+/* --- Artikelseite ---------------------------------------------------------- */
+
+.artikel-seite { gap: var(--a8); }
+.artikel-info h1 { font-weight: 500; }
+.artikel-info .untertitel { font-family: var(--schrift-titel); font-style: italic; color: var(--nebentext); }
+.artikel-info .preis { font-family: var(--schrift-titel); font-size: 2rem; color: var(--knopf); }
+.galerie-gross { border-radius: var(--stb-bogen); background: var(--flaeche) var(--stb-streifen); aspect-ratio: 3 / 4; }
+.galerie-klein button { border-radius: 10px; background: var(--flaeche); }
+.optionswerte button { border-radius: 8px; }
+.menge { border-radius: 8px; }
+.lagerhinweis { font-family: var(--stb-handschrift); font-size: 1.125rem; }
+.steuerhinweis, .kaufzusagen { font-size: 0.875rem; }
+.zusammenfassung, .auswahl, .meldung { border-radius: 14px; }
+
+.rte { line-height: 1.75; max-width: 64ch; }
+.rte h2, .rte h3 { margin-top: var(--a6); }
+
+/* --- Fuß ------------------------------------------------------------------- */
+
+/* Dunkelbraun statt Beige: der Fuß macht die Seite zu, statt sie ausfransen
+   zu lassen. */
+.fuss {
+  background: var(--stb-dunkel); color: #e8dcc6; border-top: 0;
+  margin-top: var(--a8); padding: var(--a8) 0 var(--a5);
+}
+.fuss a { color: #e8dcc6; }
+.fuss a:hover { color: #fff; }
+.fuss .nebentext { color: #b8a78a; }
+.fuss-raster { grid-template-columns: 1.5fr 1fr 1fr 1.2fr; gap: var(--a7); }
+.fuss-raster h4 {
+  font-family: var(--schrift-titel); font-size: 1.25rem; font-weight: 500;
+  text-transform: none; letter-spacing: 0; color: #fbf5ea;
+}
+.fuss-marke h4 { font-size: 1.5rem; }
+.anbieter { font-family: var(--stb-handschrift); font-size: 1.1875rem; color: #d8c9ad; }
+
+.sozial a { border-color: rgba(232, 220, 198, .3); color: #e8dcc6; background: none; }
+.sozial a:hover { background: rgba(232, 220, 198, .12); border-color: #e8dcc6; }
+
+.fuss-hilfe h4 { color: #fbf5ea; }
+.hilfe-telefon { color: #fbf5ea; font-family: var(--schrift-titel); font-size: 1.5rem; }
+.hilfe-telefon:hover { color: #fff; }
+.hilfe-zeiten { color: #b8a78a; font-family: var(--stb-handschrift); font-size: 1.0625rem; }
+
+.fuss-vertrauen { border-top-color: rgba(232, 220, 198, .18); }
+.zahlarten-titel { color: #b8a78a; }
+.zahlart { background: none; border-color: rgba(232, 220, 198, .3); color: #e8dcc6; border-radius: 999px; }
+.fuss-unten { border-top-color: rgba(232, 220, 198, .18); color: #b8a78a; }
+.fuss-spalte > summary::after { color: #b8a78a; }
+.fuss-spalte { border-bottom-color: rgba(232, 220, 198, .18); }
+
+@media (max-width: 1000px) {
+  .fuss-raster { grid-template-columns: 1fr 1fr; gap: var(--a5) var(--a6); }
+  .stempel { right: var(--a5); width: 96px; height: 96px; }
+}
+
+@media (max-width: 900px) {
+  .buehne-innen { padding-right: var(--a5); }
+}
+
+@media (max-width: 760px) {
+  .kopf-innen { padding-top: var(--a4); }
+  /* Ohne das Wort "Warenkorb" bliebe auf dem Telefon nur eine einsame Null –
+     dort also doch die Tasche. */
+  .warenkorb-link .symbol { display: block; }
+  .kopf-nav .behaelter { justify-content: flex-start; padding-bottom: 0; }
+  .buehne { padding: var(--a7) 0 var(--a6); }
+  .stempel { position: static; margin: var(--a5) 0 0 var(--a5); }
+  .fuss-raster { grid-template-columns: 1fr; gap: var(--a4); }
+  .hinweisleiste { font-size: 1.125rem; }
+}

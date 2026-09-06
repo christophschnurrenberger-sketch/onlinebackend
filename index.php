@@ -26,6 +26,21 @@ Theme::kopf(['canonical' => Config::url()]);
       </a>
     <?php endif; ?>
   </div>
+  <?php
+  /*
+   * Runder Stempel auf der Bühne, etwa "seit 1998 · Brandenburg". Kleine
+   * Betriebe verkaufen über Herkunft und Dauer – deshalb steht das nicht
+   * kleingedruckt im Impressum. Ohne Text im Backend erscheint nichts.
+   */
+  ?>
+  <?php if (Theme::e('stempel_text') !== ''): ?>
+    <div class="stempel">
+      <span class="stempel-text"><?= Util::e(Theme::e('stempel_text')) ?></span>
+      <?php if (Theme::e('stempel_ort') !== ''): ?>
+        <span class="stempel-ort"><?= Util::e(Theme::e('stempel_ort')) ?></span>
+      <?php endif; ?>
+    </div>
+  <?php endif; ?>
 </section>
 
 <section class="abschnitt">

@@ -39,6 +39,7 @@ Es gibt zwei Sorten:
 | **Fahrrad** | `assets/stile/rad.css` | Technik: Schwarz, Signalrot, schmale Versalien, kantig, große Preise |
 | **Pferdesport** | `assets/stile/pferd.css` | Katalogsortiment: Marineblau auf Sand, Serifenüberschriften, ruhige Karten |
 | **Kräuter** | `assets/stile/kraeuter.css` | Naturprodukte: Creme, weiße Karten, Rot als einzige Signalfarbe, Salbeigrün für den Versandhinweis, Marke mittig |
+| **Kräuterstube** | `assets/stile/stube.css` | Manufaktur: Creme und Terrakotta, Serifenüberschriften, Handschrift für Randnotizen, Bogenbilder, dunkelbrauner Fuß |
 | Basis, Kontrast, Warm, Dunkel | — | Reine Farbschemata ohne eigene Datei |
 
 Golf, Fahrrad und Pferdesport sind nach dem gebaut, was in der jeweiligen
@@ -98,16 +99,32 @@ dem Basis-Stylesheet eingebunden und überschreibt es damit:
 Änderungen am Design werden — wie alles andere — erst nach dem
 **Veröffentlichen** im Shop sichtbar.
 
-### Mitgelieferte Schrift
+### Mitgelieferte Schriften
 
-Unter `assets/schriften/` liegt **Source Sans 3** (Adobe, SIL Open Font
-License) als WOFF2 in drei Schnitten. Der Shop liefert sie selbst aus — nicht
+Unter `assets/schriften/` liegen vier Schriften als WOFF2, alle unter der SIL
+Open Font License:
+
+| Schrift | Art | Wird benutzt von |
+|---|---|---|
+| **Source Sans 3** | Grotesk, drei Schnitte | Stil *Kräuter* |
+| **Petrona** | Serif, variabel, auch kursiv | Stil *Kräuterstube* (Überschriften, Preise) |
+| **Cabin** | Grotesk, variabel | Stil *Kräuterstube* (Fließtext) |
+| **Caveat** | Handschrift, variabel | Stil *Kräuterstube* (Randnotizen) |
+
+Die drei variablen Schriften sind auf den lateinischen Zeichensatz
+zusammengestrichen — 43 bis 78 kB statt 165 bis 400 kB.
+
+Der Kräuterstube-Stil lebt vom Dreiklang: Serifen tragen Überschriften und
+Preise, die Grotesk den Fließtext, die Handschrift nur Randnotizen — dort, wo
+im Laden jemand etwas dazusagen würde („nichts für Katzen", „heute frisch
+abgefüllt"). Nie im Fließtext, nie in einer Überschrift, nie länger als eine
+Zeile. Der Shop liefert sie selbst aus — nicht
 über Google Fonts, denn dabei ginge bei jedem Seitenaufruf die IP-Adresse des
 Besuchers an einen Server in den USA; dafür sind deutsche Seitenbetreiber
 bereits abgemahnt worden.
 
-Im Backend steht sie unter *Design → Typografie* als **„Source Sans 3
-(mitgeliefert)"** zur Auswahl. Wird eine andere Schrift eingestellt, lädt der
+Im Backend stehen sie unter *Design → Typografie* mit dem Zusatz
+**„(mitgeliefert)"** zur Auswahl. Wird eine andere Schrift eingestellt, lädt der
 Browser die Dateien gar nicht erst — die `@font-face`-Regeln in `shop.css`
 kosten dann nichts.
 
