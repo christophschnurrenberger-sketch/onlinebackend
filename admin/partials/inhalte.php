@@ -47,6 +47,21 @@ if (Util::isPost() && Auth::darf('pflegen')) {
             ? Inhalte::beitragSpeichern($id > 0 ? $id : null, $daten)
             : Inhalte::seiteSpeichern($id > 0 ? $id : null, $daten);
 
+        /*
+         * Bausteine der Seite. Maßgeblich ist das versteckte Feld "pos" und
+         * nicht die Reihenfolge im Formular: beim Umsortieren mit der Maus
+         * wandert die Karte im Dokument, ihre Feldnamen bleiben aber, wie sie
+         * sind.
+         */
+        if (!$istBeitrag) {
+            $roh = Util::postArray('bs');
+            usort($roh, static fn($a, $b): int => (int) ($a['pos'] ?? 0) <=> (int) ($b['pos'] ?? 0));
+            Bausteine::setzen($neueId, array_map(static fn($b): array => [
+                'typ'   => (string) ($b['typ'] ?? ''),
+                'daten' => (array) ($b['daten'] ?? []),
+            ], $roh));
+        }
+
         Util::redirect($datei . '?id=' . $neueId . '&meldung=' . rawurlencode($einzahl . ' gespeichert.'));
     } catch (Throwable $e) {
         echo '<div class="bk-hinweis bk-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
@@ -103,11 +118,20 @@ if ($maske) {
           <?php endif; ?>
           <div class="bk-feld" style="margin:0">
             <label for="inhalt">Inhalt</label>
-            <textarea id="inhalt" name="inhalt" rows="20"><?= Util::e((string) $werte['inhalt']) ?></textarea>
+            <textarea id="inhalt" name="inhalt" rows="<?= $istBeitrag ? 20 : 8 ?>"><?= Util::e((string) $werte['inhalt']) ?></textarea>
             <div class="bk-tipp">Einfaches HTML: &lt;p&gt;, &lt;h2&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;a&gt;.
-              Skripte werden beim Speichern entfernt.</div>
+              Skripte werden beim Speichern entfernt.
+              <?php if (!$istBeitrag): ?>
+                Für gestaltete Seiten reichen die <strong>Bausteine</strong> darunter – dieses Feld
+                kann dann leer bleiben.
+              <?php endif; ?></div>
           </div>
         </div></section>
+
+        <?php if (!$istBeitrag): ?>
+          <?php $bausteine = $id > 0 ? Bausteine::zurSeite($id) : []; ?>
+          <?php require __DIR__ . '/bausteine.php'; ?>
+        <?php endif; ?>
 
         <section class="bk-karte">
           <div class="bk-karte-kopf"><h2>Suchmaschinen</h2></div>

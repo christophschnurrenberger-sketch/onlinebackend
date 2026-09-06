@@ -65,7 +65,7 @@ if (PHP_SAPI !== 'cli' && !headers_sent()) {
 /* Klassen laden – bewusst ohne Composer, damit das System überall läuft. */
 foreach ([
     'Config', 'Util', 'DB', 'Log', 'Settings', 'Schema', 'Auth',
-    'Medien', 'Artikel', 'Kategorien', 'Inhalte', 'Kunden',
+    'Medien', 'Artikel', 'Kategorien', 'Inhalte', 'Bausteine', 'Kunden',
     'Steuern', 'Versand', 'Rabatte', 'Bestand', 'Preise', 'Warenkorb',
     'Bestellungen', 'Zahlung', 'Kasse', 'Mail', 'Veroeffentlichung', 'Theme',
 ] as $klasse) {

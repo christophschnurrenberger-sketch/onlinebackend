@@ -187,6 +187,38 @@ Der Grundpreis rechnet auf 1 l bzw. 1 kg um; bei Mengen bis 250 g/ml auf
 100 g/ml, weil „249,00 €/l“ bei einer 50-ml-Flasche niemandem hilft. Bei
 Stückware bleibt die Zeile leer.
 
+## Seiten aus Bausteinen
+
+Seiten müssen keine Textwüste sein. Unter **Seiten → eine Seite öffnen** liegt
+unter dem Textfeld der **Baukasten**: Bausteine werden hinzugefügt, mit der
+Maus am Griff umsortiert (auf dem Telefon mit ↑ und ↓) und einzeln befüllt.
+
+| Baustein | Was er macht |
+|---|---|
+| **Bühne mit Bild** | Bild im Bogen, daneben Überschrift mit farbiger Akzentzeile, Text, Knopf. Dazu Etikett aufs Bild und runder Stempel. |
+| **Grüner Kasten** | Zitat oder Haltung auf farbigem Grund, rechts ein Bild, darunter Name und Rolle. |
+| **Wobei darf ich helfen?** | Kartenreihe zum Anklicken; jede Karte führt auf eine Seite mit Empfehlungen. |
+| **Artikelraster** | Artikel aus einer Kategorie, im Design der Seite. |
+| **Aus dem Kräuterbuch** | Schräg liegende Zettel mit Nummer, Titel, botanischem Namen und Anriss. |
+| **Kräuterbuch-Kopf** | Der Anfang einer Kräuterbuchseite: Nummer, Titel, botanischer Name, Vorspann, Bild. |
+| **Spalten** | Drei bis vier kurze Absätze nebeneinander. |
+| **Fließtext** | Überschrift und Text, wahlweise in schmaler Spalte. |
+
+Eine Seite **ohne** Bausteine erscheint als schlichte Textseite — richtig für
+Impressum und AGB. Steht im alten Textfeld noch etwas, während Bausteine
+vorhanden sind, hängt es unter den Bausteinen.
+
+Die Bausteine liegen als JSON in der Spalte `bausteine.daten`; ein neuer
+Bausteintyp braucht deshalb keine Datenbankänderung, nur einen Eintrag in
+`Bausteine::TYPEN` und einen Zweig in `Bausteine::rendern()`. Wie alles andere
+werden sie erst nach dem **Veröffentlichen** im Shop sichtbar.
+
+Die Klassen der Bausteine beginnen mit `bs-`: `.bs-buehne`, `.bs-bogen`,
+`.bs-etikett`, `.bs-akzent`, `.bs-notiz`, `.bs-gruen-kasten`, `.bs-karte`,
+`.bs-zettel`, `.bs-latein`, `.bs-weiter`, `.bs-spalten`. Der Kräuterstube-Stil
+macht daraus Bögen, schräge Zettel und Handschrift; jeder andere Stil zeigt
+dieselben Bausteine schlicht.
+
 ## Stufe 2: Eigenes Stylesheet
 
 Für ein richtiges eigenes Design ersetzt du `assets/shop.css`. Die Templates

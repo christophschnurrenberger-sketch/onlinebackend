@@ -266,3 +266,93 @@ h3 { font-size: 1.25rem; }
   .fuss-raster { grid-template-columns: 1fr; gap: var(--a4); }
   .hinweisleiste { font-size: 1.125rem; }
 }
+
+/* --- Seitenbausteine ------------------------------------------------------- */
+/*
+ * Die Bausteine aus dem Backend im Stubenkleid: Bögen statt Rechtecke,
+ * Handschrift für Randnotizen, schräg gelegte Zettel im Kräuterbuch.
+ */
+
+.bs { padding: var(--a8) 0; }
+.bs + .bs { padding-top: 0; }
+.bs-buehne { padding-bottom: var(--a7); }
+
+/* Der Bogen schneidet nichts ab: Etikett und Stempel dürfen über den Rand
+   ragen, sonst sähen sie nicht aufgeklebt aus, sondern eingedruckt. */
+.bs-bogen {
+  border-radius: var(--stb-bogen); background: var(--flaeche) var(--stb-streifen);
+  overflow: visible; position: relative;
+}
+.bs-bogen img { border-radius: inherit; }
+.bs-bogen .stempel { position: absolute; right: -34px; bottom: 34px; margin: 0; }
+.bs-etikett { left: -18px; top: 26px; z-index: 1; }
+.bs-bogen-klein { border-radius: 22px 22px 14px 14px / 16% 16% 14px 14px; }
+
+/* Das Etikett liegt schräg auf der Ecke, wie aufgeklebt. */
+.bs-etikett {
+  font-family: var(--stb-handschrift); font-size: 1.125rem; color: var(--nebentext);
+  background: rgba(251, 245, 234, .92); transform: rotate(-4deg);
+  padding: 5px 16px; border-radius: 2px; box-shadow: 0 1px 4px rgba(51, 40, 31, .12);
+}
+
+.bs-buehne h1 { font-weight: 500; }
+/* Die Akzentzeile steht kursiv und in Terrakotta mitten in der Überschrift –
+   das ist der auffälligste Griff des ganzen Entwurfs. */
+.bs-akzent { font-style: italic; color: var(--knopf); }
+.bs-buehne p { font-size: 1.1875rem; color: var(--nebentext); }
+.bs-notiz { font-family: var(--stb-handschrift); font-size: 1.1875rem; color: var(--nebentext); }
+.bs-nebenlink { font-family: var(--schrift-titel); color: var(--text); }
+.bs-nebenlink:hover { color: var(--knopf); }
+
+/* Grüner Kasten: das eine Mal, an dem die Seite die Farbe wechselt. */
+.bs-gruen-kasten { border-radius: 24px; padding: var(--a7); background: var(--akzent); }
+.bs-gruen blockquote {
+  font-family: var(--schrift-titel); font-size: 1.75rem; font-weight: 400; line-height: 1.35;
+}
+.bs-gruen .bs-notiz { font-family: var(--stb-handschrift); color: rgba(251, 245, 234, .8); }
+.bs-gruen p { color: rgba(251, 245, 234, .88); }
+.bs-name { font-family: var(--stb-handschrift); font-size: 1.5rem; font-weight: 400; }
+.bs-rolle { color: rgba(251, 245, 234, .7); }
+.bs-gruen .bs-bogen { background: rgba(251, 245, 234, .12) var(--stb-streifen); }
+
+/* Karten „Wobei darf ich helfen?“ */
+.bs-karte {
+  background: var(--hintergrund); border-color: var(--rahmen); border-radius: 16px;
+  padding: var(--a4) var(--a5) var(--a5);
+}
+a.bs-karte:hover { border-color: var(--knopf); box-shadow: 0 6px 18px rgba(51, 40, 31, .08); }
+.bs-karte-titel { font-size: 1.25rem; font-weight: 500; }
+.bs-karte-text { font-family: var(--stb-handschrift); font-size: 1.0625rem; margin-top: 6px; }
+
+/* Kräuterbuch: Zettel, die leicht schief liegen. Beim Überfahren richten sie
+   sich auf – das ist der einzige Ort, an dem die Seite spielt. */
+.bs-zettel {
+  background: var(--hintergrund); border-color: var(--rahmen); border-radius: 14px;
+  padding: var(--a5) var(--a5) var(--a4);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.bs-zettel-0 { transform: rotate(-1.1deg); }
+.bs-zettel-1 { transform: rotate(.8deg); }
+.bs-zettel-2 { transform: rotate(-.5deg); }
+a.bs-zettel:hover { transform: rotate(0) translateY(-3px); box-shadow: 0 10px 26px rgba(51, 40, 31, .10); }
+.bs-zettel-nr { font-size: 0.6875rem; letter-spacing: .18em; }
+.bs-zettel h3 { font-size: 1.375rem; font-weight: 500; }
+.bs-latein { font-family: var(--schrift-titel); }
+.bs-weiter { font-family: var(--stb-handschrift); font-size: 1.125rem; }
+.bs-weiter::after { content: " →"; }
+
+/* Kräuterbuchseite */
+.bs-eintrag { padding-top: var(--a7); }
+.bs-eintrag h1 { font-weight: 500; margin-bottom: var(--a2); }
+.bs-eintrag .bs-latein { font-size: 1.125rem; margin-bottom: var(--a5); }
+.bs-eintrag p { font-size: 1.125rem; }
+
+.bs-spalte h3 { font-size: 1.25rem; font-weight: 500; color: var(--akzent); }
+.bs-spalte p { color: var(--nebentext); }
+
+.bs-text .rte { font-size: 1.0625rem; }
+
+@media (max-width: 900px) {
+  .bs-zettel, a.bs-zettel:hover { transform: none; }
+  .bs-gruen-kasten { padding: var(--a5); }
+}

@@ -26,7 +26,7 @@
 final class Schema
 {
     /** Version des Schemas – wird in den Einstellungen gespeichert. */
-    public const VERSION = 2;
+    public const VERSION = 3;
 
     public static function migrate(): void
     {
@@ -269,6 +269,25 @@ final class Schema
                 seo_text  %STR(400)% NOT NULL DEFAULT "",
                 erstellt  %DT%       NOT NULL,
                 geaendert %DT%       NOT NULL
+            )%ENGINE%',
+
+            /*
+             * Bausteine einer Seite.
+             *
+             * Statt einer Seite mit einem Klumpen HTML besteht eine Seite aus
+             * einer Reihe von Bausteinen: Bühne, Kartenreihe, Artikelraster,
+             * Kräuterbuch. Jeder Baustein hat einen Typ und einen Sack voll
+             * Feldern, die als JSON danebenliegen – so kommt ein neuer
+             * Bausteintyp ohne Datenbankänderung aus.
+             */
+            'CREATE TABLE IF NOT EXISTS bausteine (
+                id        %PK%,
+                seite_id  %INT%     NOT NULL,
+                typ       %STR(40)% NOT NULL,
+                position  %INT%     NOT NULL DEFAULT 0,
+                daten     %TEXT%,
+                erstellt  %DT%      NOT NULL,
+                geaendert %DT%      NOT NULL
             )%ENGINE%',
 
             'CREATE TABLE IF NOT EXISTS beitraege (
@@ -545,6 +564,7 @@ final class Schema
             'CREATE UNIQUE INDEX IF NOT EXISTS ux_seiten_handle ON seiten (handle)',
             'CREATE UNIQUE INDEX IF NOT EXISTS ux_beitraege_handle ON beitraege (handle)',
             'CREATE INDEX IF NOT EXISTS ix_menue ON menuepunkte (menue, position)',
+            'CREATE INDEX IF NOT EXISTS ix_bausteine ON bausteine (seite_id, position)',
             'CREATE UNIQUE INDEX IF NOT EXISTS ux_kunden_email ON kunden (email)',
             'CREATE INDEX IF NOT EXISTS ix_adressen_kunde ON adressen (kunde_id)',
             'CREATE INDEX IF NOT EXISTS ix_versandarten_zone ON versandarten (zone_id)',

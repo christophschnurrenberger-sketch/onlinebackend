@@ -24,16 +24,37 @@ if ($seite === null) {
     exit;
 }
 
+$bausteine = (array) ($seite['bausteine'] ?? []);
+
 Theme::kopf([
     'titel'        => (string) ($seite['seo_titel'] ?: $seite['titel']),
     'beschreibung' => (string) $seite['seo_text'],
     'canonical'    => Config::url('seite.php?h=' . rawurlencode($handle)),
 ]);
-?>
-<div class="behaelter">
-  <article class="schmal">
-    <h1><?= Util::e((string) $seite['titel']) ?></h1>
-    <div class="rte"><?= $seite['inhalt'] ?></div>
-  </article>
-</div>
-<?php Theme::fuss(); ?>
+
+/*
+ * Zwei Arten von Seiten: aus Bausteinen gebaute und einfache Textseiten.
+ * Impressum und AGB brauchen keinen Baukasten, eine Themenseite schon –
+ * deshalb entscheidet die Seite selbst, indem sie Bausteine hat oder nicht.
+ */
+if ($bausteine !== []) {
+    foreach ($bausteine as $baustein) {
+        Bausteine::rendern($baustein, $fassung);
+    }
+    // Ein Text im alten Feld geht nicht verloren, er steht unter den Bausteinen.
+    if (trim((string) $seite['inhalt']) !== '') {
+        echo '<div class="behaelter"><article class="schmal"><div class="rte">'
+           . $seite['inhalt'] . '</div></article></div>';
+    }
+} else {
+    ?>
+    <div class="behaelter">
+      <article class="schmal">
+        <h1><?= Util::e((string) $seite['titel']) ?></h1>
+        <div class="rte"><?= $seite['inhalt'] ?></div>
+      </article>
+    </div>
+    <?php
+}
+
+Theme::fuss();

@@ -131,6 +131,9 @@ final class Veroeffentlichung
             'inhalt'    => (string) $row['inhalt'],
             'seo_titel' => (string) $row['seo_titel'],
             'seo_text'  => (string) $row['seo_text'],
+            // Bausteine wandern mit in die Fassung – auch sie sollen erst nach
+            // dem Veröffentlichen im Shop stehen.
+            'bausteine' => Bausteine::zurSeite((int) $row['id']),
         ];
     }
 
