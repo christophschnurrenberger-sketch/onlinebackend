@@ -91,25 +91,40 @@ $bsKarte = static function (string $typ, int $index, array $daten) use ($bsFeld)
     </div>
     <?php
 };
+
+/*
+ * Kleine Zeichnungen für die Auswahl.
+ *
+ * Wer eine Seite baut, sucht nicht nach dem Wort "Spalten", sondern nach der
+ * Form, die er im Kopf hat. Deshalb steht neben jedem Namen eine grobe Skizze
+ * des Aufbaus – aus ein paar Kästchen, ohne Bild, ohne Schriftart, ohne
+ * zusätzliche Ladezeit.
+ */
+$bsSkizzen = [
+    'buehne'       => '<span class="sk-bogen"></span><span class="sk-spalte"><i class="sk-h"></i><i></i><i></i><i class="sk-knopf"></i></span>',
+    'gruen'        => '<span class="sk-gruen"><i></i><i></i><i class="sk-kurz"></i></span>',
+    'hilfe'        => '<span class="sk-raster sk-vier"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>',
+    'artikel'      => '<span class="sk-raster sk-drei"><i class="sk-ware"></i><i class="sk-ware"></i><i class="sk-ware"></i></span>',
+    'kraeuterbuch' => '<span class="sk-schraeg"><i></i><i></i><i></i></span>',
+    'eintrag'      => '<span class="sk-spalte"><i class="sk-nr"></i><i class="sk-h"></i><i></i></span><span class="sk-bogen sk-bogen-klein"></span>',
+    'werte'        => '<span class="sk-saeulen"><span><i class="sk-h"></i><i></i><i></i></span>'
+                    . '<span><i class="sk-h"></i><i></i><i></i></span>'
+                    . '<span><i class="sk-h"></i><i></i><i></i></span></span>',
+    'text'         => '<span class="sk-spalte sk-breit"><i class="sk-h"></i><i></i><i></i><i class="sk-kurz"></i></span>',
+];
 ?>
 
 <section class="bk-karte">
   <div class="bk-karte-kopf">
     <h2>Bausteine</h2>
-    <div class="bk-baustein-neu">
-      <select id="bausteinwahl">
-        <?php foreach (Bausteine::TYPEN as $schluessel => $muster): ?>
-          <option value="<?= Util::e($schluessel) ?>"><?= Util::e($muster['name']) ?></option>
-        <?php endforeach; ?>
-      </select>
-      <button class="bk-knopf bk-knopf-klein" type="button" data-baustein-hinzu>Hinzufügen</button>
-    </div>
   </div>
   <div class="bk-karte-inhalt">
     <div class="bk-hinweis bk-hinweis-info" style="margin-top:0">
       Bausteine bauen die Seite von oben nach unten. Mit der Maus am Griff
-      <span class="bk-griff">⠿</span> lassen sie sich umsortieren. Hat eine Seite keinen
-      einzigen Baustein, erscheint sie als schlichte Textseite – richtig für Impressum und AGB.
+      <span class="bk-griff">⠿</span> lassen sie sich umsortieren. Die Vorschau zeigt beim
+      Tippen mit; ein Klick hinein öffnet den Baustein, der dort steht.
+      Hat eine Seite keinen einzigen Baustein, erscheint sie als schlichte Textseite –
+      richtig für Impressum und AGB.
     </div>
 
     <div id="bausteinliste" data-sortier>
@@ -119,8 +134,21 @@ $bsKarte = static function (string $typ, int $index, array $daten) use ($bsFeld)
     </div>
 
     <?php if ($bausteine === []): ?>
-      <p class="bk-tipp" id="bausteine-leer">Noch keine Bausteine. Oben rechts einen auswählen und hinzufügen.</p>
+      <p class="bk-tipp" id="bausteine-leer">Noch keine Bausteine. Unten einen auswählen.</p>
     <?php endif; ?>
+
+    <div class="bk-baustein-wahl">
+      <div class="bk-baustein-wahl-kopf">Baustein hinzufügen</div>
+      <div class="bk-baustein-kacheln">
+        <?php foreach (Bausteine::TYPEN as $schluessel => $muster): ?>
+          <button class="bk-baustein-kachel" type="button" data-baustein-hinzu="<?= Util::e($schluessel) ?>">
+            <span class="bk-skizze"><?= $bsSkizzen[$schluessel] ?? '' ?></span>
+            <strong><?= Util::e($muster['name']) ?></strong>
+            <span class="bk-tipp"><?= Util::e($muster['text']) ?></span>
+          </button>
+        <?php endforeach; ?>
+      </div>
+    </div>
   </div>
 </section>
 

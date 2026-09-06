@@ -203,10 +203,14 @@ final class Bausteine
     /**
      * Lässt nur durch, was der Typ kennt, und putzt jedes Feld nach seiner Art.
      *
+     * Öffentlich, weil auch die Live-Vorschau (admin/vorschau.php) hier
+     * durchgeht: Sie zeigt damit genau das, was beim Speichern herauskäme –
+     * und rendert nie ungeprüftes HTML aus dem Formular.
+     *
      * @param array<string,mixed> $daten
      * @return array<string,mixed>
      */
-    private static function saeubern(string $typ, array $daten): array
+    public static function saeubern(string $typ, array $daten): array
     {
         $muster = self::TYPEN[$typ];
         $rein   = [];

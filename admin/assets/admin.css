@@ -395,8 +395,128 @@ td.bk-zahl-rechts, th.bk-zahl-rechts { text-align: right; font-variant-numeric: 
   display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0 12px;
   border-top: 1px dashed var(--rahmen); padding-top: 10px; margin-top: 4px;
 }
-.bk-baustein-neu { display: flex; gap: 8px; align-items: center; }
-.bk-baustein-neu select { max-width: 220px; }
+
+/* --- Bausteinauswahl mit Skizze -------------------------------------------- */
+
+/*
+ * Die Auswahl zeigt jeden Typ als Kachel mit einer groben Zeichnung seines
+ * Aufbaus. Wer eine Seite baut, denkt in Formen, nicht in Begriffen: "das mit
+ * dem runden Bild links" findet sich schneller als "Bühne mit Bild".
+ * Die Zeichnungen bestehen aus leeren Kästchen – kein Bild, kein Ladevorgang.
+ */
+.bk-baustein-wahl { border-top: 1px solid var(--rahmen); margin-top: 4px; padding-top: 14px; }
+.bk-baustein-wahl-kopf { font-weight: 600; margin-bottom: 10px; }
+.bk-baustein-kacheln {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px;
+}
+.bk-baustein-kachel {
+  display: block; text-align: left; cursor: pointer; font: inherit; color: inherit;
+  background: var(--flaeche); border: 1px solid var(--rahmen); border-radius: var(--ecken);
+  padding: 10px; transition: border-color .12s ease, box-shadow .12s ease;
+}
+.bk-baustein-kachel:hover { border-color: var(--blau); box-shadow: var(--schatten); }
+.bk-baustein-kachel strong { display: block; margin-top: 8px; font-size: 13px; }
+.bk-baustein-kachel .bk-tipp { margin: 2px 0 0; }
+
+.bk-skizze {
+  display: flex; align-items: stretch; gap: 5px; height: 54px; padding: 6px;
+  background: var(--flaeche2); border-radius: var(--ecken-klein); overflow: hidden;
+}
+.bk-skizze i { display: block; background: var(--rahmen-kraeftig); border-radius: 2px; }
+.sk-bogen {
+  flex: 0 0 34%; background: var(--rahmen-kraeftig);
+  border-radius: 50% 50% 3px 3px / 38% 38% 3px 3px;
+}
+.sk-bogen-klein { flex-basis: 26%; }
+.sk-spalte { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.sk-spalte i { height: 4px; }
+.sk-spalte i.sk-h { height: 8px; background: var(--schwach); }
+.sk-spalte i.sk-kurz { width: 55%; }
+.sk-spalte i.sk-knopf { width: 40%; height: 8px; background: var(--nebentext); border-radius: 4px; }
+.sk-spalte i.sk-nr { width: 22%; height: 6px; background: var(--nebentext); }
+.sk-breit i { width: 100%; }
+.sk-gruen {
+  flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 4px;
+  background: #4c5f42; border-radius: 4px; padding: 7px;
+}
+.sk-gruen i { height: 5px; background: rgba(255,255,255,.6); }
+.sk-gruen i.sk-kurz { width: 50%; }
+.sk-raster { flex: 1; display: grid; gap: 4px; }
+.sk-raster.sk-vier { grid-template-columns: repeat(4, 1fr); grid-template-rows: 1fr 1fr; }
+.sk-raster.sk-drei { grid-template-columns: repeat(3, 1fr); }
+.sk-raster i { background: var(--rahmen-kraeftig); border-radius: 2px; }
+.sk-raster i.sk-ware { border-radius: 40% 40% 3px 3px / 26% 26% 3px 3px; }
+.sk-saeulen { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
+.sk-saeulen > span { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+.sk-saeulen i { height: 4px; background: var(--rahmen-kraeftig); border-radius: 2px; }
+.sk-saeulen i.sk-h { height: 6px; background: var(--schwach); }
+.sk-schraeg { flex: 1; display: flex; align-items: center; gap: 6px; }
+.sk-schraeg i {
+  flex: 1; height: 30px; background: var(--flaeche);
+  border: 1px solid var(--rahmen-kraeftig); border-radius: 3px;
+}
+.sk-schraeg i:nth-child(1) { transform: rotate(-4deg); }
+.sk-schraeg i:nth-child(2) { transform: rotate(3deg); }
+.sk-schraeg i:nth-child(3) { transform: rotate(-2deg); }
+/* Der Baustein, der gerade in der Vorschau angeklickt wurde. */
+.bk-baustein.bk-baustein-aktiv { border-color: var(--blau); box-shadow: 0 0 0 3px var(--blau-bg); }
+
+/* --- Live-Vorschau --------------------------------------------------------- */
+
+/*
+ * Baukasten-Aufteilung: links die Felder, rechts die Vorschau. Die rechte
+ * Spalte klebt am oberen Rand, damit die Vorschau beim Blättern durch lange
+ * Bausteinlisten stehen bleibt – sonst müsste man nach jedem Tippen wieder
+ * nach oben scrollen, um das Ergebnis zu sehen.
+ */
+.bk-baukasten { grid-template-columns: minmax(0, 1fr) minmax(360px, 42%); }
+.bk-baukasten > div:last-child { position: sticky; top: calc(var(--kopfhoehe) + 16px); }
+
+.bk-vorschau { overflow: hidden; }
+.bk-vorschau .bk-karte-kopf { gap: 10px; }
+.bk-vorschau-schalter { display: flex; gap: 6px; margin-left: auto; }
+.bk-knopf-aktiv, .bk-knopf.bk-knopf-aktiv {
+  background: var(--text); border-color: var(--text); color: #fff;
+}
+
+/*
+ * Die Bühne zeigt einen Rahmen in Originalbreite (1280 px oder 390 px),
+ * herunterskaliert auf die Spaltenbreite. Skaliert statt schmal gerendert,
+ * weil eine 400 px breite Vorschau sonst das Telefon-Layout zeigen würde –
+ * und damit nicht das, was der Kunde am Rechner sieht.
+ */
+.bk-vorschau-buehne {
+  position: relative; overflow: hidden; background: var(--flaeche2);
+  border-top: 1px solid var(--rahmen); border-bottom: 1px solid var(--rahmen);
+  height: calc(100vh - var(--kopfhoehe) - 230px); min-height: 360px;
+}
+.bk-vorschau-buehne iframe {
+  position: absolute; left: 0; top: 0; border: 0; background: #fff;
+  transform-origin: top left; display: block;
+}
+.bk-vorschau-schleier {
+  position: absolute; inset: 0; background: rgba(255,255,255,.55);
+  backdrop-filter: blur(1px); pointer-events: none;
+}
+.bk-vorschau-fuss {
+  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  font-size: 12px; color: var(--nebentext);
+}
+.bk-vorschau-fuss button { margin-left: auto; }
+
+/*
+ * Große Ansicht: legt die Vorschau über die Arbeitsfläche.
+ *
+ * Dafür muss die klebende rechte Spalte kurz aufgegeben werden: "position:
+ * sticky" bildet einen eigenen Stapelzusammenhang, in dem selbst z-index 200
+ * unter der Kopfzeile des Backends landet.
+ */
+body.hat-vorschau-gross .bk-baukasten > div:last-child { position: static; }
+.bk-vorschau.bk-vorschau-gross {
+  position: fixed; inset: 14px; z-index: 200; margin: 0;
+  display: flex; flex-direction: column; box-shadow: var(--schatten-gross);
+}
+.bk-vorschau.bk-vorschau-gross .bk-vorschau-buehne { flex: 1; height: auto; min-height: 0; }
 
 /* --- Kleine Bildschirme --------------------------------------------------- */
 
@@ -412,5 +532,16 @@ td.bk-zahl-rechts, th.bk-zahl-rechts { text-align: right; font-variant-numeric: 
   .bk-baustein-felder { grid-template-columns: 1fr; }
   .bk-menue-schalter { display: inline-flex !important; }
   .bk-stand { display: none; }
+}
+
+/*
+ * Unter 1080 Pixeln ist die Fläche zu schmal für Felder und Vorschau
+ * nebeneinander: dann untereinander, Vorschau mit fester Höhe. Darüber hilft
+ * bei knappem Platz der Knopf für die große Ansicht.
+ */
+@media (max-width: 1080px) {
+  .bk-baukasten { grid-template-columns: 1fr; }
+  .bk-baukasten > div:last-child { position: static; }
+  .bk-vorschau-buehne { height: 70vh; }
 }
 .bk-menue-schalter { display: none; }

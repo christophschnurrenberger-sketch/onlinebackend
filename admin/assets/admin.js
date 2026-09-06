@@ -64,6 +64,7 @@
     if (!weg) return;
     var zeile = weg.closest(weg.dataset.zeileWeg);
     if (zeile) zeile.remove();
+    document.dispatchEvent(new CustomEvent('vorschau:neu'));
   });
 
   /* --- Suchfelder mit kurzer Verzögerung absenden ------------------------- */
@@ -134,6 +135,8 @@
     function nummerieren() {
       var felder = behaelter.querySelectorAll('[data-sortier-pos]');
       for (var i = 0; i < felder.length; i++) felder[i].value = String(i);
+      // Die Vorschau hängt an der Reihenfolge, nicht nur an den Texten.
+      document.dispatchEvent(new CustomEvent('vorschau:neu'));
     }
 
     /* Verschieben per Knopf – auf dem Telefon die einzige Möglichkeit. */
@@ -152,26 +155,236 @@
       karte.scrollIntoView({ block: 'nearest' });
     });
 
-    var neu = document.querySelector('[data-baustein-hinzu]');
-    var wahl = document.getElementById('bausteinwahl');
-    if (neu && wahl) {
-      neu.addEventListener('click', function () {
-        var vorlage = document.getElementById('bs-vorlage-' + wahl.value);
-        if (!vorlage) return;
-        // Fortlaufende Nummer, damit die Feldnamen sich nie überschneiden.
-        var nummer = Date.now() % 100000;
-        var html = vorlage.innerHTML.split('__I__').join(String(nummer));
-        var huelle = document.createElement('div');
-        huelle.innerHTML = html;
-        var karte = huelle.querySelector('[data-sortier-element]');
-        if (!karte) return;
-        behaelter.appendChild(karte);
-        nummerieren();
-        var leer = document.getElementById('bausteine-leer');
-        if (leer) leer.remove();
-        karte.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    /*
+     * Neue Bausteine kommen aus der Kachelauswahl unter der Liste. Die
+     * Vorlage steht als <template> in der Seite, gebaut vom selben PHP-Code
+     * wie die vorhandenen Karten – ein zweiter Satz Formularfelder in
+     * JavaScript wäre eine Fehlerquelle, die sich nie wieder schließt.
+     */
+    document.addEventListener('click', function (e) {
+      var knopf = e.target.closest('[data-baustein-hinzu]');
+      if (!knopf) return;
+      var vorlage = document.getElementById('bs-vorlage-' + knopf.dataset.bausteinHinzu);
+      if (!vorlage) return;
+      // Fortlaufende Nummer, damit die Feldnamen sich nie überschneiden.
+      var nummer = Date.now() % 100000;
+      var html = vorlage.innerHTML.split('__I__').join(String(nummer));
+      var huelle = document.createElement('div');
+      huelle.innerHTML = html;
+      var karte = huelle.querySelector('[data-sortier-element]');
+      if (!karte) return;
+      behaelter.appendChild(karte);
+      nummerieren();
+      var leer = document.getElementById('bausteine-leer');
+      if (leer) leer.remove();
+      karte.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Ins erste Feld springen: dann zeigt die Vorschau gleich, wo der
+      // neue Baustein gelandet ist.
+      var erstes = karte.querySelector('input[type=text], textarea');
+      if (erstes) erstes.focus({ preventScroll: true });
+    });
+  }
+
+  /* --- Live-Vorschau ------------------------------------------------------ */
+
+  /*
+   * Der Baukasten zeigt rechts, was links entsteht.
+   *
+   * Statt die Seite im Backend nachzubauen, schickt die Vorschau den
+   * ungespeicherten Formularstand an admin/vorschau.php und zeigt dessen
+   * Antwort in einem Rahmen. Damit ist die Vorschau nicht "so ähnlich wie der
+   * Shop", sondern derselbe Programmcode – eine Abweichung kann gar nicht
+   * entstehen.
+   *
+   * Der Rahmen wird in Originalbreite gebaut (1280 px) und heruntergerechnet.
+   * Ein schmal gerenderter Rahmen würde das Telefon-Layout zeigen und damit
+   * das Falsche.
+   */
+  var vk = document.querySelector('[data-vorschau]');
+  var vformular = document.getElementById('inhaltform');
+  if (vk && vformular && window.fetch && 'srcdoc' in document.createElement('iframe')) {
+    var vrahmen   = vk.querySelector('[data-vorschau-rahmen]');
+    var vbuehne   = vk.querySelector('[data-vorschau-buehne]');
+    var vstand    = vk.querySelector('[data-vorschau-stand]');
+    var vschleier = vk.querySelector('[data-vorschau-schleier]');
+    var vziel     = vk.dataset.vorschauZiel;
+
+    var vbreite = 1280;      // Breite, in der gerendert wird
+    var vrollen = 0;         // zuletzt gemeldete Blätterhöhe im Rahmen
+    var vaktiv  = null;      // Baustein, der gerade bearbeitet wird
+    var vletzte = null;      // zuletzt gesendeter Formularstand
+    var vtimer  = null;
+    var vabbruch = null;
+
+    function vpassen() {
+      var platz = vbuehne.clientWidth;
+      var faktor = Math.min(1, platz / vbreite);
+      vrahmen.style.width = vbreite + 'px';
+      vrahmen.style.height = Math.ceil(vbuehne.clientHeight / faktor) + 'px';
+      vrahmen.style.transform = 'scale(' + faktor + ')';
+      vrahmen.style.left = Math.max(0, Math.round((platz - vbreite * faktor) / 2)) + 'px';
+    }
+
+    function vdaten() {
+      return new URLSearchParams(new FormData(vformular)).toString();
+    }
+
+    function vbauen(erzwingen) {
+      var koerper = vdaten();
+
+      /*
+       * Welcher Baustein gerade bearbeitet wird, steht im Fokus – nicht in
+       * einer eigenen Buchführung. Nach dem Umsortieren wäre eine gemerkte
+       * Nummer falsch, der Fokus stimmt immer.
+       */
+      var fokus = document.activeElement;
+      var offen = (fokus && fokus.closest) ? fokus.closest('[data-sortier-element]') : null;
+      var marke = offen ? offen.querySelector('[data-sortier-pos]') : null;
+      vaktiv = marke ? Number(marke.value) : null;
+
+      if (!erzwingen && koerper === vletzte) return;
+      vletzte = koerper;
+
+      if (vabbruch) vabbruch.abort();
+      vabbruch = ('AbortController' in window) ? new AbortController() : null;
+
+      vschleier.hidden = false;
+      vstand.textContent = 'wird aufgebaut …';
+
+      fetch(vziel, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' },
+        body: koerper,
+        signal: vabbruch ? vabbruch.signal : undefined
+      }).then(function (antwort) {
+        return antwort.text();
+      }).then(function (html) {
+        vrahmen.srcdoc = html;
+        vschleier.hidden = true;
+        vstand.textContent = 'Stand von ' + new Date().toLocaleTimeString('de-DE');
+      }).catch(function (fehler) {
+        if (fehler && fehler.name === 'AbortError') return;
+        vschleier.hidden = true;
+        vstand.textContent = 'Vorschau nicht erreichbar.';
+        // Beim nächsten Versuch nicht wegen "unverändert" abbrechen.
+        vletzte = null;
       });
     }
+
+    /*
+     * Nach dem Aufbau den alten Zustand wiederherstellen: erst die Markierung
+     * (ohne zu springen), dann die Blätterhöhe. Andernfalls stünde die
+     * Vorschau nach jedem Tastendruck wieder ganz oben.
+     */
+    vrahmen.addEventListener('load', function () {
+      var fenster = vrahmen.contentWindow;
+      if (!fenster) return;
+      if (vaktiv !== null) fenster.postMessage({ bsHervor: vaktiv, bsSpringen: false }, '*');
+      if (vrollen > 0) fenster.postMessage({ bsRollen: vrollen }, '*');
+    });
+
+    /* Tippen sammeln: erst wenn eine Sekunde Ruhe ist, wird neu gebaut. */
+    function vspaeter() {
+      clearTimeout(vtimer);
+      vtimer = setTimeout(function () { vbauen(false); }, 700);
+    }
+    vformular.addEventListener('input', vspaeter);
+    vformular.addEventListener('change', vspaeter);
+    document.addEventListener('vorschau:neu', vspaeter);
+
+    var vjetzt = vk.querySelector('[data-vorschau-neu]');
+    if (vjetzt) {
+      vjetzt.addEventListener('click', function () { clearTimeout(vtimer); vbauen(true); });
+    }
+
+    /* Bildschirm oder Telefon. */
+    vk.querySelectorAll('[data-vorschau-breite]').forEach(function (knopf) {
+      knopf.addEventListener('click', function () {
+        vk.querySelectorAll('[data-vorschau-breite]').forEach(function (k) {
+          k.classList.remove('bk-knopf-aktiv');
+        });
+        knopf.classList.add('bk-knopf-aktiv');
+        vbreite = Number(knopf.dataset.vorschauBreite) || 1280;
+        vpassen();
+      });
+    });
+
+    /*
+     * Vom Rahmen zurück ins Formular: Ein Klick in der Vorschau öffnet den
+     * Baustein, der dort steht. Das ist der Teil, der aus einer Liste von
+     * Feldern einen Baukasten macht.
+     */
+    window.addEventListener('message', function (e) {
+      if (!e.data || e.source !== vrahmen.contentWindow) return;
+
+      if (typeof e.data.bsRollstand === 'number') {
+        vrollen = e.data.bsRollstand;
+        return;
+      }
+      if (typeof e.data.bsSprung !== 'number') return;
+
+      /*
+       * Über den Wert suchen, nicht über das Attribut: nummerieren() setzt
+       * die Eigenschaft, das HTML-Attribut bleibt dabei auf dem alten Stand.
+       * Ein Selektor [value="3"] fände nach dem ersten Umsortieren die
+       * falsche Karte.
+       */
+      var karte = null;
+      var felder = vformular.querySelectorAll('[data-sortier-pos]');
+      for (var i = 0; i < felder.length; i++) {
+        if (Number(felder[i].value) === e.data.bsSprung) {
+          karte = felder[i].closest('[data-sortier-element]');
+          break;
+        }
+      }
+      if (!karte) return;
+      vformular.querySelectorAll('.bk-baustein-aktiv').forEach(function (k) {
+        k.classList.remove('bk-baustein-aktiv');
+      });
+      karte.classList.add('bk-baustein-aktiv');
+      karte.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var feld = karte.querySelector('input[type=text], textarea');
+      if (feld) feld.focus({ preventScroll: true });
+    });
+
+    /* Und umgekehrt: Wer ein Feld anfasst, sieht im Rahmen, wo es hingehört. */
+    vformular.addEventListener('focusin', function (e) {
+      var karte = e.target.closest('[data-sortier-element]');
+      if (!karte || !vrahmen.contentWindow) return;
+      var pos = karte.querySelector('[data-sortier-pos]');
+      if (!pos) return;
+      vformular.querySelectorAll('.bk-baustein-aktiv').forEach(function (k) {
+        k.classList.remove('bk-baustein-aktiv');
+      });
+      karte.classList.add('bk-baustein-aktiv');
+      vrahmen.contentWindow.postMessage({ bsHervor: Number(pos.value) }, '*');
+    });
+
+    /* Große Ansicht ein- und ausschalten. */
+    var vgross = vk.querySelector('[data-vorschau-gross]');
+    function vumschalten(an) {
+      vk.classList.toggle('bk-vorschau-gross', an);
+      document.body.classList.toggle('hat-vorschau-gross', an);
+      if (vgross) {
+        vgross.classList.toggle('bk-knopf-aktiv', an);
+        vgross.textContent = an ? '⤡' : '⤢';
+      }
+      // Erst nach dem Umbruch messen, sonst steht die alte Höhe im Weg.
+      requestAnimationFrame(vpassen);
+    }
+    if (vgross) {
+      vgross.addEventListener('click', function () {
+        vumschalten(!vk.classList.contains('bk-vorschau-gross'));
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && vk.classList.contains('bk-vorschau-gross')) vumschalten(false);
+      });
+    }
+
+    window.addEventListener('resize', vpassen);
+    vpassen();
+    vbauen(true);
   }
 
 })();

@@ -192,6 +192,8 @@ Stückware bleibt die Zeile leer.
 Seiten müssen keine Textwüste sein. Unter **Seiten → eine Seite öffnen** liegt
 unter dem Textfeld der **Baukasten**: Bausteine werden hinzugefügt, mit der
 Maus am Griff umsortiert (auf dem Telefon mit ↑ und ↓) und einzeln befüllt.
+Unten stehen die Typen als Kacheln mit einer Skizze ihres Aufbaus — die Form
+findet sich schneller als der Name.
 
 | Baustein | Was er macht |
 |---|---|
@@ -203,6 +205,32 @@ Maus am Griff umsortiert (auf dem Telefon mit ↑ und ↓) und einzeln befüllt.
 | **Kräuterbuch-Kopf** | Der Anfang einer Kräuterbuchseite: Nummer, Titel, botanischer Name, Vorspann, Bild. |
 | **Spalten** | Drei bis vier kurze Absätze nebeneinander. |
 | **Fließtext** | Überschrift und Text, wahlweise in schmaler Spalte. |
+
+### Die Vorschau daneben
+
+Rechts neben den Feldern steht die Seite, wie sie im Shop aussieht. Sie baut
+sich nach jeder Änderung neu auf — auch nach dem Umsortieren — und zeigt den
+**ungespeicherten** Stand: nichts muss gespeichert werden, um zu sehen, was
+herauskommt.
+
+* **Bildschirm / Telefon** schaltet die Breite um (1280 px bzw. 390 px). Die
+  Vorschau wird in voller Breite gebaut und verkleinert dargestellt; sonst
+  zeigte die schmale Spalte das Telefon-Layout und damit das Falsche.
+* Ein **Klick in die Vorschau** öffnet den Baustein, der dort steht.
+* Umgekehrt hebt die Vorschau den Baustein hervor, dessen Feld gerade
+  bearbeitet wird.
+* Blätterhöhe und Markierung überstehen den Neuaufbau — die Vorschau springt
+  beim Tippen nicht nach oben.
+
+Technisch schickt das Backend den Formularstand an `admin/vorschau.php`; das
+Skript rendert ihn mit demselben `Bausteine::rendern()` und demselben Theme
+wie der Shop. Die Vorschau ist deshalb kein Nachbau, der irgendwann
+auseinanderläuft, sondern dasselbe Ergebnis. Die Formularwerte gehen dabei
+durch dieselbe Reinigung wie beim Speichern (`Bausteine::saeubern()`,
+`Util::sauberesHtml()`).
+
+Ohne JavaScript bleibt die Vorschau leer; Bearbeiten, Speichern und
+Veröffentlichen funktionieren unverändert.
 
 Eine Seite **ohne** Bausteine erscheint als schlichte Textseite — richtig für
 Impressum und AGB. Steht im alten Textfeld noch etwas, während Bausteine

@@ -33,6 +33,10 @@ final class Inhalte
 
     public static function seiteLoeschen(int $id): void
     {
+        // Die Bausteine gehören zur Seite und haben ohne sie keinen Sinn. Auf
+        // eine Fremdschlüsselregel ist bei SQLite auf Mietservern kein
+        // Verlass (PRAGMA foreign_keys ist voreingestellt aus), deshalb hier.
+        DB::run('DELETE FROM bausteine WHERE seite_id = ?', [$id]);
         DB::delete('seiten', $id);
     }
 
