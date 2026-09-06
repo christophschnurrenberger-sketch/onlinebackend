@@ -75,18 +75,18 @@ $farben = [
 ];
 ?>
 
-<div class="ad-seitenkopf">
-  <div class="ad-titel">
+<div class="bk-seitenkopf">
+  <div class="bk-titel">
     <h1>Design</h1>
-    <div class="ad-untertitel">Farben, Schriften und Startseite des Shops</div>
+    <div class="bk-untertitel">Farben, Schriften und Startseite des Shops</div>
   </div>
-  <div class="ad-aktionen">
-    <a class="ad-knopf" href="<?= Util::e(Config::baseUrl()) ?>/" target="_blank" rel="noopener">Shop ansehen ↗</a>
-    <button class="ad-knopf ad-knopf-voll" type="submit" form="designform">Speichern</button>
+  <div class="bk-aktionen">
+    <a class="bk-knopf" href="<?= Util::e(Config::baseUrl()) ?>/" target="_blank" rel="noopener">Shop ansehen ↗</a>
+    <button class="bk-knopf bk-knopf-voll" type="submit" form="designform">Speichern</button>
   </div>
 </div>
 
-<div class="ad-hinweis ad-hinweis-info">
+<div class="bk-hinweis bk-hinweis-info">
   <strong>So funktioniert das Design</strong>
   Diese Werte werden als CSS-Variablen in jede Shopseite geschrieben. Die Branchenstile laden
   zusätzlich eine Datei aus <code>assets/stile/</code>, die Abstände, Rahmen und Versalien mitbringt –
@@ -100,22 +100,22 @@ $stilkachel = static function (string $schluessel, array $stil, string $aktuell)
     $w = $stil['werte'];
     $an = $schluessel === $aktuell;
     ?>
-    <label class="ad-stil<?= $an ? ' ist-aktiv' : '' ?>">
+    <label class="bk-stil<?= $an ? ' ist-aktiv' : '' ?>">
       <input type="radio" name="design_vorlage" value="<?= Util::e($schluessel) ?>" <?= $an ? 'checked' : '' ?>>
-      <span class="ad-stil-probe" style="background:<?= Util::e($w['farbe_hintergrund']) ?>;
+      <span class="bk-stil-probe" style="background:<?= Util::e($w['farbe_hintergrund']) ?>;
             border-color:<?= Util::e($w['farbe_rahmen']) ?>">
-        <span class="ad-stil-kopf" style="background:<?= Util::e($w['farbe_knopf']) ?>"></span>
-        <span class="ad-stil-titel" style="font-family:<?= Util::e($w['schrift_titel']) ?>;
+        <span class="bk-stil-kopf" style="background:<?= Util::e($w['farbe_knopf']) ?>"></span>
+        <span class="bk-stil-titel" style="font-family:<?= Util::e($w['schrift_titel']) ?>;
               color:<?= Util::e($w['farbe_text']) ?>">Aa</span>
-        <span class="ad-stil-knopf" style="background:<?= Util::e($w['farbe_knopf']) ?>;
+        <span class="bk-stil-knopf" style="background:<?= Util::e($w['farbe_knopf']) ?>;
               color:<?= Util::e($w['farbe_knopf_text']) ?>;border-radius:<?= Util::e($w['ecken']) ?>"></span>
-        <span class="ad-stil-punkt" style="background:<?= Util::e($w['farbe_akzent']) ?>"></span>
-        <span class="ad-stil-flaeche" style="background:<?= Util::e($w['farbe_flaeche']) ?>"></span>
+        <span class="bk-stil-punkt" style="background:<?= Util::e($w['farbe_akzent']) ?>"></span>
+        <span class="bk-stil-flaeche" style="background:<?= Util::e($w['farbe_flaeche']) ?>"></span>
       </span>
-      <span class="ad-stil-name"><?= Util::e($stil['name']) ?>
+      <span class="bk-stil-name"><?= Util::e($stil['name']) ?>
         <?php if ($stil['datei'] !== ''): ?><em>eigene Stildatei</em><?php endif; ?>
       </span>
-      <span class="ad-stil-text"><?= Util::e($stil['text']) ?></span>
+      <span class="bk-stil-text"><?= Util::e($stil['text']) ?></span>
     </label>
     <?php
 };
@@ -125,26 +125,26 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
 <form method="post" style="margin-bottom:16px">
   <?= Auth::csrfFeld() ?>
   <input type="hidden" name="aktion" value="vorlage">
-  <section class="ad-karte">
-    <div class="ad-karte-kopf">
+  <section class="bk-karte">
+    <div class="bk-karte-kopf">
       <h2>Shop-Stil</h2>
-      <button class="ad-knopf ad-knopf-voll" type="submit">Ausgewählten Stil übernehmen</button>
+      <button class="bk-knopf bk-knopf-voll" type="submit">Ausgewählten Stil übernehmen</button>
     </div>
-    <div class="ad-karte-inhalt">
-      <p class="ad-tipp" style="margin-top:0">
+    <div class="bk-karte-inhalt">
+      <p class="bk-tipp" style="margin-top:0">
         Ein Stil setzt Farben, Schriften, Ecken und Rasterbreite auf einen Schlag – die Branchenstile
         bringen zusätzlich eine eigene Stildatei mit, die Abstände, Rahmen und Versalien mitbringt.
         <strong>Achtung:</strong> Beim Übernehmen werden die Farben und Schriften unten überschrieben.
         Danach kannst du alles einzeln nachjustieren.
       </p>
-      <h3 class="ad-stil-gruppe">Für eine Branche gebaut</h3>
-      <div class="ad-stil-raster">
+      <h3 class="bk-stil-gruppe">Für eine Branche gebaut</h3>
+      <div class="bk-stil-raster">
         <?php foreach ($stile as $schluessel => $stil): ?>
           <?php if ($stil['datei'] !== '') { $stilkachel($schluessel, $stil, $aktuellerStil); } ?>
         <?php endforeach; ?>
       </div>
-      <h3 class="ad-stil-gruppe">Neutrale Farbschemata</h3>
-      <div class="ad-stil-raster">
+      <h3 class="bk-stil-gruppe">Neutrale Farbschemata</h3>
+      <div class="bk-stil-raster">
         <?php foreach ($stile as $schluessel => $stil): ?>
           <?php if ($stil['datei'] === '') { $stilkachel($schluessel, $stil, $aktuellerStil); } ?>
         <?php endforeach; ?>
@@ -153,19 +153,19 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
   </section>
 </form>
 
-<form id="designform" method="post" class="ad-zwei">
+<form id="designform" method="post" class="bk-zwei">
   <?= Auth::csrfFeld() ?>
   <input type="hidden" name="design_vorlage" value="<?= Util::e($e('design_vorlage')) ?>">
 
   <div>
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Farben</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feldzeile">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Farben</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feldzeile">
           <?php foreach ($farben as $feld => $label): ?>
-            <div class="ad-feld">
+            <div class="bk-feld">
               <label for="<?= $feld ?>"><?= Util::e($label) ?></label>
-              <div class="ad-farbe">
+              <div class="bk-farbe">
                 <input type="color" value="<?= Util::e(preg_match('/^#[0-9a-f]{6}$/i', $e($feld)) ? $e($feld) : '#000000') ?>">
                 <input type="text" id="<?= $feld ?>" name="<?= $feld ?>" value="<?= Util::e($e($feld)) ?>">
               </div>
@@ -175,40 +175,40 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Startseite</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feld">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Startseite</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feld">
           <label for="start_titel">Überschrift</label>
           <input type="text" id="start_titel" name="start_titel" value="<?= Util::e($e('start_titel')) ?>">
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="start_text">Unterzeile</label>
           <input type="text" id="start_text" name="start_text" value="<?= Util::e($e('start_text')) ?>">
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="start_bild">Hintergrundbild (Adresse)</label>
           <input type="text" id="start_bild" name="start_bild" value="<?= Util::e($e('start_bild')) ?>"
                  placeholder="uploads/buehne.jpg">
-          <div class="ad-tipp">Leer lassen für eine einfarbige Fläche.</div>
+          <div class="bk-tipp">Leer lassen für eine einfarbige Fläche.</div>
         </div>
-        <div class="ad-feldzeile">
-          <div class="ad-feld"><label for="start_knopf">Buttontext</label>
+        <div class="bk-feldzeile">
+          <div class="bk-feld"><label for="start_knopf">Buttontext</label>
             <input type="text" id="start_knopf" name="start_knopf" value="<?= Util::e($e('start_knopf')) ?>"></div>
-          <div class="ad-feld"><label for="start_knopf_url">Buttonziel</label>
+          <div class="bk-feld"><label for="start_knopf_url">Buttonziel</label>
             <input type="text" id="start_knopf_url" name="start_knopf_url" value="<?= Util::e($e('start_knopf_url')) ?>"></div>
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Ankündigungsleiste</h2></div>
-      <div class="ad-karte-inhalt">
-        <label class="ad-haken">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Ankündigungsleiste</h2></div>
+      <div class="bk-karte-inhalt">
+        <label class="bk-haken">
           <input type="checkbox" name="hinweisleiste_an" value="1" <?= Settings::bool('hinweisleiste_an') ? 'checked' : '' ?>>
           <span>Leiste über dem Kopf anzeigen</span>
         </label>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="hinweisleiste">Text</label>
           <input type="text" id="hinweisleiste" name="hinweisleiste" value="<?= Util::e($e('hinweisleiste')) ?>"
                  placeholder="Versandkostenfrei ab 75 €">
@@ -216,60 +216,60 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Servicezeile &amp; Vorteile</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-hinweis ad-hinweis-warnung" style="margin:0 0 14px">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Servicezeile &amp; Vorteile</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-hinweis bk-hinweis-warnung" style="margin:0 0 14px">
           Diese Texte stehen öffentlich im Shop. In Deutschland sind Werbeaussagen
           verbindlich – bitte nur hineinschreiben, was auch eingehalten wird.
         </div>
-        <label class="ad-haken">
+        <label class="bk-haken">
           <input type="checkbox" name="servicezeile_an" value="1" <?= Settings::bool('servicezeile_an') ? 'checked' : '' ?>>
           <span>Schmale Servicezeile ganz oben anzeigen</span>
         </label>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="servicezeile">Text links</label>
           <input type="text" id="servicezeile" name="servicezeile" value="<?= Util::e($e('servicezeile')) ?>"
                  placeholder="Kundenservice Mo–Fr 9–17 Uhr">
-          <div class="ad-tipp">Rechts stehen automatisch Telefonnummer und Kontakt aus den Einstellungen.</div>
+          <div class="bk-tipp">Rechts stehen automatisch Telefonnummer und Kontakt aus den Einstellungen.</div>
         </div>
-        <label class="ad-haken">
+        <label class="bk-haken">
           <input type="checkbox" name="vorteile_an" value="1" <?= Settings::bool('vorteile_an') ? 'checked' : '' ?>>
           <span>Vorteilsleiste unter dem Kopf anzeigen</span>
         </label>
-        <div class="ad-feldzeile">
-          <div class="ad-feld"><label for="vorteil_1">Vorteil 1</label>
+        <div class="bk-feldzeile">
+          <div class="bk-feld"><label for="vorteil_1">Vorteil 1</label>
             <input type="text" id="vorteil_1" name="vorteil_1" value="<?= Util::e($e('vorteil_1')) ?>"
                    placeholder="Versandkostenfrei ab 50 €"></div>
-          <div class="ad-feld"><label for="vorteil_2">Vorteil 2</label>
+          <div class="bk-feld"><label for="vorteil_2">Vorteil 2</label>
             <input type="text" id="vorteil_2" name="vorteil_2" value="<?= Util::e($e('vorteil_2')) ?>"></div>
         </div>
-        <div class="ad-feldzeile">
-          <div class="ad-feld"><label for="vorteil_3">Vorteil 3</label>
+        <div class="bk-feldzeile">
+          <div class="bk-feld"><label for="vorteil_3">Vorteil 3</label>
             <input type="text" id="vorteil_3" name="vorteil_3" value="<?= Util::e($e('vorteil_3')) ?>"></div>
-          <div class="ad-feld" style="margin:0"><label for="vorteil_4">Vorteil 4</label>
+          <div class="bk-feld" style="margin:0"><label for="vorteil_4">Vorteil 4</label>
             <input type="text" id="vorteil_4" name="vorteil_4" value="<?= Util::e($e('vorteil_4')) ?>"></div>
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Eigenes CSS</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feld" style="margin:0">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Eigenes CSS</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feld" style="margin:0">
           <label for="eigenes_css">Zusätzliche Regeln</label>
-          <textarea id="eigenes_css" name="eigenes_css" rows="8" class="ad-code"><?= Util::e($e('eigenes_css')) ?></textarea>
-          <div class="ad-tipp">Wird nach dem Basis-Stylesheet eingebunden und überschreibt es damit.</div>
+          <textarea id="eigenes_css" name="eigenes_css" rows="8" class="bk-code"><?= Util::e($e('eigenes_css')) ?></textarea>
+          <div class="bk-tipp">Wird nach dem Basis-Stylesheet eingebunden und überschreibt es damit.</div>
         </div>
       </div>
     </section>
   </div>
 
   <div>
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Typografie &amp; Raster</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feld">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Typografie &amp; Raster</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feld">
           <label for="schrift_titel">Überschriften</label>
           <select id="schrift_titel" name="schrift_titel">
             <?php foreach ($schriften as $wert => $label): ?>
@@ -277,7 +277,7 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="schrift_text">Fließtext</label>
           <select id="schrift_text" name="schrift_text">
             <?php foreach ($schriften as $wert => $label): ?>
@@ -285,7 +285,7 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="ecken">Ecken</label>
           <select id="ecken" name="ecken">
             <?php foreach (['0px' => 'Kantig', '6px' => 'Leicht gerundet', '10px' => 'Gerundet', '18px' => 'Stark gerundet'] as $wert => $label): ?>
@@ -293,7 +293,7 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="inhaltsbreite">Inhaltsbreite</label>
           <select id="inhaltsbreite" name="inhaltsbreite">
             <?php foreach (['1000px' => 'Schmal', '1200px' => 'Standard', '1400px' => 'Breit', '100%' => 'Volle Breite'] as $wert => $label): ?>
@@ -301,7 +301,7 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="artikel_pro_reihe">Artikel pro Reihe</label>
           <select id="artikel_pro_reihe" name="artikel_pro_reihe">
             <?php foreach (['2', '3', '4', '5'] as $wert): ?>
@@ -312,27 +312,27 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Anzeigeoptionen</h2></div>
-      <div class="ad-karte-inhalt">
-        <label class="ad-haken">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Anzeigeoptionen</h2></div>
+      <div class="bk-karte-inhalt">
+        <label class="bk-haken">
           <input type="checkbox" name="hersteller_zeigen" value="1" <?= Settings::bool('hersteller_zeigen') ? 'checked' : '' ?>>
           <span>Hersteller in der Artikelliste zeigen</span>
         </label>
-        <label class="ad-haken">
+        <label class="bk-haken">
           <input type="checkbox" name="streichpreis_zeigen" value="1" <?= Settings::bool('streichpreis_zeigen') ? 'checked' : '' ?>>
           <span>Streichpreise und Sale-Kennzeichnung zeigen</span>
         </label>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="fusszeile_text">Fußzeilentext</label>
           <input type="text" id="fusszeile_text" name="fusszeile_text" value="<?= Util::e($e('fusszeile_text')) ?>">
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Vorschau</h2></div>
-      <div class="ad-karte-inhalt">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Vorschau</h2></div>
+      <div class="bk-karte-inhalt">
         <?php
         $farbe = static fn(string $k): string => Util::e(preg_replace('/[;{}<>"]/', '', Settings::get($k)));
         ?>
@@ -373,7 +373,7 @@ $aktuellerStil = $e('design_vorlage') !== '' ? $e('design_vorlage') : 'basis';
             <?php endfor; ?>
           </div>
         </div>
-        <p class="ad-tipp" style="margin-top:8px">Grobe Vorschau. Die vollständige Ansicht öffnet
+        <p class="bk-tipp" style="margin-top:8px">Grobe Vorschau. Die vollständige Ansicht öffnet
           der Knopf oben rechts.</p>
       </div>
     </section>

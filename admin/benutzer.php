@@ -49,44 +49,44 @@ if (Util::isPost()) {
                 Util::redirect('benutzer.php?meldung=' . rawurlencode('Rolle geändert.'));
         }
     } catch (Throwable $e) {
-        echo '<div class="ad-hinweis ad-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
+        echo '<div class="bk-hinweis bk-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
     }
 }
 
 $alle = DB::all('SELECT id, email, name, rolle, aktiv, letzter_login, erstellt FROM benutzer ORDER BY id');
 ?>
 
-<div class="ad-seitenkopf">
-  <div class="ad-titel">
+<div class="bk-seitenkopf">
+  <div class="bk-titel">
     <h1>Benutzer</h1>
-    <div class="ad-untertitel"><?= count($alle) ?> Zugänge</div>
+    <div class="bk-untertitel"><?= count($alle) ?> Zugänge</div>
   </div>
 </div>
 
-<div class="ad-hinweis ad-hinweis-info">
+<div class="bk-hinweis bk-hinweis-info">
   <strong>Rollen</strong>
   Inhaber und Administrator dürfen alles, auch Einstellungen und Benutzer ändern.
   Mitarbeiter pflegen Artikel, Bestellungen, Kunden und Inhalte, kommen aber nicht an
   Einstellungen, Versandzonen, Steuersätze oder das Zurücksetzen von Fassungen.
 </div>
 
-<section class="ad-karte">
-  <div class="ad-karte-kopf"><h2>Vorhandene Zugänge</h2></div>
-  <div class="ad-karte-inhalt eng">
-    <div class="ad-tabelle-rahmen"><table>
+<section class="bk-karte">
+  <div class="bk-karte-kopf"><h2>Vorhandene Zugänge</h2></div>
+  <div class="bk-karte-inhalt eng">
+    <div class="bk-tabelle-rahmen"><table>
       <thead><tr><th>Name</th><th>E-Mail</th><th>Rolle</th><th>Zuletzt angemeldet</th><th></th></tr></thead>
       <tbody>
         <?php foreach ($alle as $eintrag): ?>
           <tr>
             <td><?= Util::e((string) ($eintrag['name'] ?: '—')) ?>
               <?php if ((int) $eintrag['id'] === (int) $benutzer['id']): ?>
-                <span class="ad-neben">(du)</span>
+                <span class="bk-neben">(du)</span>
               <?php endif; ?>
             </td>
-            <td class="ad-neben"><?= Util::e((string) $eintrag['email']) ?></td>
+            <td class="bk-neben"><?= Util::e((string) $eintrag['email']) ?></td>
             <td>
               <?php if ((string) $eintrag['rolle'] === 'inhaber' || (int) $eintrag['id'] === (int) $benutzer['id']): ?>
-                <span class="ad-marke <?= (string) $eintrag['rolle'] === 'inhaber' ? 'ad-marke-gruen' : '' ?>">
+                <span class="bk-marke <?= (string) $eintrag['rolle'] === 'inhaber' ? 'bk-marke-gruen' : '' ?>">
                   <i></i><?= Util::e(Auth::rolleName((string) $eintrag['rolle'])) ?>
                 </span>
               <?php else: ?>
@@ -106,16 +106,16 @@ $alle = DB::all('SELECT id, email, name, rolle, aktiv, letzter_login, erstellt F
                 </form>
               <?php endif; ?>
             </td>
-            <td class="ad-neben"><?= $eintrag['letzter_login'] !== null
+            <td class="bk-neben"><?= $eintrag['letzter_login'] !== null
                 ? Util::e(Util::dt((string) $eintrag['letzter_login'])) : 'nie' ?></td>
-            <td class="ad-zahl-rechts">
+            <td class="bk-zahl-rechts">
               <?php if ((int) $eintrag['id'] !== (int) $benutzer['id']): ?>
                 <form method="post" style="display:inline"
                       data-frage="Zugang von <?= Util::e((string) $eintrag['email']) ?> löschen?">
                   <?= Auth::csrfFeld() ?>
                   <input type="hidden" name="aktion" value="loeschen">
                   <input type="hidden" name="id" value="<?= (int) $eintrag['id'] ?>">
-                  <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="submit">Löschen</button>
+                  <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="submit">Löschen</button>
                 </form>
               <?php endif; ?>
             </td>
@@ -126,26 +126,26 @@ $alle = DB::all('SELECT id, email, name, rolle, aktiv, letzter_login, erstellt F
   </div>
 </section>
 
-<div class="ad-zwei">
-  <form method="post" class="ad-karte">
+<div class="bk-zwei">
+  <form method="post" class="bk-karte">
     <?= Auth::csrfFeld() ?>
     <input type="hidden" name="aktion" value="anlegen">
-    <div class="ad-karte-kopf"><h2>Benutzer hinzufügen</h2></div>
-    <div class="ad-karte-inhalt">
-      <div class="ad-feld">
+    <div class="bk-karte-kopf"><h2>Benutzer hinzufügen</h2></div>
+    <div class="bk-karte-inhalt">
+      <div class="bk-feld">
         <label for="name">Name</label>
         <input type="text" id="name" name="name">
       </div>
-      <div class="ad-feld">
+      <div class="bk-feld">
         <label for="email">E-Mail-Adresse</label>
         <input type="email" id="email" name="email" required>
       </div>
-      <div class="ad-feld">
+      <div class="bk-feld">
         <label for="passwort">Passwort</label>
         <input type="password" id="passwort" name="passwort" required autocomplete="new-password">
-        <div class="ad-tipp">Mindestens 10 Zeichen.</div>
+        <div class="bk-tipp">Mindestens 10 Zeichen.</div>
       </div>
-      <div class="ad-feld" style="margin:0">
+      <div class="bk-feld" style="margin:0">
         <label for="rolle">Rolle</label>
         <select id="rolle" name="rolle">
           <option value="mitarbeiter">Mitarbeiter</option>
@@ -153,25 +153,25 @@ $alle = DB::all('SELECT id, email, name, rolle, aktiv, letzter_login, erstellt F
         </select>
       </div>
     </div>
-    <div class="ad-karte-fuss">
-      <button class="ad-knopf ad-knopf-voll" type="submit">Benutzer anlegen</button>
+    <div class="bk-karte-fuss">
+      <button class="bk-knopf bk-knopf-voll" type="submit">Benutzer anlegen</button>
     </div>
   </form>
 
-  <form method="post" class="ad-karte">
+  <form method="post" class="bk-karte">
     <?= Auth::csrfFeld() ?>
     <input type="hidden" name="aktion" value="passwort">
-    <div class="ad-karte-kopf"><h2>Eigenes Passwort ändern</h2></div>
-    <div class="ad-karte-inhalt">
+    <div class="bk-karte-kopf"><h2>Eigenes Passwort ändern</h2></div>
+    <div class="bk-karte-inhalt">
       <input type="hidden" name="id" value="<?= (int) $benutzer['id'] ?>">
-      <div class="ad-feld" style="margin:0">
+      <div class="bk-feld" style="margin:0">
         <label for="neues_passwort">Neues Passwort</label>
         <input type="password" id="neues_passwort" name="passwort" required autocomplete="new-password">
-        <div class="ad-tipp">Mindestens 10 Zeichen. Alle anderen Anmeldungen werden dabei beendet.</div>
+        <div class="bk-tipp">Mindestens 10 Zeichen. Alle anderen Anmeldungen werden dabei beendet.</div>
       </div>
     </div>
-    <div class="ad-karte-fuss">
-      <button class="ad-knopf ad-knopf-voll" type="submit">Passwort ändern</button>
+    <div class="bk-karte-fuss">
+      <button class="bk-knopf bk-knopf-voll" type="submit">Passwort ändern</button>
     </div>
   </form>
 </div>

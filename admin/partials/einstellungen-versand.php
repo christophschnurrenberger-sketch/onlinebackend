@@ -1,6 +1,6 @@
 <?php /** Reiter „Versand“. */ ?>
 
-<div class="ad-hinweis ad-hinweis-info">
+<div class="bk-hinweis bk-hinweis-info">
   <strong>Zonen und Versandarten</strong>
   Eine Zone bündelt Länder, ihre Versandarten gelten für alle davon.
   Eine Zone <em>ohne</em> Länderliste ist die Auffangzone für alle übrigen Länder –
@@ -8,16 +8,16 @@
 </div>
 
 <?php foreach (Versand::zonen() as $zone): ?>
-  <form method="post" class="ad-block">
+  <form method="post" class="bk-block">
     <?= Auth::csrfFeld() ?>
     <input type="hidden" name="bereich" value="zone-speichern">
     <input type="hidden" name="reiter" value="versand">
     <input type="hidden" name="zone_id" value="<?= (int) $zone['id'] ?>">
 
-    <div class="ad-feldzeile">
-      <div class="ad-feld"><label>Name der Zone</label>
+    <div class="bk-feldzeile">
+      <div class="bk-feld"><label>Name der Zone</label>
         <input type="text" name="zone_name" value="<?= Util::e((string) $zone['name']) ?>" required></div>
-      <div class="ad-feld"><label>Länder (Kürzel, kommagetrennt)</label>
+      <div class="bk-feld"><label>Länder (Kürzel, kommagetrennt)</label>
         <input type="text" name="zone_laender" value="<?= Util::e(implode(', ', $zone['laenderliste'])) ?>"
                placeholder="leer = alle übrigen Länder"></div>
     </div>
@@ -28,7 +28,7 @@
     // Immer eine leere Zeile anbieten, damit sich ohne Umweg eine Art ergänzen lässt.
     $arten[] = ['name' => '', 'preis' => 0, 'lieferzeit' => '', 'frei_ab' => null];
     foreach ($arten as $art): ?>
-      <div class="ad-feldzeile" style="grid-template-columns:1.4fr .8fr 1fr 1fr;margin-bottom:8px">
+      <div class="bk-feldzeile" style="grid-template-columns:1.4fr .8fr 1fr 1fr;margin-bottom:8px">
         <input type="text" name="art_name[]" value="<?= Util::e((string) $art['name']) ?>"
                placeholder="Standardversand"
                style="padding:8px 11px;border:1px solid var(--rahmen-kraeftig);border-radius:6px;font:inherit">
@@ -45,9 +45,9 @@
       </div>
     <?php endforeach; ?>
 
-    <div class="ad-knopfgruppe" style="margin-top:10px">
-      <button class="ad-knopf ad-knopf-voll ad-knopf-klein" type="submit">Zone speichern</button>
-      <button class="ad-knopf ad-knopf-klein ad-knopf-rot" type="submit" name="bereich" value="zone-loeschen"
+    <div class="bk-knopfgruppe" style="margin-top:10px">
+      <button class="bk-knopf bk-knopf-voll bk-knopf-klein" type="submit">Zone speichern</button>
+      <button class="bk-knopf bk-knopf-klein bk-knopf-rot" type="submit" name="bereich" value="zone-loeschen"
               formnovalidate onclick="return confirm('Zone „<?= Util::e((string) $zone['name']) ?>“ mit allen Versandarten löschen?')">
         Zone löschen
       </button>
@@ -55,26 +55,26 @@
   </form>
 <?php endforeach; ?>
 
-<form method="post" class="ad-block" style="background:var(--flaeche)">
+<form method="post" class="bk-block" style="background:var(--flaeche)">
   <?= Auth::csrfFeld() ?>
   <input type="hidden" name="bereich" value="zone-neu">
   <input type="hidden" name="reiter" value="versand">
   <h4 style="font-size:13px;margin:0 0 10px">Neue Zone anlegen</h4>
-  <div class="ad-feldzeile">
-    <div class="ad-feld"><label>Name</label>
+  <div class="bk-feldzeile">
+    <div class="bk-feld"><label>Name</label>
       <input type="text" name="zone_name" required placeholder="z. B. Deutschland"></div>
-    <div class="ad-feld"><label>Länder (Kürzel)</label>
+    <div class="bk-feld"><label>Länder (Kürzel)</label>
       <input type="text" name="zone_laender" placeholder="DE, AT"></div>
   </div>
-  <div class="ad-feldzeile" style="grid-template-columns:1.4fr .8fr 1fr 1fr">
-    <div class="ad-feld"><label>Erste Versandart</label>
+  <div class="bk-feldzeile" style="grid-template-columns:1.4fr .8fr 1fr 1fr">
+    <div class="bk-feld"><label>Erste Versandart</label>
       <input type="text" name="art_name" placeholder="Standardversand"></div>
-    <div class="ad-feld"><label>Preis</label>
+    <div class="bk-feld"><label>Preis</label>
       <input type="text" name="art_preis" placeholder="4,90" inputmode="decimal"></div>
-    <div class="ad-feld"><label>Lieferzeit</label>
+    <div class="bk-feld"><label>Lieferzeit</label>
       <input type="text" name="art_lieferzeit" placeholder="2–3 Werktage"></div>
-    <div class="ad-feld"><label>Kostenlos ab</label>
+    <div class="bk-feld"><label>Kostenlos ab</label>
       <input type="text" name="art_frei_ab" placeholder="75,00" inputmode="decimal"></div>
   </div>
-  <button class="ad-knopf ad-knopf-voll ad-knopf-klein" type="submit">Zone anlegen</button>
+  <button class="bk-knopf bk-knopf-voll bk-knopf-klein" type="submit">Zone anlegen</button>
 </form>

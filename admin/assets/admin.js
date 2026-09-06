@@ -21,7 +21,7 @@
 
   /* --- Farbwähler mit Textfeld koppeln ----------------------------------- */
 
-  document.querySelectorAll('.ad-farbe').forEach(function (gruppe) {
+  document.querySelectorAll('.bk-farbe').forEach(function (gruppe) {
     var wahl = gruppe.querySelector('input[type=color]');
     var text = gruppe.querySelector('input[type=text]');
     if (!wahl || !text) return;

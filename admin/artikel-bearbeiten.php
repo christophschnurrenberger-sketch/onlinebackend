@@ -107,7 +107,7 @@ if (Util::isPost()) {
         Artikel::speichern($id, $daten);
         Util::redirect('artikel-bearbeiten.php?id=' . $id . '&meldung=' . rawurlencode('Artikel gespeichert.'));
     } catch (Throwable $e) {
-        echo '<div class="ad-hinweis ad-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
+        echo '<div class="bk-hinweis bk-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
     }
 }
 
@@ -149,98 +149,98 @@ $hersteller   = Artikel::hersteller();
 $typen        = Artikel::typen();
 ?>
 
-<div class="ad-seitenkopf">
-  <div class="ad-titel">
-    <a class="ad-zurueck" href="artikel.php">← Alle Artikel</a>
+<div class="bk-seitenkopf">
+  <div class="bk-titel">
+    <a class="bk-zurueck" href="artikel.php">← Alle Artikel</a>
     <h1><?= $neu ? 'Neuer Artikel' : Util::e((string) $werte['titel']) ?></h1>
     <?php if (!$neu): ?>
-      <div class="ad-untertitel">Zuletzt bearbeitet <?= Util::e(Util::dt((string) $werte['geaendert'])) ?></div>
+      <div class="bk-untertitel">Zuletzt bearbeitet <?= Util::e(Util::dt((string) $werte['geaendert'])) ?></div>
     <?php endif; ?>
   </div>
-  <div class="ad-aktionen">
+  <div class="bk-aktionen">
     <?php if (!$neu): ?>
-      <a class="ad-knopf" href="artikel-bearbeiten.php?id=<?= $id ?>&aktion=duplizieren">Duplizieren</a>
-      <a class="ad-knopf" target="_blank" rel="noopener"
+      <a class="bk-knopf" href="artikel-bearbeiten.php?id=<?= $id ?>&aktion=duplizieren">Duplizieren</a>
+      <a class="bk-knopf" target="_blank" rel="noopener"
          href="<?= Util::e(Config::url('artikel.php?h=' . rawurlencode((string) $werte['handle']))) ?>">Im Shop ansehen ↗</a>
     <?php endif; ?>
-    <button class="ad-knopf ad-knopf-voll" type="submit" form="artikelform">Speichern</button>
+    <button class="bk-knopf bk-knopf-voll" type="submit" form="artikelform">Speichern</button>
   </div>
 </div>
 
-<form id="artikelform" method="post" enctype="multipart/form-data" class="ad-zwei">
+<form id="artikelform" method="post" enctype="multipart/form-data" class="bk-zwei">
   <?= Auth::csrfFeld() ?>
 
   <div>
-    <section class="ad-karte"><div class="ad-karte-inhalt">
-      <div class="ad-feld">
+    <section class="bk-karte"><div class="bk-karte-inhalt">
+      <div class="bk-feld">
         <label for="titel">Titel</label>
         <input type="text" id="titel" name="titel" required data-titel-quelle
                value="<?= Util::e((string) $werte['titel']) ?>" placeholder="z. B. Leinenhemd Sommer">
       </div>
-      <div class="ad-feld">
+      <div class="bk-feld">
         <label for="untertitel">Kurzbeschreibung</label>
         <input type="text" id="untertitel" name="untertitel" value="<?= Util::e((string) $werte['untertitel']) ?>">
-        <div class="ad-tipp">Eine Zeile unter dem Titel im Shop.</div>
+        <div class="bk-tipp">Eine Zeile unter dem Titel im Shop.</div>
       </div>
-      <div class="ad-feld">
+      <div class="bk-feld">
         <label for="beschreibung">Beschreibung</label>
         <textarea id="beschreibung" name="beschreibung" rows="10"><?= Util::e((string) $werte['beschreibung']) ?></textarea>
-        <div class="ad-tipp">Einfaches HTML ist erlaubt: &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;a&gt;.
+        <div class="bk-tipp">Einfaches HTML ist erlaubt: &lt;p&gt;, &lt;ul&gt;, &lt;strong&gt;, &lt;a&gt;.
           Skripte werden beim Speichern entfernt.</div>
       </div>
     </div></section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Bilder</h2></div>
-      <div class="ad-karte-inhalt">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Bilder</h2></div>
+      <div class="bk-karte-inhalt">
         <?php if ($bilder !== []): ?>
-          <div class="ad-bilder" style="margin-bottom:12px">
+          <div class="bk-bilder" style="margin-bottom:12px">
             <?php foreach ($bilder as $nr => $bild): ?>
-              <div class="ad-bild">
+              <div class="bk-bild">
                 <img src="<?= Util::e(Theme::url((string) $bild['url'])) ?>" alt="">
                 <input type="hidden" name="bild_url[]" value="<?= Util::e((string) $bild['url']) ?>">
-                <button type="button" title="Entfernen" data-zeile-weg=".ad-bild">✕</button>
+                <button type="button" title="Entfernen" data-zeile-weg=".bk-bild">✕</button>
               </div>
             <?php endforeach; ?>
           </div>
         <?php endif; ?>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="neue_bilder">Bilder hinzufügen</label>
           <input type="file" id="neue_bilder" name="neue_bilder[]" accept="image/*" multiple>
-          <div class="ad-tipp">JPEG, PNG, WebP, AVIF oder GIF – bis 8 MB je Bild.
+          <div class="bk-tipp">JPEG, PNG, WebP, AVIF oder GIF – bis 8 MB je Bild.
             Werden beim Speichern übernommen.</div>
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf">
         <h2>Optionen &amp; Varianten</h2>
-        <button class="ad-knopf ad-knopf-klein" type="button"
+        <button class="bk-knopf bk-knopf-klein" type="button"
                 data-zeile-hinzu="#optionsliste" data-vorlage="#optionsvorlage">Option hinzufügen</button>
       </div>
-      <div class="ad-karte-inhalt">
+      <div class="bk-karte-inhalt">
         <div id="optionsliste">
           <?php foreach ($optionen as $nr => $option): ?>
-            <div class="ad-block">
-              <div class="ad-feldzeile" style="margin-bottom:8px">
-                <div class="ad-feld" style="margin:0">
+            <div class="bk-block">
+              <div class="bk-feldzeile" style="margin-bottom:8px">
+                <div class="bk-feld" style="margin:0">
                   <label>Optionsname</label>
                   <input type="text" name="option_name[]" value="<?= Util::e((string) $option['name']) ?>" placeholder="Größe">
                 </div>
-                <div class="ad-feld" style="margin:0">
+                <div class="bk-feld" style="margin:0">
                   <label>Werte (kommagetrennt)</label>
                   <input type="text" name="option_werte[]"
                          value="<?= Util::e(implode(', ', $option['werteliste'])) ?>" placeholder="S, M, L">
                 </div>
               </div>
-              <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-                      data-zeile-weg=".ad-block">Option entfernen</button>
+              <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+                      data-zeile-weg=".bk-block">Option entfernen</button>
             </div>
           <?php endforeach; ?>
         </div>
 
-        <p class="ad-tipp">
+        <p class="bk-tipp">
           Nach dem Ändern von Optionen einmal speichern – danach lassen sich die Varianten
           unten bearbeiten. Ohne Optionen hat der Artikel genau eine Variante.
           <strong>Inhalt und Einheit</strong> füllen den Grundpreis („19,49 €/l“). Der ist für alles
@@ -249,13 +249,13 @@ $typen        = Artikel::typen();
         </p>
 
         <div style="margin-top:16px">
-          <div class="ad-variante ad-variante-kopf">
+          <div class="bk-variante bk-variante-kopf">
             <div>Variante</div><div>Preis</div><div>Streichpreis</div>
             <div>Artikelnr.</div><div>Bestand</div><div>Inhalt</div><div>Einheit</div><div></div>
           </div>
           <div id="variantenliste">
             <?php foreach ($varianten as $nr => $variante): ?>
-              <div class="ad-variante">
+              <div class="bk-variante">
                 <input type="hidden" name="v_id[]" value="<?= (int) ($variante['id'] ?? 0) ?>">
                 <input type="hidden" name="v_o1[]" value="<?= Util::e((string) ($variante['option1'] ?? '')) ?>">
                 <input type="hidden" name="v_o2[]" value="<?= Util::e((string) ($variante['option2'] ?? '')) ?>">
@@ -275,92 +275,92 @@ $typen        = Artikel::typen();
                       <?= Util::e($anzeige) ?></option>
                   <?php endforeach; ?>
                 </select>
-                <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-                        data-zeile-weg=".ad-variante" title="Variante entfernen">✕</button>
+                <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+                        data-zeile-weg=".bk-variante" title="Variante entfernen">✕</button>
               </div>
             <?php endforeach; ?>
           </div>
-          <button class="ad-knopf ad-knopf-klein" type="button" style="margin-top:10px"
+          <button class="bk-knopf bk-knopf-klein" type="button" style="margin-top:10px"
                   data-zeile-hinzu="#variantenliste" data-vorlage="#variantenvorlage">Variante hinzufügen</button>
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Suchmaschinen</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feld">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Suchmaschinen</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feld">
           <label for="handle">Adresse im Shop</label>
           <input type="text" id="handle" name="handle" data-handle-ziel value="<?= Util::e((string) $werte['handle']) ?>">
-          <div class="ad-tipp">Erreichbar unter artikel.php?h=<?= Util::e((string) ($werte['handle'] ?: 'titel')) ?></div>
+          <div class="bk-tipp">Erreichbar unter artikel.php?h=<?= Util::e((string) ($werte['handle'] ?: 'titel')) ?></div>
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="seo_titel">SEO-Titel</label>
           <input type="text" id="seo_titel" name="seo_titel" value="<?= Util::e((string) $werte['seo_titel']) ?>"
                  placeholder="<?= Util::e((string) $werte['titel']) ?>">
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="seo_text">SEO-Beschreibung</label>
           <textarea id="seo_text" name="seo_text" rows="3"><?= Util::e((string) $werte['seo_text']) ?></textarea>
-          <div class="ad-tipp">Rund 150 Zeichen. Leer lassen, um sie aus der Beschreibung zu erzeugen.</div>
+          <div class="bk-tipp">Rund 150 Zeichen. Leer lassen, um sie aus der Beschreibung zu erzeugen.</div>
         </div>
       </div>
     </section>
   </div>
 
   <div>
-    <section class="ad-karte"><div class="ad-karte-inhalt">
-      <div class="ad-feld" style="margin:0">
+    <section class="bk-karte"><div class="bk-karte-inhalt">
+      <div class="bk-feld" style="margin:0">
         <label for="status">Status</label>
         <select id="status" name="status">
           <option value="entwurf" <?= (string) $werte['status'] === 'entwurf' ? 'selected' : '' ?>>Entwurf – nicht im Shop</option>
           <option value="aktiv"   <?= (string) $werte['status'] === 'aktiv' ? 'selected' : '' ?>>Aktiv – geht beim Veröffentlichen live</option>
           <option value="archiv"  <?= (string) $werte['status'] === 'archiv' ? 'selected' : '' ?>>Archiviert</option>
         </select>
-        <div class="ad-tipp">Auch aktive Artikel erscheinen erst nach dem Veröffentlichen im Shop.</div>
+        <div class="bk-tipp">Auch aktive Artikel erscheinen erst nach dem Veröffentlichen im Shop.</div>
       </div>
     </div></section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Einordnung</h2></div>
-      <div class="ad-karte-inhalt">
-        <div class="ad-feld">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Einordnung</h2></div>
+      <div class="bk-karte-inhalt">
+        <div class="bk-feld">
           <label for="typ">Produkttyp</label>
           <input type="text" id="typ" name="typ" list="typen" value="<?= Util::e((string) $werte['typ']) ?>" placeholder="z. B. Hemden">
           <datalist id="typen"><?php foreach ($typen as $t): ?><option value="<?= Util::e($t) ?>"></option><?php endforeach; ?></datalist>
         </div>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="hersteller">Hersteller</label>
           <input type="text" id="hersteller" name="hersteller" list="hersteller_liste" value="<?= Util::e((string) $werte['hersteller']) ?>">
           <datalist id="hersteller_liste"><?php foreach ($hersteller as $h): ?><option value="<?= Util::e($h) ?>"></option><?php endforeach; ?></datalist>
         </div>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="schlagworte">Schlagwörter</label>
           <input type="text" id="schlagworte" name="schlagworte" value="<?= Util::e((string) $werte['schlagworte']) ?>">
-          <div class="ad-tipp">Kommagetrennt. Automatische Kategorien greifen darauf zu.</div>
+          <div class="bk-tipp">Kommagetrennt. Automatische Kategorien greifen darauf zu.</div>
         </div>
       </div>
     </section>
 
-    <section class="ad-karte">
-      <div class="ad-karte-kopf"><h2>Bestand, Versand &amp; Steuer</h2></div>
-      <div class="ad-karte-inhalt">
-        <label class="ad-haken">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf"><h2>Bestand, Versand &amp; Steuer</h2></div>
+      <div class="bk-karte-inhalt">
+        <label class="bk-haken">
           <input type="checkbox" name="bestand_fuehren" value="1"
                  <?= (int) ($erste['bestand_fuehren'] ?? 1) === 1 ? 'checked' : '' ?>>
           <span>Bestand führen</span>
         </label>
-        <label class="ad-haken">
+        <label class="bk-haken">
           <input type="checkbox" name="ueberverkauf" value="1"
                  <?= (int) ($erste['ueberverkauf'] ?? 0) === 1 ? 'checked' : '' ?>>
           <span>Verkauf auch bei Bestand 0 zulassen</span>
         </label>
-        <label class="ad-haken">
+        <label class="bk-haken">
           <input type="checkbox" name="versandpflicht" value="1"
                  <?= (int) ($erste['versandpflicht'] ?? 1) === 1 ? 'checked' : '' ?>>
           <span>Artikel muss versendet werden</span>
         </label>
-        <div class="ad-feld">
+        <div class="bk-feld">
           <label for="steuer_id">Steuersatz</label>
           <select id="steuer_id" name="steuer_id">
             <option value="">Standardsatz des Shops</option>
@@ -372,7 +372,7 @@ $typen        = Artikel::typen();
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="ad-feld" style="margin:0">
+        <div class="bk-feld" style="margin:0">
           <label for="gewicht_g">Gewicht in Gramm</label>
           <input type="number" id="gewicht_g" name="gewicht_g" value="<?= (int) ($erste['gewicht_g'] ?? 0) ?>" min="0">
         </div>
@@ -380,11 +380,11 @@ $typen        = Artikel::typen();
     </section>
 
     <?php if (!$neu && $artikel['kategorien'] !== []): ?>
-      <section class="ad-karte">
-        <div class="ad-karte-kopf"><h2>In Kategorien</h2></div>
-        <div class="ad-karte-inhalt">
+      <section class="bk-karte">
+        <div class="bk-karte-kopf"><h2>In Kategorien</h2></div>
+        <div class="bk-karte-inhalt">
           <?php foreach ($artikel['kategorien'] as $kategorie): ?>
-            <a class="ad-marke" style="margin:0 4px 4px 0"
+            <a class="bk-marke" style="margin:0 4px 4px 0"
                href="kategorie.php?id=<?= (int) $kategorie['id'] ?>"><?= Util::e((string) $kategorie['titel']) ?></a>
           <?php endforeach; ?>
         </div>
@@ -392,8 +392,8 @@ $typen        = Artikel::typen();
     <?php endif; ?>
 
     <?php if (!$neu): ?>
-      <section class="ad-karte"><div class="ad-karte-inhalt">
-        <a class="ad-knopf ad-knopf-rot" style="width:100%;justify-content:center"
+      <section class="bk-karte"><div class="bk-karte-inhalt">
+        <a class="bk-knopf bk-knopf-rot" style="width:100%;justify-content:center"
            href="artikel-bearbeiten.php?id=<?= $id ?>&aktion=loeschen&_token=<?= Util::e(Auth::csrfToken()) ?>"
            data-frage="Diesen Artikel endgültig löschen? Bestehende Bestellungen bleiben unverändert.">
           Artikel löschen
@@ -404,20 +404,20 @@ $typen        = Artikel::typen();
 </form>
 
 <template id="optionsvorlage">
-  <div class="ad-block">
-    <div class="ad-feldzeile" style="margin-bottom:8px">
-      <div class="ad-feld" style="margin:0"><label>Optionsname</label>
+  <div class="bk-block">
+    <div class="bk-feldzeile" style="margin-bottom:8px">
+      <div class="bk-feld" style="margin:0"><label>Optionsname</label>
         <input type="text" name="option_name[]" placeholder="Größe"></div>
-      <div class="ad-feld" style="margin:0"><label>Werte (kommagetrennt)</label>
+      <div class="bk-feld" style="margin:0"><label>Werte (kommagetrennt)</label>
         <input type="text" name="option_werte[]" placeholder="S, M, L"></div>
     </div>
-    <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-            data-zeile-weg=".ad-block">Option entfernen</button>
+    <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+            data-zeile-weg=".bk-block">Option entfernen</button>
   </div>
 </template>
 
 <template id="variantenvorlage">
-  <div class="ad-variante">
+  <div class="bk-variante">
     <input type="hidden" name="v_id[]" value="0">
     <input type="hidden" name="v_o1[]" value=""><input type="hidden" name="v_o2[]" value="">
     <input type="hidden" name="v_o3[]" value="">
@@ -433,8 +433,8 @@ $typen        = Artikel::typen();
         <option value="<?= Util::e($kuerzel) ?>"><?= Util::e($anzeige) ?></option>
       <?php endforeach; ?>
     </select>
-    <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-            data-zeile-weg=".ad-variante" title="Variante entfernen">✕</button>
+    <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+            data-zeile-weg=".bk-variante" title="Variante entfernen">✕</button>
   </div>
 </template>
 

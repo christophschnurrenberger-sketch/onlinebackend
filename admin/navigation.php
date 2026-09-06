@@ -44,17 +44,17 @@ if (Util::isPost()) {
 $menues = ['haupt' => 'Hauptmenü (Kopfzeile)', 'fuss' => 'Fußzeile'];
 ?>
 
-<div class="ad-seitenkopf">
-  <div class="ad-titel">
+<div class="bk-seitenkopf">
+  <div class="bk-titel">
     <h1>Navigation</h1>
-    <div class="ad-untertitel">Menüpunkte für Kopf- und Fußzeile des Shops</div>
+    <div class="bk-untertitel">Menüpunkte für Kopf- und Fußzeile des Shops</div>
   </div>
-  <div class="ad-aktionen">
-    <button class="ad-knopf ad-knopf-voll" type="submit" form="navform">Speichern</button>
+  <div class="bk-aktionen">
+    <button class="bk-knopf bk-knopf-voll" type="submit" form="navform">Speichern</button>
   </div>
 </div>
 
-<div class="ad-hinweis ad-hinweis-info">
+<div class="bk-hinweis bk-hinweis-info">
   <strong>Adressen im Shop</strong>
   Kategorie: <code>kategorie.php?h=handle</code> ·
   Artikel: <code>artikel.php?h=handle</code> ·
@@ -67,60 +67,60 @@ $menues = ['haupt' => 'Hauptmenü (Kopfzeile)', 'fuss' => 'Fußzeile'];
 
   <?php foreach ($menues as $schluessel => $bezeichnung): ?>
     <?php $punkte = Inhalte::menue($schluessel); ?>
-    <section class="ad-karte">
-      <div class="ad-karte-kopf">
+    <section class="bk-karte">
+      <div class="bk-karte-kopf">
         <h2><?= Util::e($bezeichnung) ?></h2>
-        <button class="ad-knopf ad-knopf-klein" type="button"
+        <button class="bk-knopf bk-knopf-klein" type="button"
                 data-zeile-hinzu="#<?= $schluessel ?>_liste"
                 data-vorlage="#<?= $schluessel ?>_vorlage">Punkt hinzufügen</button>
       </div>
-      <div class="ad-karte-inhalt">
+      <div class="bk-karte-inhalt">
         <div id="<?= $schluessel ?>_liste">
           <?php $nr = 0; ?>
           <?php foreach ($punkte as $punkt): ?>
             <?php $eigeneNr = $nr++; ?>
-            <div class="ad-block">
-              <div class="ad-feldzeile" style="margin-bottom:8px">
-                <div class="ad-feld" style="margin:0">
+            <div class="bk-block">
+              <div class="bk-feldzeile" style="margin-bottom:8px">
+                <div class="bk-feld" style="margin:0">
                   <label>Beschriftung</label>
                   <input type="text" name="<?= $schluessel ?>_label[<?= $eigeneNr ?>]"
                          value="<?= Util::e((string) $punkt['label']) ?>">
                 </div>
-                <div class="ad-feld" style="margin:0">
+                <div class="bk-feld" style="margin:0">
                   <label>Adresse</label>
                   <input type="text" name="<?= $schluessel ?>_url[<?= $eigeneNr ?>]"
                          value="<?= Util::e((string) $punkt['url']) ?>">
                 </div>
               </div>
               <input type="hidden" name="<?= $schluessel ?>_eltern[<?= $eigeneNr ?>]" value="">
-              <div class="ad-knopfgruppe">
-                <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-                        data-zeile-weg=".ad-block">Entfernen</button>
+              <div class="bk-knopfgruppe">
+                <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+                        data-zeile-weg=".bk-block">Entfernen</button>
               </div>
 
               <?php foreach ($punkt['kinder'] as $kind): ?>
                 <?php $kindNr = $nr++; ?>
-                <div class="ad-block" style="margin:10px 0 0 24px;background:var(--flaeche)">
-                  <div class="ad-feldzeile" style="margin-bottom:8px">
-                    <div class="ad-feld" style="margin:0">
+                <div class="bk-block" style="margin:10px 0 0 24px;background:var(--flaeche)">
+                  <div class="bk-feldzeile" style="margin-bottom:8px">
+                    <div class="bk-feld" style="margin:0">
                       <label>Unterpunkt</label>
                       <input type="text" name="<?= $schluessel ?>_label[<?= $kindNr ?>]"
                              value="<?= Util::e((string) $kind['label']) ?>">
                     </div>
-                    <div class="ad-feld" style="margin:0">
+                    <div class="bk-feld" style="margin:0">
                       <label>Adresse</label>
                       <input type="text" name="<?= $schluessel ?>_url[<?= $kindNr ?>]"
                              value="<?= Util::e((string) $kind['url']) ?>">
                     </div>
                   </div>
                   <input type="hidden" name="<?= $schluessel ?>_eltern[<?= $kindNr ?>]" value="<?= $eigeneNr ?>">
-                  <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-                          data-zeile-weg=".ad-block">Entfernen</button>
+                  <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+                          data-zeile-weg=".bk-block">Entfernen</button>
                 </div>
               <?php endforeach; ?>
 
               <?php if ($schluessel === 'haupt'): ?>
-                <p class="ad-tipp" style="margin:8px 0 0">
+                <p class="bk-tipp" style="margin:8px 0 0">
                   Unterpunkte lassen sich nach dem Speichern über den Knopf oben ergänzen
                   und dann diesem Punkt zuordnen.
                 </p>
@@ -129,22 +129,22 @@ $menues = ['haupt' => 'Hauptmenü (Kopfzeile)', 'fuss' => 'Fußzeile'];
           <?php endforeach; ?>
         </div>
         <?php if ($punkte === []): ?>
-          <p class="ad-tipp">Noch keine Menüpunkte.</p>
+          <p class="bk-tipp">Noch keine Menüpunkte.</p>
         <?php endif; ?>
       </div>
     </section>
 
     <template id="<?= $schluessel ?>_vorlage">
-      <div class="ad-block">
-        <div class="ad-feldzeile" style="margin-bottom:8px">
-          <div class="ad-feld" style="margin:0"><label>Beschriftung</label>
+      <div class="bk-block">
+        <div class="bk-feldzeile" style="margin-bottom:8px">
+          <div class="bk-feld" style="margin:0"><label>Beschriftung</label>
             <input type="text" name="<?= $schluessel ?>_label[__N__]" value="Neuer Punkt"></div>
-          <div class="ad-feld" style="margin:0"><label>Adresse</label>
+          <div class="bk-feld" style="margin:0"><label>Adresse</label>
             <input type="text" name="<?= $schluessel ?>_url[__N__]" value="index.php"></div>
         </div>
         <input type="hidden" name="<?= $schluessel ?>_eltern[__N__]" value="">
-        <button class="ad-knopf ad-knopf-klein ad-knopf-leer ad-knopf-rot" type="button"
-                data-zeile-weg=".ad-block">Entfernen</button>
+        <button class="bk-knopf bk-knopf-klein bk-knopf-leer bk-knopf-rot" type="button"
+                data-zeile-weg=".bk-block">Entfernen</button>
       </div>
     </template>
   <?php endforeach; ?>

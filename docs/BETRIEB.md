@@ -265,6 +265,7 @@ geändert, zieht der Shop das beim nächsten Seitenaufruf selbst nach.
 | Symptom | Ursache |
 |---|---|
 | **Internal Server Error** auf *allen* Seiten | Fast immer die `.htaccess`. Siehe unten. |
+| Im Backend fehlt die komplette Seitennavigation | Ein Werbeblocker versteckt Elemente mit ad-typischen Klassennamen. Seit Fassung 1.0.1 heißen sie `bk-…` statt `ad-…`; bitte `admin/` neu hochladen. |
 | Backend zeigt eine alte oder leere Seite, Konsole meldet `404` für `admin.css`, `app.js` … | Reste einer früheren Fassung, meist eine `index.html` neben der `index.php`. `aufraeumen.php` aufrufen, siehe Abschnitt 8. |
 | Weiße Seite | PHP-Version zu alt oder ein Fehler. `systemcheck.php` aufrufen; die Fehlermeldung steht im Fehlerprotokoll des Hosters. |
 | „Der Shop ist noch nicht eingerichtet“ | `config.php` fehlt — `install.php` aufrufen. |

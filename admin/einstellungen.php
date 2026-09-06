@@ -163,26 +163,26 @@ if (Util::isPost()) {
         Util::redirect('einstellungen.php?reiter=' . rawurlencode(Util::post('reiter', $aktiv))
             . '&meldung=' . rawurlencode('Einstellungen gespeichert.'));
     } catch (Throwable $e) {
-        echo '<div class="ad-hinweis ad-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
+        echo '<div class="bk-hinweis bk-hinweis-fehler">' . Util::e($e->getMessage()) . '</div>';
     }
 }
 
 $e = static fn(string $k): string => Settings::get($k);
 ?>
 
-<div class="ad-seitenkopf">
-  <div class="ad-titel"><h1>Einstellungen</h1></div>
+<div class="bk-seitenkopf">
+  <div class="bk-titel"><h1>Einstellungen</h1></div>
 </div>
 
-<section class="ad-karte">
-  <div class="ad-reiter">
+<section class="bk-karte">
+  <div class="bk-reiter">
     <?php foreach ($reiter as $wert => $label): ?>
       <a href="einstellungen.php?reiter=<?= Util::e($wert) ?>" class="<?= $aktiv === $wert ? 'aktiv' : '' ?>">
         <?= Util::e($label) ?>
       </a>
     <?php endforeach; ?>
   </div>
-  <div class="ad-karte-inhalt">
+  <div class="bk-karte-inhalt">
     <?php require __DIR__ . '/partials/einstellungen-' . $aktiv . '.php'; ?>
   </div>
 </section>

@@ -42,16 +42,16 @@ function admin_icon(string $datei): string
         'protokoll.php'        => '<path d="M3 12h4l2.5 7 5-16L17 12h4"/>',
     ];
     $d = $pfade[$datei] ?? '<circle cx="12" cy="12" r="9"/>';
-    return '<svg class="ad-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
+    return '<svg class="bk-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" '
          . 'stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="18" height="18">' . $d . '</svg>';
 }
 
 function admin_link(string $datei, string $beschriftung, int $zaehler = 0): void
 {
     $aktiv = basename((string) ($_SERVER['SCRIPT_NAME'] ?? '')) === $datei;
-    echo '<a class="ad-link' . ($aktiv ? ' aktiv' : '') . '" href="' . Util::e($datei) . '">'
+    echo '<a class="bk-link' . ($aktiv ? ' aktiv' : '') . '" href="' . Util::e($datei) . '">'
        . admin_icon($datei) . Util::e($beschriftung)
-       . ($zaehler > 0 ? '<span class="ad-zaehler">' . $zaehler . '</span>' : '')
+       . ($zaehler > 0 ? '<span class="bk-zaehler">' . $zaehler . '</span>' : '')
        . '</a>';
 }
 
@@ -69,18 +69,18 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
 <link rel="stylesheet" href="assets/admin.css">
 </head>
 <body>
-<div class="ad-layout">
+<div class="bk-layout">
 
-  <aside class="ad-nav" id="seitenleiste">
-    <div class="ad-shop">
-      <div class="ad-shop-zeichen"><?= Util::e(mb_strtoupper(mb_substr(Settings::get('shop_name', 'S'), 0, 1, 'UTF-8'), 'UTF-8')) ?></div>
+  <aside class="bk-nav" id="seitenleiste">
+    <div class="bk-shop">
+      <div class="bk-shop-zeichen"><?= Util::e(mb_strtoupper(mb_substr(Settings::get('shop_name', 'S'), 0, 1, 'UTF-8'), 'UTF-8')) ?></div>
       <div style="min-width:0">
-        <div class="ad-shop-name"><?= Util::e(Settings::get('shop_name')) ?></div>
-        <div class="ad-shop-rolle"><?= Util::e((string) ($benutzer['name'] ?: $benutzer['email'])) ?></div>
+        <div class="bk-shop-name"><?= Util::e(Settings::get('shop_name')) ?></div>
+        <div class="bk-shop-rolle"><?= Util::e((string) ($benutzer['name'] ?: $benutzer['email'])) ?></div>
       </div>
     </div>
 
-    <div class="ad-gruppe">
+    <div class="bk-gruppe">
       <?php
       admin_link('index.php', 'Übersicht');
       admin_link('bestellungen.php', 'Bestellungen', $offeneBestellungen);
@@ -90,16 +90,16 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
       ?>
     </div>
 
-    <div class="ad-gruppe">
-      <div class="ad-gruppe-titel">Katalog</div>
+    <div class="bk-gruppe">
+      <div class="bk-gruppe-titel">Katalog</div>
       <?php
       admin_link('kategorien.php', 'Kategorien');
       admin_link('bestand.php', 'Bestand');
       ?>
     </div>
 
-    <div class="ad-gruppe">
-      <div class="ad-gruppe-titel">Onlineshop</div>
+    <div class="bk-gruppe">
+      <div class="bk-gruppe-titel">Onlineshop</div>
       <?php
       admin_link('design.php', 'Design');
       admin_link('seiten.php', 'Seiten');
@@ -109,7 +109,7 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
       ?>
     </div>
 
-    <div class="ad-gruppe">
+    <div class="bk-gruppe">
       <?php
       admin_link('einstellungen.php', 'Einstellungen');
       if (Auth::darf('einstellen')) {
@@ -119,8 +119,8 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
       ?>
     </div>
 
-    <div class="ad-fueller"></div>
-    <div class="ad-nav-fuss">
+    <div class="bk-fueller"></div>
+    <div class="bk-nav-fuss">
       <a href="<?= Util::e(Config::baseUrl()) ?>/" target="_blank" rel="noopener">Shop ansehen ↗</a><br>
       <a href="abmelden.php">Abmelden</a><br>
       <span style="font-size:11px">Fassung <?= Util::e(SHOP_VERSION) ?></span>
@@ -128,14 +128,14 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
   </aside>
 
   <div>
-    <header class="ad-kopf">
-      <button class="ad-knopf ad-knopf-leer ad-knopf-klein ad-menue-schalter" type="button"
+    <header class="bk-kopf">
+      <button class="bk-knopf bk-knopf-leer bk-knopf-klein bk-menue-schalter" type="button"
               onclick="document.getElementById('seitenleiste').classList.toggle('offen')" aria-label="Menü">☰</button>
-      <form class="ad-suche" action="artikel.php">
+      <form class="bk-suche" action="artikel.php">
         <input type="search" name="suche" placeholder="Artikel suchen …" value="<?= Util::e(Util::get('suche')) ?>">
       </form>
-      <div class="ad-kopf-rechts">
-        <div class="ad-stand">
+      <div class="bk-kopf-rechts">
+        <div class="bk-stand">
           <?php if ($zuVeroeffentlichen > 0): ?>
             <strong><?= $zuVeroeffentlichen ?> Änderung<?= $zuVeroeffentlichen === 1 ? '' : 'en' ?> offen</strong>
           <?php else: ?>
@@ -146,18 +146,18 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
             echo $zuletzt !== '' ? 'zuletzt ' . Util::e(Util::seit($zuletzt)) : 'noch nie veröffentlicht';
           ?>
         </div>
-        <a class="ad-knopf ad-knopf-gruen" href="veroeffentlichen.php">Veröffentlichen</a>
+        <a class="bk-knopf bk-knopf-gruen" href="veroeffentlichen.php">Veröffentlichen</a>
       </div>
     </header>
 
-    <main class="ad-inhalt">
+    <main class="bk-inhalt">
       <?php if (is_file(dirname(__DIR__, 2) . '/install.php')): ?>
-        <div class="ad-hinweis ad-hinweis-warnung">
+        <div class="bk-hinweis bk-hinweis-warnung">
           <strong>Bitte install.php vom Server löschen.</strong>
           Solange die Datei erreichbar ist, könnte jemand den Shop neu einrichten.
         </div>
       <?php endif; ?>
 
       <?php if ($meldung !== ''): ?>
-        <div class="ad-hinweis ad-hinweis-<?= Util::e($meldungArt) ?>"><?= Util::e($meldung) ?></div>
+        <div class="bk-hinweis bk-hinweis-<?= Util::e($meldungArt) ?>"><?= Util::e($meldung) ?></div>
       <?php endif; ?>

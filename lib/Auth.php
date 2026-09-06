@@ -258,11 +258,11 @@ final class Auth
             http_response_code(403);
             echo '<!DOCTYPE html><html lang="de"><head><meta charset="utf-8"><title>Kein Zugriff</title>'
                . '<link rel="stylesheet" href="assets/admin.css"></head><body>'
-               . '<div class="ad-login-wrap"><div class="ad-login">'
+               . '<div class="bk-login-wrap"><div class="bk-login">'
                . '<h1>Kein Zugriff</h1>'
-               . '<p class="ad-sub">Für diesen Bereich fehlt deinem Zugang die Berechtigung. '
+               . '<p class="bk-sub">Für diesen Bereich fehlt deinem Zugang die Berechtigung. '
                . 'Ein Administrator kann sie unter „Einstellungen → Benutzer“ vergeben.</p>'
-               . '<a class="ad-btn" href="index.php">Zur Übersicht</a>'
+               . '<a class="bk-btn" href="index.php">Zur Übersicht</a>'
                . '</div></div></body></html>';
             exit;
         }
