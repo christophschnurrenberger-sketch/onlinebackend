@@ -82,6 +82,13 @@ final class Settings
         // Leer lassen blendet ihn aus.
         'stempel_text'     => '',
         'stempel_ort'      => '',
+        // Kundenbewertungen. "manuell" heißt: erst lesen, dann freigeben –
+        // aussortiert wird nur Beleidigendes und Spam, nie eine schlechte
+        // Note (Anhang zu § 3 Abs. 3 Nr. 23b/c UWG).
+        'bewertungen_an'   => '1',
+        'bewertungen_freigabe' => 'manuell',
+        'start_seo_titel'  => '',
+        'start_seo_text'   => '',
         'start_titel'      => 'Neu im Shop',
         'start_text'       => 'Handverlesen, sofort lieferbar.',
         'start_bild'       => '',

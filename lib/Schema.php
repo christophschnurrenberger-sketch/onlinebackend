@@ -26,7 +26,7 @@
 final class Schema
 {
     /** Version des Schemas – wird in den Einstellungen gespeichert. */
-    public const VERSION = 3;
+    public const VERSION = 4;
 
     public static function migrate(): void
     {
@@ -288,6 +288,38 @@ final class Schema
                 daten     %TEXT%,
                 erstellt  %DT%      NOT NULL,
                 geaendert %DT%      NOT NULL
+            )%ENGINE%',
+
+            /*
+             * Kundenbewertungen.
+             *
+             * Sie laufen bewusst NICHT über die veröffentlichte Fassung: eine
+             * freigegebene Bewertung soll sofort im Shop stehen, ohne dass
+             * jemand erst den ganzen Katalog neu veröffentlicht – wie
+             * Bestände und Bestellungen.
+             *
+             * bestellung_id ist der Nachweis: Steht dort eine Bestellung, hat
+             * dieselbe E-Mail den Artikel wirklich gekauft. Danach richtet
+             * sich die Kennzeichnung "Verifizierter Kauf", die § 5b Abs. 3
+             * UWG verlangt.
+             *
+             * status: neu (wartet auf Freigabe) | frei | versteckt
+             */
+            'CREATE TABLE IF NOT EXISTS bewertungen (
+                id            %PK%,
+                artikel_id    %INT%      NOT NULL,
+                bestellung_id %INT%,
+                kunde_id      %INT%,
+                name          %STR(120)% NOT NULL DEFAULT "",
+                email         %STR(190)% NOT NULL DEFAULT "",
+                sterne        %INT%      NOT NULL DEFAULT 5,
+                titel         %STR(200)% NOT NULL DEFAULT "",
+                text          %TEXT%,
+                antwort       %TEXT%,
+                status        %STR(20)%  NOT NULL DEFAULT "neu",
+                quelle        %STR(64)%  NOT NULL DEFAULT "",
+                erstellt      %DT%       NOT NULL,
+                geaendert     %DT%       NOT NULL
             )%ENGINE%',
 
             'CREATE TABLE IF NOT EXISTS beitraege (
@@ -565,6 +597,8 @@ final class Schema
             'CREATE UNIQUE INDEX IF NOT EXISTS ux_beitraege_handle ON beitraege (handle)',
             'CREATE INDEX IF NOT EXISTS ix_menue ON menuepunkte (menue, position)',
             'CREATE INDEX IF NOT EXISTS ix_bausteine ON bausteine (seite_id, position)',
+            'CREATE INDEX IF NOT EXISTS ix_bewertungen_artikel ON bewertungen (artikel_id, status)',
+            'CREATE INDEX IF NOT EXISTS ix_bewertungen_status ON bewertungen (status, erstellt)',
             'CREATE UNIQUE INDEX IF NOT EXISTS ux_kunden_email ON kunden (email)',
             'CREATE INDEX IF NOT EXISTS ix_adressen_kunde ON adressen (kunde_id)',
             'CREATE INDEX IF NOT EXISTS ix_versandarten_zone ON versandarten (zone_id)',

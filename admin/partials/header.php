@@ -15,6 +15,7 @@ $aktuelleDatei = basename((string) ($_SERVER['SCRIPT_NAME'] ?? ''));
 
 /* Zahlen für die Navigation und die Kopfzeile. */
 $offeneBestellungen = (int) DB::value("SELECT COUNT(*) FROM bestellungen WHERE status = 'offen' AND versandstatus != 'versendet'", [], 0);
+$offeneBewertungen  = Bewertungen::offene();
 $offeneAenderungen  = Veroeffentlichung::offeneAenderungen();
 $zuVeroeffentlichen = $offeneAenderungen['nie'] ? 1 : $offeneAenderungen['anzahl'];
 
@@ -33,8 +34,10 @@ function admin_icon(string $datei): string
         'kategorien.php'       => '<path d="M8 6h13M8 12h13M8 18h13"/><path d="M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>',
         'bestand.php'          => '<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5v-9Z"/><path d="m3 7.5 9 4.5 9-4.5M12 12v9"/>',
         'design.php'           => '<circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.5 0 2-1 2-2s-.8-1.5-.8-2.5S14 13 15.5 13H18a3 3 0 0 0 3-3"/>',
+        'startseite.php'       => '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M7 13h6M7 16.5h4"/><rect x="14.5" y="12.5" width="4.5" height="4.5" rx="1"/>',
         'seiten.php'           => '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/>',
         'journal.php'          => '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+        'bewertungen.php'      => '<path d="m12 3.5 2.7 5.6 6 .9-4.4 4.3 1 6.2-5.3-2.8-5.3 2.8 1-6.2L3.3 10l6-.9Z"/>',
         'navigation.php'       => '<path d="M4 6h16M4 12h10M4 18h13"/>',
         'veroeffentlichen.php' => '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/>',
         'einstellungen.php'    => '<circle cx="12" cy="12" r="3.2"/><path d="M19.5 12a7.5 7.5 0 0 0-.1-1.2l2-1.6-2-3.4-2.4 1a7.5 7.5 0 0 0-2-1.2L14.6 3H9.4L9 5.6a7.5 7.5 0 0 0-2 1.2l-2.4-1-2 3.4 2 1.6a7.5 7.5 0 0 0 0 2.4l-2 1.6 2 3.4 2.4-1a7.5 7.5 0 0 0 2 1.2l.4 2.6h5.2l.4-2.6a7.5 7.5 0 0 0 2-1.2l2.4 1 2-3.4-2-1.6c.07-.4.1-.8.1-1.2Z"/>',
@@ -102,8 +105,10 @@ $meldungArt = Util::einesVon(Util::get('art', 'erfolg'), ['erfolg', 'fehler', 'w
       <div class="bk-gruppe-titel">Onlineshop</div>
       <?php
       admin_link('design.php', 'Design');
+      admin_link('startseite.php', 'Startseite');
       admin_link('seiten.php', 'Seiten');
       admin_link('journal.php', 'Journal');
+      admin_link('bewertungen.php', 'Bewertungen', $offeneBewertungen);
       admin_link('navigation.php', 'Navigation');
       admin_link('veroeffentlichen.php', 'Veröffentlichen', $zuVeroeffentlichen);
       ?>

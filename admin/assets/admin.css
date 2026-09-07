@@ -446,6 +446,11 @@ td.bk-zahl-rechts, th.bk-zahl-rechts { text-align: right; font-variant-numeric: 
 .sk-raster.sk-drei { grid-template-columns: repeat(3, 1fr); }
 .sk-raster i { background: var(--rahmen-kraeftig); border-radius: 2px; }
 .sk-raster i.sk-ware { border-radius: 40% 40% 3px 3px / 26% 26% 3px 3px; }
+.sk-raster i.sk-zitat {
+  background: var(--flaeche); border: 1px solid var(--rahmen-kraeftig);
+  background-image: linear-gradient(var(--schwach) 0 3px, transparent 3px);
+  background-repeat: no-repeat; background-position: 6px 7px; background-size: 60% 3px;
+}
 .sk-saeulen { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; }
 .sk-saeulen > span { display: flex; flex-direction: column; justify-content: center; gap: 4px; }
 .sk-saeulen i { height: 4px; background: var(--rahmen-kraeftig); border-radius: 2px; }
@@ -460,6 +465,20 @@ td.bk-zahl-rechts, th.bk-zahl-rechts { text-align: right; font-variant-numeric: 
 .sk-schraeg i:nth-child(3) { transform: rotate(-2deg); }
 /* Der Baustein, der gerade in der Vorschau angeklickt wurde. */
 .bk-baustein.bk-baustein-aktiv { border-color: var(--blau); box-shadow: 0 0 0 3px var(--blau-bg); }
+
+/* --- Bewertungen ----------------------------------------------------------- */
+
+.bk-bewertung { border: 1px solid var(--rahmen); border-radius: var(--ecken); padding: 14px 16px; margin-bottom: 12px; }
+.bk-bewertung-kopf { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 4px; }
+.bk-sterne { color: #e8a33d; font-size: 15px; letter-spacing: 1px; line-height: 1; }
+.bk-sterne-rest { color: var(--rahmen-kraeftig); }
+.bk-bewertung-wer { font-size: 12px; color: var(--nebentext); margin-bottom: 8px; }
+.bk-bewertung-text { margin: 0 0 10px; line-height: 1.55; white-space: pre-line; }
+.bk-bewertung-aktionen { display: flex; gap: 8px; flex-wrap: wrap; }
+.bk-bewertung-antwort { margin-top: 10px; border-top: 1px dashed var(--rahmen); padding-top: 10px; }
+.bk-bewertung-antwort > summary { cursor: pointer; font-size: 13px; color: var(--blau); }
+.bk-bewertung-antwort > summary::marker { color: var(--schwach); }
+.bk-bewertung-antwort form { margin-top: 10px; }
 
 /* --- Live-Vorschau --------------------------------------------------------- */
 

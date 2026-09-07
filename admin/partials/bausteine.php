@@ -105,6 +105,8 @@ $bsSkizzen = [
     'gruen'        => '<span class="sk-gruen"><i></i><i></i><i class="sk-kurz"></i></span>',
     'hilfe'        => '<span class="sk-raster sk-vier"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>',
     'artikel'      => '<span class="sk-raster sk-drei"><i class="sk-ware"></i><i class="sk-ware"></i><i class="sk-ware"></i></span>',
+    'kategorien'   => '<span class="sk-raster sk-vier"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>',
+    'stimmen'      => '<span class="sk-raster sk-drei"><i class="sk-zitat"></i><i class="sk-zitat"></i><i class="sk-zitat"></i></span>',
     'kraeuterbuch' => '<span class="sk-schraeg"><i></i><i></i><i></i></span>',
     'eintrag'      => '<span class="sk-spalte"><i class="sk-nr"></i><i class="sk-h"></i><i></i></span><span class="sk-bogen sk-bogen-klein"></span>',
     'werte'        => '<span class="sk-saeulen"><span><i class="sk-h"></i><i></i><i></i></span>'

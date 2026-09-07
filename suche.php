@@ -47,6 +47,7 @@ if ($begriff !== '') {
 }
 
 $bestaende = Theme::bestaende(Theme::variantenIds($treffer));
+$noten     = Theme::bewertungen($treffer);
 
 Theme::kopf(['titel' => $begriff !== '' ? 'Suche: ' . $begriff : 'Suche', 'noindex' => true]);
 ?>
@@ -67,7 +68,7 @@ Theme::kopf(['titel' => $begriff !== '' ? 'Suche: ' . $begriff : 'Suche', 'noind
 
   <?php if ($treffer !== []): ?>
     <div class="raster" style="padding-bottom:var(--a8)">
-      <?php foreach ($treffer as $artikel) { Theme::kachel($artikel, $bestaende); } ?>
+      <?php foreach ($treffer as $artikel) { Theme::kachel($artikel, $bestaende, $noten); } ?>
     </div>
   <?php elseif ($begriff !== ''): ?>
     <div class="leer"><p>Keine Treffer. Versuch es mit einem anderen Begriff.</p></div>

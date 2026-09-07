@@ -15,8 +15,13 @@
     if (frage && !window.confirm(frage)) e.preventDefault();
   });
   document.addEventListener('click', function (e) {
+    // Links und Knöpfe gleichermaßen: Bei einem Absendeknopf hängt die Frage
+    // an der Aktion, nicht am Formular – ein Formular kann mehrere haben.
     var el = e.target.closest('[data-frage]');
-    if (el && el.tagName === 'A' && !window.confirm(el.dataset.frage)) e.preventDefault();
+    if (!el) return;
+    if (el.tagName === 'A' || el.tagName === 'BUTTON' || el.type === 'submit') {
+      if (!window.confirm(el.dataset.frage)) e.preventDefault();
+    }
   });
 
   /* --- Farbwähler mit Textfeld koppeln ----------------------------------- */

@@ -305,6 +305,85 @@ a:hover { text-decoration: underline; }
 .rte table { width: 100%; border-collapse: collapse; margin: var(--a4) 0; }
 .rte th, .rte td { border: 1px solid var(--rahmen); padding: var(--a2) var(--a3); text-align: left; }
 
+/* --- Sterne und Bewertungen ------------------------------------------------ */
+
+/*
+ * Die Sterne bestehen aus zwei Lagen: unten fünf graue, darüber dieselben in
+ * der Signalfarbe, auf die Breite des Schnitts beschnitten. Damit sind auch
+ * 4,3 Sterne genau darstellbar, ohne eine einzige Grafik zu laden.
+ */
+/*
+ * width: fit-content ist hier nicht kosmetisch. Als Kind eines Flex- oder
+ * Grid-Behälters würde der Balken sonst auf die volle Spaltenbreite gedehnt –
+ * und weil die goldene Lage prozentual beschnitten wird, sähen aus 3 von 5
+ * Sternen plötzlich fünf volle.
+ */
+.sterne {
+  position: relative; display: inline-block; width: fit-content;
+  line-height: 0; white-space: nowrap; vertical-align: -0.15em;
+}
+.sterne-grund { display: block; color: var(--rahmen); }
+.sterne-voll {
+  position: absolute; left: 0; top: 0; overflow: hidden; display: block;
+  color: #e8a33d; white-space: nowrap;
+}
+.sterne svg { fill: currentColor; }
+
+.sternleiste { display: inline-flex; align-items: center; gap: var(--a2); font-size: 0.875rem; margin-bottom: var(--a3); }
+a.sternleiste { color: inherit; }
+a.sternleiste:hover { text-decoration: none; }
+a.sternleiste:hover .sterne-anzahl { text-decoration: underline; }
+.sterne-zahl { font-weight: 600; }
+.sterne-anzahl { color: var(--nebentext); }
+.sternleiste-klein { display: flex; gap: 6px; margin: 2px 0 0; font-size: 0.8125rem; }
+
+.bewertungen { scroll-margin-top: 20px; }
+.bw-raster { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: var(--a7); }
+.bw-uebersicht {
+  background: var(--flaeche); border-radius: var(--ecken); padding: var(--a5);
+  align-self: start; text-align: center;
+}
+.bw-note { font-size: 2.5rem; font-weight: 600; line-height: 1.1; font-family: var(--schrift-titel); }
+.bw-verteilung { list-style: none; margin: var(--a4) 0; padding: 0; text-align: left; }
+.bw-verteilung li { display: grid; grid-template-columns: 4.5rem 1fr 1.75rem; align-items: center; gap: var(--a2); font-size: 0.8125rem; margin-bottom: 5px; }
+.bw-balken { display: block; height: 8px; border-radius: 999px; background: var(--rahmen); overflow: hidden; }
+.bw-balken i { display: block; height: 100%; background: #e8a33d; }
+.bw-anzahl { text-align: right; color: var(--nebentext); }
+
+.bw-stimme { border-bottom: 1px solid var(--rahmen); padding-bottom: var(--a4); margin-bottom: var(--a4); }
+.bw-kopf { display: flex; align-items: center; gap: var(--a3); flex-wrap: wrap; }
+.bw-titel { font-size: 1rem; }
+.bw-wer { font-size: 0.8125rem; margin: 4px 0 var(--a2); }
+.bw-echt {
+  display: inline-block; margin-left: 6px; padding: 1px 8px; border-radius: 999px;
+  font-size: 0.6875rem; font-weight: 600; letter-spacing: .02em;
+  color: var(--akzent); background: var(--flaeche);
+  background: color-mix(in srgb, var(--akzent) 12%, transparent);
+}
+.bw-text { margin: 0; line-height: 1.6; white-space: pre-line; }
+.bw-antwort {
+  margin-top: var(--a3); padding: var(--a3) var(--a4); border-left: 3px solid var(--rahmen);
+  background: var(--flaeche); border-radius: 0 var(--ecken) var(--ecken) 0; font-size: 0.9375rem;
+}
+.bw-antwort p { margin: 4px 0 0; }
+.bw-hinweis {
+  font-size: 0.8125rem; color: var(--nebentext); line-height: 1.55;
+  border: 1px solid var(--rahmen); border-radius: var(--ecken); padding: var(--a3) var(--a4);
+}
+
+.bw-form { margin-top: var(--a5); }
+.bw-form h3 { margin-bottom: var(--a3); }
+.bw-form label { display: block; margin-bottom: var(--a3); font-size: 0.875rem; }
+.bw-form input[type=text], .bw-form input[type=email], .bw-form textarea {
+  display: block; width: 100%; margin-top: 4px; padding: 10px 12px; font: inherit;
+  border: 1px solid var(--rahmen); border-radius: var(--ecken);
+  background: var(--hintergrund); color: var(--text);
+}
+.bw-zwei { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--a4); }
+.bw-wahl { border: 0; padding: 0; margin: 0 0 var(--a3); }
+.bw-wahl legend { padding: 0; font-size: 0.875rem; margin-bottom: var(--a2); }
+.bw-wahl label { display: inline-flex; align-items: center; gap: 5px; margin: 0 var(--a3) 0 0; font-size: 0.875rem; }
+
 /* --- Knöpfe --------------------------------------------------------------- */
 
 .knopf {
@@ -487,6 +566,16 @@ a.bs-zettel:hover { text-decoration: none; }
 .bs-latein { font-style: italic; color: var(--nebentext); margin: 0 0 var(--a3); }
 .bs-weiter { color: var(--knopf); }
 
+/* Kundenstimmen: drei Zitate nebeneinander, jedes mit Sternen und Herkunft. */
+.bs-stimmen-raster { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--a5); }
+.bs-stimme {
+  margin: 0; padding: var(--a5); background: var(--flaeche);
+  border-radius: var(--ecken); display: flex; flex-direction: column; gap: var(--a2);
+}
+.bs-stimme h3 { font-size: 1.0625rem; margin: 0; }
+.bs-stimme blockquote { margin: 0; font-size: 0.9375rem; line-height: 1.6; }
+.bs-stimme figcaption { font-size: 0.8125rem; color: var(--nebentext); margin-top: auto; padding-top: var(--a2); }
+
 .bs-spalten { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: var(--a6); }
 .bs-spalte h3 { margin-bottom: var(--a2); }
 .bs-spalte p { font-size: 0.9375rem; }
@@ -556,6 +645,8 @@ a.bs-zettel:hover { text-decoration: none; }
   .zusammenfassung { position: static; }
   .datenpaar { grid-template-columns: 1fr; }
   .raster { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .bw-raster { grid-template-columns: 1fr; gap: var(--a5); }
+  .bw-zwei { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 760px) {

@@ -106,6 +106,13 @@ final class Veroeffentlichung
             'einstellungen' => Settings::all(true),
             'artikel'     => $artikel,
             'kategorien'  => $kategorien,
+            /*
+             * Die Startseite ist keine Zeile in "seiten": Sie hat kein Kürzel
+             * und liegt unter index.php. Ihre Bausteine hängen an der
+             * Seitennummer 0 und wandern hier gesondert mit. Ist die Reihe
+             * leer, zeigt index.php den eingebauten Aufbau.
+             */
+            'startseite'  => ['bausteine' => Bausteine::zurSeite(Bausteine::START)],
             'seiten'      => array_map([self::class, 'inhaltKurz'], Inhalte::seiten(true)),
             'beitraege'   => array_map(static function (array $b): array {
                 $kurz = self::inhaltKurz($b);
@@ -293,6 +300,9 @@ final class Veroeffentlichung
         }
         if (json_encode($live['menues'] ?? []) !== json_encode($entwurf['menues'] ?? [])) {
             $liste[] = ['art' => 'geaendert', 'typ' => 'Navigation', 'titel' => 'Menüpunkte'];
+        }
+        if (json_encode($live['startseite'] ?? []) !== json_encode($entwurf['startseite'] ?? [])) {
+            $liste[] = ['art' => 'geaendert', 'typ' => 'Startseite', 'titel' => 'Bausteine der Startseite'];
         }
 
         return ['nie' => false, 'anzahl' => count($liste), 'liste' => $liste];

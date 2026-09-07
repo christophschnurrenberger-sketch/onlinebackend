@@ -63,6 +63,15 @@ $verwandte = array_slice($verwandte, 0, 4);
 $meldung = Util::get('meldung');
 $versandseite = Theme::e('seite_versand');
 
+/*
+ * Bewertungen kommen an der veröffentlichten Fassung vorbei direkt aus der
+ * Datenbank – wie der Bestand. Eine freigegebene Bewertung soll sofort
+ * dastehen und nicht auf das nächste Veröffentlichen warten.
+ */
+$bewertungenAn = Theme::bewertungenAn();
+$noten         = $bewertungenAn ? Bewertungen::zahlen((int) $artikel['id']) : ['anzahl' => 0, 'schnitt' => 0.0, 'verteilung' => []];
+$stimmen       = $bewertungenAn && $noten['anzahl'] > 0 ? Bewertungen::zuArtikel((int) $artikel['id']) : [];
+
 Theme::kopf([
     'titel'        => (string) ($artikel['seo_titel'] ?: $artikel['titel']),
     'beschreibung' => (string) $artikel['seo_text'],
@@ -113,6 +122,15 @@ Theme::kopf([
       <h1><?= Util::e((string) $artikel['titel']) ?></h1>
       <?php if ((string) $artikel['untertitel'] !== ''): ?>
         <p class="untertitel"><?= Util::e((string) $artikel['untertitel']) ?></p>
+      <?php endif; ?>
+
+      <?php /* Sterne stehen direkt unter dem Titel und springen zu den
+               Bewertungen – so machen es alle großen Händler, weil genau dort
+               nach ihnen gesucht wird. */ ?>
+      <?php if ($noten['anzahl'] > 0): ?>
+        <?= Theme::sternzeile($noten, '#bewertungen') ?>
+      <?php elseif ($bewertungenAn): ?>
+        <p class="klein nebentext"><a href="#bewertung-schreiben">Noch keine Bewertung – die erste schreiben</a></p>
       <?php endif; ?>
 
       <?php
@@ -238,12 +256,17 @@ Theme::kopf([
     </div>
   </div>
 
+  <?php if ($bewertungenAn): ?>
+    <?php require __DIR__ . '/lib/teile/bewertungen.php'; ?>
+  <?php endif; ?>
+
   <?php if ($verwandte !== []): ?>
     <?php $verwandteBestaende = Theme::bestaende(Theme::variantenIds($verwandte)); ?>
+    <?php $verwandteNoten = Theme::bewertungen($verwandte); ?>
     <section class="abschnitt">
       <div class="abschnitt-kopf"><h2>Passt dazu</h2></div>
       <div class="raster">
-        <?php foreach ($verwandte as $eintrag) { Theme::kachel($eintrag, $verwandteBestaende); } ?>
+        <?php foreach ($verwandte as $eintrag) { Theme::kachel($eintrag, $verwandteBestaende, $verwandteNoten); } ?>
       </div>
     </section>
   <?php endif; ?>

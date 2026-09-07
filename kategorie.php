@@ -63,6 +63,7 @@ $seiten   = max(1, (int) ceil(count($artikel) / PRO_SEITE));
 $seite    = min($seite, $seiten);
 $sichtbar = array_slice($artikel, ($seite - 1) * PRO_SEITE, PRO_SEITE);
 $bestaende = Theme::bestaende(Theme::variantenIds($sichtbar));
+$noten     = Theme::bewertungen($sichtbar);
 
 Theme::kopf([
     'titel'        => (string) ($kategorie['seo_titel'] ?: $kategorie['titel']),
@@ -103,7 +104,7 @@ Theme::kopf([
 
   <?php if ($sichtbar !== []): ?>
     <div class="raster">
-      <?php foreach ($sichtbar as $eintrag) { Theme::kachel($eintrag, $bestaende); } ?>
+      <?php foreach ($sichtbar as $eintrag) { Theme::kachel($eintrag, $bestaende, $noten); } ?>
     </div>
   <?php else: ?>
     <div class="leer"><p>In dieser Kategorie sind noch keine Artikel.</p></div>

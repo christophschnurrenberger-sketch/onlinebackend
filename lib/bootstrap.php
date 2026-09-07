@@ -67,7 +67,7 @@ foreach ([
     'Config', 'Util', 'DB', 'Log', 'Settings', 'Schema', 'Auth',
     'Medien', 'Artikel', 'Kategorien', 'Inhalte', 'Bausteine', 'Kunden',
     'Steuern', 'Versand', 'Rabatte', 'Bestand', 'Preise', 'Warenkorb',
-    'Bestellungen', 'Zahlung', 'Kasse', 'Mail', 'Veroeffentlichung', 'Theme',
+    'Bestellungen', 'Zahlung', 'Kasse', 'Mail', 'Bewertungen', 'Veroeffentlichung', 'Theme',
 ] as $klasse) {
     require_once SHOP_ROOT . '/lib/' . $klasse . '.php';
 }

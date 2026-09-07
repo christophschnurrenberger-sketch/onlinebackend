@@ -15,6 +15,17 @@
 final class Bausteine
 {
     /**
+     * Seitennummer der Startseite.
+     *
+     * Die Startseite ist keine Zeile in "seiten": Sie hat kein Kürzel, ist
+     * nicht löschbar und liegt unter index.php statt unter seite.php. Ihre
+     * Bausteine hängen deshalb an der Nummer 0, die kein echter
+     * Primärschlüssel je bekommt. Das erspart eine Scheinseite, die im
+     * Seitenverzeichnis stünde und über zwei Adressen erreichbar wäre.
+     */
+    public const START = 0;
+
+    /**
      * Die Bausteintypen.
      *
      * felder: Schlüssel => [Art, Beschriftung, Hinweis]
@@ -82,6 +93,31 @@ final class Bausteine
                 'notiz'        => ['text', 'Handschriftlicher Zusatz'],
                 'kategorie'    => ['text', 'Kategorie (Kürzel)', 'Leer lassen für die neuesten Artikel.'],
                 'anzahl'       => ['zahl', 'Wie viele Artikel', 'Vorgabe 6.'],
+                'link'         => ['text', 'Link rechts oben'],
+                'link_ziel'    => ['text', 'Ziel des Links'],
+            ],
+        ],
+
+        'kategorien' => [
+            'name' => 'Kategorienraster',
+            'text' => 'Die Kategorien des Shops als Kacheln mit Bild und Anzahl.',
+            'felder' => [
+                'ueberschrift' => ['text', 'Überschrift'],
+                'notiz'        => ['text', 'Handschriftlicher Zusatz'],
+                'anzahl'       => ['zahl', 'Wie viele Kategorien', 'Vorgabe 8.'],
+                'link'         => ['text', 'Link rechts oben'],
+                'link_ziel'    => ['text', 'Ziel des Links'],
+            ],
+        ],
+
+        'stimmen' => [
+            'name' => 'Kundenstimmen',
+            'text' => 'Die neuesten freigegebenen Bewertungen. Füllt sich von selbst.',
+            'felder' => [
+                'ueberschrift' => ['text', 'Überschrift'],
+                'notiz'        => ['text', 'Handschriftlicher Zusatz'],
+                'anzahl'       => ['zahl', 'Wie viele Stimmen', 'Vorgabe 3.'],
+                'mindestens'   => ['zahl', 'Mindestens so viele Sterne', 'Leer oder 1 zeigt alle. Achtung: Nur gute zu zeigen ist zulässig, solange auf der Artikelseite alle stehen.'],
                 'link'         => ['text', 'Link rechts oben'],
                 'link_ziel'    => ['text', 'Ziel des Links'],
             ],
@@ -276,6 +312,8 @@ final class Bausteine
             'gruen'        => self::gruen($d),
             'hilfe'        => self::hilfe($d, $liste('karten')),
             'artikel'      => self::artikel($d, $fassung),
+            'kategorien'   => self::kategorien($d, $fassung),
+            'stimmen'      => self::stimmen($d),
             'kraeuterbuch' => self::kraeuterbuch($d, $liste('eintraege')),
             'eintrag'      => self::eintrag($d),
             'werte'        => self::werte($d, $liste('spalten')),
@@ -422,13 +460,86 @@ final class Bausteine
             echo '<div class="leer"><p>Hier sind noch keine Artikel veröffentlicht.</p></div>';
         } else {
             $bestaende = Theme::bestaende(Theme::variantenIds($artikel));
+            $noten     = Theme::bewertungen($artikel);
             echo '<div class="raster">';
             foreach ($artikel as $eintrag) {
-                Theme::kachel($eintrag, $bestaende);
+                Theme::kachel($eintrag, $bestaende, $noten);
             }
             echo '</div>';
         }
         echo '</div></section>';
+    }
+
+    /** @param array<string,mixed> $fassung */
+    private static function kategorien(callable $d, array $fassung): void
+    {
+        $anzahl     = max(1, min(24, (int) ($d('anzahl') ?: 8)));
+        $kategorien = array_slice($fassung['kategorien'] ?? [], 0, $anzahl);
+
+        echo '<section class="bs bs-kategorien"><div class="behaelter">';
+        self::abschnittskopf($d);
+        if ($kategorien === []) {
+            echo '<div class="leer"><p>Noch keine Kategorien veröffentlicht.</p></div>';
+            echo '</div></section>';
+            return;
+        }
+        echo '<div class="raster">';
+        foreach ($kategorien as $kategorie) {
+            $zahl = count((array) ($kategorie['artikel_ids'] ?? []));
+            echo '<article class="kachel"><a href="'
+               . Util::e(Config::url('kategorie.php?h=' . rawurlencode((string) $kategorie['handle']))) . '">';
+            echo '<div class="kachel-bild">';
+            if ((string) ($kategorie['bild_url'] ?? '') !== '') {
+                echo '<img src="' . Util::e(Theme::url((string) $kategorie['bild_url'])) . '" alt="" loading="lazy">';
+            } else {
+                echo '<div class="kein-bild">' . Util::e((string) $kategorie['titel']) . '</div>';
+            }
+            echo '</div>';
+            echo '<h3>' . Util::e((string) $kategorie['titel']) . '</h3>';
+            echo '<p class="hersteller">' . $zahl . ' Artikel</p>';
+            echo '</a></article>';
+        }
+        echo '</div></div></section>';
+    }
+
+    /**
+     * Kundenstimmen.
+     *
+     * Zieht die neuesten freigegebenen Bewertungen direkt aus der Datenbank –
+     * nicht aus der Fassung. Der Baustein muss deshalb nie gepflegt werden:
+     * Wird eine Bewertung freigegeben, steht sie hier.
+     */
+    private static function stimmen(callable $d): void
+    {
+        if (!Theme::bewertungenAn()) {
+            return;
+        }
+        $anzahl  = max(1, min(12, (int) ($d('anzahl') ?: 3)));
+        $stimmen = Bewertungen::neueste($anzahl, max(1, min(5, (int) ($d('mindestens') ?: 1))));
+        if ($stimmen === []) {
+            return;
+        }
+
+        echo '<section class="bs bs-stimmen"><div class="behaelter">';
+        self::abschnittskopf($d);
+        echo '<div class="bs-stimmen-raster">';
+        foreach ($stimmen as $stimme) {
+            echo '<figure class="bs-stimme">';
+            echo Theme::sterne((float) (int) $stimme['sterne'], -1, 15);
+            if ((string) $stimme['titel'] !== '') {
+                echo '<h3>' . Util::e((string) $stimme['titel']) . '</h3>';
+            }
+            echo '<blockquote>' . Util::e(Util::kuerzen((string) $stimme['text'], 260)) . '</blockquote>';
+            echo '<figcaption>' . Util::e((string) $stimme['name']);
+            if ($stimme['bestellung_id'] !== null) {
+                echo ' <span class="bw-echt">Verifizierter Kauf</span>';
+            }
+            echo '<br><a href="'
+               . Util::e(Config::url('artikel.php?h=' . rawurlencode((string) $stimme['artikel_handle'])))
+               . '#bewertungen">' . Util::e((string) $stimme['artikel_titel']) . '</a>';
+            echo '</figcaption></figure>';
+        }
+        echo '</div></div></section>';
     }
 
     /** @param array<int,array<string,string>> $eintraege */

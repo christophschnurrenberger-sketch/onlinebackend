@@ -260,7 +260,27 @@ Vor der Übertragung prüft der Lauf jede PHP-Datei mit `php -l`. Ein Tippfehler
 bricht den Lauf ab, statt den Shop lahmzulegen. Hat sich das Datenbankschema
 geändert, zieht der Shop das beim nächsten Seitenaufruf selbst nach.
 
-## 10. Wenn etwas klemmt
+## 10. Bewertungen betreuen
+
+Steht die Freigabe auf „manuell“ (Vorgabe), zeigt die Navigation links die Zahl
+der wartenden Bewertungen. Ein Blick pro Tag genügt.
+
+**Was freigegeben wird:** alles, was eine echte Erfahrung schildert — auch
+zwei Sterne, auch unbequeme. **Was nicht:** Beleidigungen, offensichtlicher
+Spam, Tatsachenbehauptungen, die nachweislich falsch sind, und alles, was
+Persönlichkeitsrechte Dritter verletzt.
+
+Eine schlechte Bewertung zu verstecken, *weil* sie schlecht ist, ist nach dem
+Anhang zu § 3 Abs. 3 UWG (Nr. 23b, 23c) unzulässig und abmahnfähig. Es ist
+außerdem wirkungslos: Eine Notenverteilung ohne eine einzige kritische Stimme
+glaubt kein Kunde. Der bessere Weg ist die **öffentliche Antwort** unter der
+Bewertung — sachlich, kurz, ohne Rechtfertigung. Sie steht dort dauerhaft und
+wird von den nächsten Interessenten mitgelesen.
+
+Bewertungen wirken sofort, ohne Veröffentlichen. Wer sie ganz abschalten will,
+findet den Schalter unten auf derselben Seite.
+
+## 11. Wenn etwas klemmt
 
 | Symptom | Ursache |
 |---|---|

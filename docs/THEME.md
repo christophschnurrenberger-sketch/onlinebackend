@@ -201,6 +201,8 @@ findet sich schneller als der Name.
 | **Grüner Kasten** | Zitat oder Haltung auf farbigem Grund, rechts ein Bild, darunter Name und Rolle. |
 | **Wobei darf ich helfen?** | Kartenreihe zum Anklicken; jede Karte führt auf eine Seite mit Empfehlungen. |
 | **Artikelraster** | Artikel aus einer Kategorie, im Design der Seite. |
+| **Kategorienraster** | Die Kategorien des Shops als Kacheln mit Bild und Artikelzahl. |
+| **Kundenstimmen** | Die neuesten freigegebenen Bewertungen. Füllt sich von selbst. |
 | **Aus dem Kräuterbuch** | Schräg liegende Zettel mit Nummer, Titel, botanischem Namen und Anriss. |
 | **Kräuterbuch-Kopf** | Der Anfang einer Kräuterbuchseite: Nummer, Titel, botanischer Name, Vorspann, Bild. |
 | **Spalten** | Drei bis vier kurze Absätze nebeneinander. |
@@ -243,9 +245,56 @@ werden sie erst nach dem **Veröffentlichen** im Shop sichtbar.
 
 Die Klassen der Bausteine beginnen mit `bs-`: `.bs-buehne`, `.bs-bogen`,
 `.bs-etikett`, `.bs-akzent`, `.bs-notiz`, `.bs-gruen-kasten`, `.bs-karte`,
-`.bs-zettel`, `.bs-latein`, `.bs-weiter`, `.bs-spalten`. Der Kräuterstube-Stil
+`.bs-zettel`, `.bs-latein`, `.bs-weiter`, `.bs-spalten`, `.bs-stimme`.
+Die Sterne bestehen aus `.sterne` mit zwei Lagen (`.sterne-grund`,
+`.sterne-voll`) und brauchen kein Bild. Der Kräuterstube-Stil
 macht daraus Bögen, schräge Zettel und Handschrift; jeder andere Stil zeigt
 dieselben Bausteine schlicht.
+
+## Die Startseite
+
+Die Startseite liegt unter **Startseite** in der Navigation und ist derselbe
+Baukasten — nur ohne Kürzel, ohne Löschknopf und ohne Eintrag im
+Seitenverzeichnis. Ihre Bausteine hängen an `Bausteine::START` (Seitennummer 0).
+
+Solange dort **kein** Baustein liegt, zeigt `index.php` den eingebauten Aufbau:
+Bühne aus den Design-Einstellungen, „Neu im Shop“, Kategorien. Der erste
+Baustein ersetzt ihn vollständig. Der Knopf *Auf die eingebaute Startseite
+zurück* entfernt alle Bausteine wieder — nichts geht dabei verloren außer den
+Bausteinen selbst.
+
+Wer das Eingebaute nachbauen will, nimmt **Bühne mit Bild**, **Artikelraster**
+und **Kategorienraster**.
+
+## Kundenbewertungen
+
+Unter **Bewertungen** im Backend laufen die Kundenbewertungen zusammen. Im Shop
+erscheinen sie an drei Stellen: als Sterne unter dem Titel in jeder
+Artikelkachel, als Abschnitt mit Notenverteilung und Formular auf der
+Artikelseite, und über den Baustein **Kundenstimmen** auf jeder Seite.
+
+Was dabei zu beachten ist, steht nicht nur im Backend, sondern hat Gründe:
+
+- **Freigeben heißt lesen, nicht auswählen.** Der Anhang zu § 3 Abs. 3 UWG
+  (Nr. 23b, 23c) verbietet gefälschte Bewertungen ebenso wie das gezielte
+  Aussortieren negativer. Aussortiert werden darf, was beleidigend,
+  rechtswidrig oder Spam ist — sonst nichts.
+- **„Verifizierter Kauf“ wird nicht per Hand vergeben.** Beim Absenden sucht
+  `Bewertungen::kaufNachweis()` eine bezahlte, nicht stornierte Bestellung
+  derselben E-Mail-Adresse über denselben Artikel. Nur dann steht die
+  Kennzeichnung da.
+- **Der Pflichthinweis nach § 5b Abs. 3 UWG** steht als `Bewertungen::HINWEIS`
+  im Programmcode und sichtbar bei den Bewertungen, nicht in den Einstellungen.
+  Was geprüft wird, entscheidet der Code — deshalb darf der Text nicht
+  editierbar sein.
+- **Die Anzahl steht immer neben der Note.** Eine einzelne Fünf-Sterne-Bewertung
+  ist keine 5,0, sondern eine Meinung.
+- **Bewertungen laufen an der veröffentlichten Fassung vorbei.** Freigeben wirkt
+  sofort; veröffentlicht werden muss dafür nichts. Das gilt auch für den
+  Schalter, der sie ein- und ausschaltet.
+
+Eine sachliche Antwort unter einer kritischen Bewertung wirkt fast immer besser
+als das Verstecken — und ist im Gegensatz dazu erlaubt.
 
 ## Stufe 2: Eigenes Stylesheet
 

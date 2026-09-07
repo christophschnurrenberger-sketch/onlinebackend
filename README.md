@@ -99,9 +99,9 @@ Das hat vier praktische Folgen:
    kein langsamer Katalog-Query bremst die Kasse aus.
 
 **Was bewusst nicht über die Fassung läuft:** Bestände, Warenkörbe,
-Bestellungen, Kunden und Rabattzähler. Die müssen sofort wirken — ein
-ausverkaufter Artikel darf nicht bis zur nächsten Veröffentlichung
-weiterverkauft werden.
+Bestellungen, Kunden, Rabattzähler und Bewertungen. Die müssen sofort wirken —
+ein ausverkaufter Artikel darf nicht bis zur nächsten Veröffentlichung
+weiterverkauft werden, und eine freigegebene Bewertung soll sofort dastehen.
 
 ## Was drin ist
 
@@ -124,14 +124,25 @@ Anteil, mehrere Sätze, Versandzonen mit Tarifen und Versandkostenfreiheit ab
 Schwellenwert, Rabattcodes (Prozent, Betrag, Gratisversand) mit
 Mindestbestellwert, Laufzeit, Nutzungslimit und „einmal pro Kunde“.
 
-**Inhalte** — Seiten, Journal-Beiträge, zweistufige Navigation, Bildupload.
-Impressum, AGB, Datenschutz und Widerruf legt der Installer als Entwürfe an.
+**Inhalte** — Seiten und Startseite als visueller Baukasten: Bausteine werden
+aus Kacheln ausgewählt, mit der Maus umsortiert und direkt daneben in einer
+Live-Vorschau kontrolliert, die dieselbe Ausgabe zeigt wie der Shop. Dazu
+Journal-Beiträge, zweistufige Navigation, Bildupload. Impressum, AGB,
+Datenschutz und Widerruf legt der Installer als Entwürfe an.
+
+**Bewertungen** — Sterne in der Artikelliste, Notenverteilung und Formular auf
+der Artikelseite, Baustein „Kundenstimmen“ für Start- und Inhaltsseiten.
+„Verifizierter Kauf“ wird automatisch vergeben, wenn zur E-Mail-Adresse eine
+bezahlte Bestellung des Artikels vorliegt (§ 5b Abs. 3 UWG). Moderation gegen
+Spam und Beleidigung, öffentliche Antwort je Bewertung — das Backend sagt
+deutlich, dass negative Bewertungen nicht aussortiert werden dürfen.
 
 **E-Mail** — Bestellbestätigung, Zahlungseingang und Versandbenachrichtigung,
 wahlweise über `mail()` oder einen eigenen SMTP-Zugang.
 
 **Design** — Farben, Schriften, Rasterbreite und Startseite im Backend
-einstellbar, mit Sofortvorschau. Vier Vorlagen zum Starten.
+einstellbar, mit Sofortvorschau. Neun Vorlagen zum Starten, davon fünf für
+eine Branche.
 
 Details zu jedem Bereich stehen in [`docs/`](docs/).
 
@@ -149,11 +160,12 @@ artikel.php        Artikeldetail      bestellung.php  Bestellstatus
 seite.php          Inhaltsseite       zahlung.php     Rückkehr vom Anbieter
 journal.php        Journal            webhook.php     Zahlungsmeldungen
 suche.php          Suche              sitemap.php     Sitemap
+bewertung.php      Bewertung abgeben
 
 lib/               Programmklassen (per .htaccess nicht direkt erreichbar)
 admin/             Backend
 assets/            Stylesheet und JavaScript des Shops
-assets/stile/      Fertige Shop-Stile (Golf, Fahrrad, Pferdesport, Kräuter)
+assets/stile/      Fertige Shop-Stile (Golf, Fahrrad, Pferdesport, Kräuter, Kräuterstube)
 data/              Datenbank bei SQLite
 uploads/           Hochgeladene Bilder
 ```

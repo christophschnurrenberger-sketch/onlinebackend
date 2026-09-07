@@ -1,11 +1,34 @@
 <?php
-/** Startseite des Shops. */
+/**
+ * Startseite des Shops.
+ *
+ * Zwei Wege, wie bei seite.php: Liegen im Backend unter „Startseite“
+ * Bausteine, bauen die die Seite. Sonst greift der eingebaute Aufbau darunter
+ * – Bühne, neue Artikel, Kategorien. So steht nach einem Update niemand vor
+ * einer leeren Startseite, nur weil es die Möglichkeit jetzt gibt.
+ */
 
 require __DIR__ . '/lib/bootstrap.php';
 
 $fassung = Theme::fassung();
+
+$bausteine = (array) ($fassung['startseite']['bausteine'] ?? []);
+if ($bausteine !== []) {
+    Theme::kopf([
+        'titel'        => Theme::e('start_seo_titel'),
+        'beschreibung' => Theme::e('start_seo_text'),
+        'canonical'    => Config::url(),
+    ]);
+    foreach ($bausteine as $baustein) {
+        Bausteine::rendern($baustein, $fassung);
+    }
+    Theme::fuss();
+    exit;
+}
+
 $neueste = array_slice($fassung['artikel'], 0, 8);
 $bestaende = Theme::bestaende(Theme::variantenIds($neueste));
+$noten     = Theme::bewertungen($neueste);
 
 $buehnenbild = Theme::e('start_bild');
 $stil = $buehnenbild !== ''
@@ -51,7 +74,7 @@ Theme::kopf(['canonical' => Config::url()]);
     </div>
     <?php if ($neueste !== []): ?>
       <div class="raster">
-        <?php foreach ($neueste as $artikel) { Theme::kachel($artikel, $bestaende); } ?>
+        <?php foreach ($neueste as $artikel) { Theme::kachel($artikel, $bestaende, $noten); } ?>
       </div>
     <?php else: ?>
       <div class="leer">

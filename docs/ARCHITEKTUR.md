@@ -68,6 +68,12 @@ bestellungen ─┬── bestellzeilen
               ├── erstattungen
               └── zahlungen
 
+seiten ── bausteine                 der Baukasten; seite_id 0 ist die Startseite
+
+artikel ── bewertungen              Kundenbewertungen, moderiert
+           bestellung_id zeigt auf die bezahlte Bestellung, mit der
+           der Kauf nachgewiesen ist ("Verifizierter Kauf")
+
 veroeffentlichungen                 die eingefrorenen Fassungen
 ```
 
@@ -80,6 +86,12 @@ Bestandteile, die auffallen könnten:
   eine Zeile mit Grund, Bestellung und Benutzer. Ohne Journal ist Lagerhaltung
   nicht nachvollziehbar; die Frage „warum stehen hier drei?“ bliebe
   unbeantwortbar.
+- **`bausteine.seite_id = 0` ist die Startseite.** Sie ist keine Zeile in
+  `seiten`: Sie hat kein Kürzel, ist nicht löschbar und liegt unter
+  `index.php`. Eine Scheinseite anzulegen hätte sie ins Seitenverzeichnis
+  gestellt und über zwei Adressen erreichbar gemacht. Liegt kein Baustein
+  vor, zeigt `index.php` den eingebauten Aufbau.
+- **`bewertungen` läuft an der Fassung vorbei.** Siehe unten.
 - **`webhooks` speichert vor der Verarbeitung.** Schlägt sie fehl, ist die
   Meldung trotzdem dokumentiert. Die Eindeutigkeit von `(anbieter, ereignis_id)`
   macht die Verarbeitung idempotent.
@@ -99,11 +111,16 @@ ab. Der Shop liest ausschließlich aus der Fassung, die gerade `live = 1` trägt
 Kategorien (Regeln werden dabei zu festen Artikellisten aufgelöst),
 veröffentlichte Seiten und Beiträge, Menüs und alle Einstellungen.
 
-**Was bewusst draußen bleibt:** Bestände, Warenkörbe, Bestellungen, Kunden und
-Rabattzähler. Die müssen sofort wirken. Ein ausverkaufter Artikel darf nicht bis
-zur nächsten Veröffentlichung weiterverkauft werden — deshalb liest der Shop
-Verfügbarkeiten direkt aus der Datenbank, auch wenn der Rest der Seite aus der
-Fassung kommt.
+**Was bewusst draußen bleibt:** Bestände, Warenkörbe, Bestellungen, Kunden,
+Rabattzähler und **Bewertungen**. Die müssen sofort wirken. Ein ausverkaufter
+Artikel darf nicht bis zur nächsten Veröffentlichung weiterverkauft werden —
+deshalb liest der Shop Verfügbarkeiten direkt aus der Datenbank, auch wenn der
+Rest der Seite aus der Fassung kommt. Für Bewertungen gilt dasselbe: Eine
+freigegebene Bewertung steht sofort beim Artikel; müsste man dafür den ganzen
+Katalog neu veröffentlichen, würde die Moderation zur Zumutung. Aus demselben
+Grund liest auch der Schalter „Bewertungen zeigen“ am Arbeitsstand statt an der
+Fassung — er ist die einzige Anzeigeoption, die das tut, und `Theme::bewertungenAn()`
+sagt im Kommentar warum.
 
 Die Alternative wäre gewesen, im Shop einfach auf `status = 'aktiv'` zu filtern.
 Das hätte drei Dinge gekostet: das gefahrlose Arbeiten an aktiven Artikeln, den

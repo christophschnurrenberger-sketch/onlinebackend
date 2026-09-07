@@ -195,6 +195,21 @@ final class Theme
         return in_array(self::e($schluessel), ['1', 'true', 'ja', 'on'], true);
     }
 
+    /**
+     * Sind Kundenbewertungen im Shop eingeschaltet?
+     *
+     * Als einzige Anzeigeoption liest dieser Schalter am Arbeitsstand statt an
+     * der veröffentlichten Fassung. Das ist Absicht: Bewertungen laufen
+     * insgesamt an der Fassung vorbei – eine freigegebene Bewertung erscheint
+     * sofort. Müsste man ausgerechnet zum Ein- und Ausschalten den ganzen
+     * Katalog neu veröffentlichen, wäre das die eine Ausnahme, die niemand
+     * versteht.
+     */
+    public static function bewertungenAn(): bool
+    {
+        return Settings::bool('bewertungen_an');
+    }
+
     private static function nichtVeroeffentlicht(): never
     {
         http_response_code(503);
@@ -580,6 +595,58 @@ $vorteile = array_values(array_filter([
             . 'stroke-linejoin="round" aria-hidden="true" focusable="false">' . $d . '</svg>';
     }
 
+    /* ------------------------------------------------------------- Sterne */
+
+    /**
+     * Sternebewertung als Balken aus fünf Sternen.
+     *
+     * Zwei Lagen übereinander: unten fünf graue Sterne, darüber dieselben in
+     * der Signalfarbe, auf die Breite des Schnitts beschnitten. Halbe Sterne
+     * kommen so ohne eigene Grafik aus, und die Anzeige bleibt genau – 4,3
+     * sieht anders aus als 4,5.
+     *
+     * Die Anzahl steht bewusst immer daneben: Eine einzelne Fünf-Sterne-
+     * Bewertung ist keine 5,0, sondern eine Meinung. Ohne Anzahl wäre die
+     * Zahl irreführend.
+     */
+    public static function sterne(float $schnitt, int $anzahl = -1, int $groesse = 16): string
+    {
+        $schnitt = max(0.0, min(5.0, $schnitt));
+        $breite  = round($schnitt / 5 * 100, 2);
+        $stern   = '<svg viewBox="0 0 20 20" width="' . $groesse . '" height="' . $groesse . '" aria-hidden="true">'
+                 . '<path d="M10 1.5 12.6 6.8l5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8L1.5 7.7l5.9-.9z"/></svg>';
+        $reihe   = str_repeat($stern, 5);
+
+        $text = $anzahl >= 0
+            ? number_format($schnitt, 1, ',', '.') . ' von 5 Sternen aus ' . $anzahl
+              . ' Bewertung' . ($anzahl === 1 ? '' : 'en')
+            : number_format($schnitt, 1, ',', '.') . ' von 5 Sternen';
+
+        return '<span class="sterne" role="img" aria-label="' . Util::e($text) . '">'
+             . '<span class="sterne-grund">' . $reihe . '</span>'
+             . '<span class="sterne-voll" style="width:' . $breite . '%">' . $reihe . '</span>'
+             . '</span>';
+    }
+
+    /**
+     * Kurze Bewertungszeile: Sterne, Schnitt, Anzahl.
+     *
+     * @param array{anzahl:int,schnitt:float} $zahlen
+     */
+    public static function sternzeile(array $zahlen, string $ziel = ''): string
+    {
+        $anzahl = (int) ($zahlen['anzahl'] ?? 0);
+        if ($anzahl < 1) {
+            return '';
+        }
+        $inhalt = self::sterne((float) $zahlen['schnitt'], $anzahl)
+                . '<span class="sterne-zahl">' . Util::e(number_format((float) $zahlen['schnitt'], 1, ',', '.')) . '</span>'
+                . '<span class="sterne-anzahl">' . $anzahl . ' Bewertung' . ($anzahl === 1 ? '' : 'en') . '</span>';
+        return $ziel !== ''
+            ? '<a class="sternleiste" href="' . Util::e($ziel) . '">' . $inhalt . '</a>'
+            : '<span class="sternleiste">' . $inhalt . '</span>';
+    }
+
     /** Macht aus einem gespeicherten Pfad eine benutzbare Adresse. */
     public static function url(string $pfad): string
     {
@@ -591,8 +658,13 @@ $vorteile = array_values(array_filter([
 
     /* ------------------------------------------------------- Artikelkacheln */
 
-    /** Eine Kachel im Artikelraster. */
-    public static function kachel(array $artikel, array $bestaende = []): void
+    /**
+     * Eine Kachel im Artikelraster.
+     *
+     * @param array<int,int|null>                                   $bestaende
+     * @param array<int,array{anzahl:int,schnitt:float}>            $bewertungen
+     */
+    public static function kachel(array $artikel, array $bestaende = [], array $bewertungen = []): void
     {
         $bild        = $artikel['bilder'][0] ?? null;
         $streich     = (int) $artikel['streich_max'];
@@ -622,6 +694,21 @@ $vorteile = array_values(array_filter([
               <p class="hersteller"><?= Util::e((string) $artikel['hersteller']) ?></p>
             <?php endif; ?>
             <h3><?= Util::e((string) $artikel['titel']) ?></h3>
+            <?php
+            /*
+             * Sterne stehen in jeder größeren Liste direkt unter dem Titel –
+             * sie entscheiden mit darüber, welche Kachel überhaupt angeklickt
+             * wird. Ohne Bewertung bleibt die Zeile weg statt "0 Sterne" zu
+             * behaupten.
+             */
+            $bewertung = $bewertungen[(int) $artikel['id']] ?? null;
+            ?>
+            <?php if ($bewertung !== null && $bewertung['anzahl'] > 0): ?>
+              <span class="sternleiste sternleiste-klein">
+                <?= self::sterne((float) $bewertung['schnitt'], (int) $bewertung['anzahl'], 13) ?>
+                <span class="sterne-anzahl">(<?= (int) $bewertung['anzahl'] ?>)</span>
+              </span>
+            <?php endif; ?>
             <?= self::preisText($artikel) ?>
             <?php $grundpreis = self::grundpreisText($artikel); ?>
             <?php if ($grundpreis !== ''): ?>
@@ -725,6 +812,25 @@ $vorteile = array_values(array_filter([
             $out[(int) $zeile['id']] = Bestand::verfuegbar($zeile);
         }
         return $out;
+    }
+
+    /**
+     * Bewertungskennzahlen zu einer Artikelliste – in einer Abfrage.
+     *
+     * Wie bestaende() bewusst an der veröffentlichten Fassung vorbei: eine
+     * freigegebene Bewertung soll sofort erscheinen. Ist die Anzeige
+     * abgeschaltet, kommt eine leere Reihe zurück und die Kacheln zeigen
+     * nichts – ohne dass die Aufrufer das wissen müssen.
+     *
+     * @param array<int,array<string,mixed>> $artikelListe
+     * @return array<int,array{anzahl:int,schnitt:float,verteilung:array<int,int>}>
+     */
+    public static function bewertungen(array $artikelListe): array
+    {
+        if (!self::bewertungenAn()) {
+            return [];
+        }
+        return Bewertungen::kennzahlen(array_map(static fn($a) => (int) $a['id'], $artikelListe));
     }
 
     /** @param array<int,int|null> $bestaende */

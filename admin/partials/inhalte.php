@@ -162,41 +162,7 @@ if ($maske) {
         </div></section>
 
         <?php if (!$istBeitrag): ?>
-          <?php /*
-             * Die Live-Vorschau.
-             *
-             * Der Rahmen zeigt admin/vorschau.php – dieselbe Ausgabe wie im
-             * Shop, gefüttert mit dem ungespeicherten Formularstand. Ohne
-             * JavaScript bleibt die Karte leer und stört nicht; gespeichert
-             * und veröffentlicht wird unabhängig davon.
-             */ ?>
-          <section class="bk-karte bk-vorschau" data-vorschau
-                   data-vorschau-ziel="<?= Util::e(Config::url('admin/vorschau.php')) ?>">
-            <div class="bk-karte-kopf">
-              <h2>Vorschau</h2>
-              <div class="bk-vorschau-schalter">
-                <button class="bk-knopf bk-knopf-klein bk-knopf-aktiv" type="button"
-                        data-vorschau-breite="1280">Bildschirm</button>
-                <button class="bk-knopf bk-knopf-klein" type="button"
-                        data-vorschau-breite="390">Telefon</button>
-                <?php /* Auf einem 13-Zoll-Laptop ist die Spalte zu schmal, um
-                         Text zu lesen. Der Knopf legt die Vorschau über die
-                         ganze Fläche – die Felder bleiben darunter erhalten. */ ?>
-                <button class="bk-knopf bk-knopf-klein bk-knopf-leer" type="button"
-                        data-vorschau-gross title="Vorschau groß zeigen (Esc schließt)">⤢</button>
-              </div>
-            </div>
-            <div class="bk-vorschau-buehne" data-vorschau-buehne>
-              <iframe data-vorschau-rahmen title="Vorschau der Seite"
-                      referrerpolicy="same-origin" loading="lazy"></iframe>
-              <div class="bk-vorschau-schleier" data-vorschau-schleier hidden></div>
-            </div>
-            <div class="bk-vorschau-fuss">
-              <span data-vorschau-stand>Vorschau wird geladen …</span>
-              <button class="bk-knopf bk-knopf-klein bk-knopf-leer" type="button"
-                      data-vorschau-neu>Neu aufbauen</button>
-            </div>
-          </section>
+          <?php require __DIR__ . '/vorschaukarte.php'; ?>
         <?php endif; ?>
 
         <?php if ($istBeitrag): ?>
@@ -225,7 +191,7 @@ if ($maske) {
           <section class="bk-karte"><div class="bk-karte-inhalt">
             <button class="bk-knopf bk-knopf-rot" type="submit" name="aktion" value="loeschen"
                     formnovalidate style="width:100%"
-                    onclick="return confirm('Diesen Eintrag endgültig löschen?')">Löschen</button>
+                    data-frage="Diesen Eintrag endgültig löschen?">Löschen</button>
           </div></section>
         <?php endif; ?>
       </div>
